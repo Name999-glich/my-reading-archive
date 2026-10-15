@@ -317,7 +317,6 @@ const CFG = {
   SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZudHV3eHB4eGVlemlqdG9hYnRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIwNTI3MzksImV4cCI6MjEwNzYyODczOX0.cuQumMCw4x8GJSo3hISjLVJO6ZCAtakVJ6dSSIkparA',
   BUCKET: 'covers'
 };
-
 const CLOUD = /^https?:\/\/.+/.test(CFG.SUPABASE_URL) && CFG.SUPABASE_ANON_KEY.length > 30;
 
 let supabase = null;
