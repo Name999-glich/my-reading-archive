@@ -221,7 +221,87 @@ h1,h2,h3{font-family:var(--font-display);font-weight:600;margin:0}
 }
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* Responsive */
+/* 📊 Tombol & Popup Lihat Rate */
+.rate-trigger-wrap{
+  display:flex;justify-content:center;margin-top:20px;
+}
+.rate-trigger{
+  font:inherit;cursor:pointer;border:1px solid var(--border);
+  background:linear-gradient(135deg, rgba(232,160,191,.18), rgba(244,168,150,.12));
+  color:var(--cream);border-radius:12px;padding:11px 22px;
+  font-size:.88rem;font-weight:500;display:inline-flex;
+  align-items:center;gap:8px;transition:.2s;
+}
+.rate-trigger:hover{
+  background:linear-gradient(135deg, rgba(232,160,191,.28), rgba(244,168,150,.20));
+  transform:translateY(-1px);
+  box-shadow:0 10px 22px -12px rgba(232,160,191,.6);
+}
+.rate-popup-backdrop{
+  position:fixed;inset:0;z-index:100;
+  background:rgba(30,18,30,.78);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;opacity:0;pointer-events:none;transition:opacity .25s;
+}
+.rate-popup-backdrop.open{opacity:1;pointer-events:auto}
+.rate-popup{
+  width:100%;max-width:420px;border-radius:20px;padding:24px;
+  background:linear-gradient(165deg,#4a3348,#33202f 70%);
+  border:1px solid var(--border);
+  box-shadow:0 40px 90px -30px #000;
+  transform:translateY(14px) scale(.98);
+  transition:transform .25s cubic-bezier(.2,.8,.3,1);
+}
+.rate-popup-backdrop.open .rate-popup{transform:none}
+.rate-popup-head{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:18px;
+}
+.rate-popup-head h3{
+  font-family:var(--font-display);font-size:1.4rem;
+  margin:0;
+}
+.rate-popup-close{
+  background:transparent;border:none;color:var(--muted);
+  font-size:1.2rem;cursor:pointer;width:34px;height:34px;
+  border-radius:10px;transition:.2s;
+}
+.rate-popup-close:hover{background:var(--surface);color:var(--cream)}
+.rate-list{display:flex;flex-direction:column;gap:2px}
+.rate-item{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:11px 4px;border-bottom:1px solid rgba(255,248,240,.08);
+}
+.rate-item:last-child{border-bottom:none}
+.rate-item .ri-name{
+  display:flex;align-items:center;gap:10px;
+  font-size:.88rem;color:var(--cream);
+}
+.rate-item .ri-icon{
+  width:26px;height:26px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.85rem;
+}
+.rate-item .ri-icon.common{background:rgba(168,192,154,.25)}
+.rate-item .ri-icon.rare{background:rgba(200,162,200,.25)}
+.rate-item .ri-icon.legend{background:rgba(244,228,166,.30)}
+.rate-item .ri-pct{
+  font-family:var(--font-display);font-size:1rem;
+  color:var(--rose);font-weight:600;
+}
+.rate-item.rare .ri-pct{color:var(--lavender)}
+.rate-item.legend .ri-pct{color:var(--butter)}
+.rate-popup-note{
+  margin-top:14px;font-size:.75rem;color:var(--muted);
+  line-height:1.6;text-align:center;
+}
+@media (max-width:600px){
+  .rate-popup{padding:20px;border-radius:16px}
+  .rate-popup-head h3{font-size:1.2rem}
+  .rate-item .ri-name{font-size:.82rem}
+}
+  /* Responsive */
 @media (max-width:600px){
   .topbar-inner{height:54px;padding:0 14px}
   .brand{font-size:1rem}
@@ -405,22 +485,83 @@ function renderGarden(books) {
     + '<div class="rc-percent">' + pct(rarityCount.legend) + '% dari tamanmu</div></div>'
     + '</div>'
     + '<div class="drop-rate-info">'
-    + '<div style="margin-bottom:8px"><strong>Peluang muncul per buku:</strong></div>'
-    + '<div class="rate-row"><span>🌼 Daisy (Common)</span><span>25%</span></div>'
-    + '<div class="rate-row"><span>🌸 Mawar (Common)</span><span>25%</span></div>'
-    + '<div class="rate-row"><span>🌻 Matahari (Common)</span><span>25%</span></div>'
-    + '<div class="rate-row"><span>💜 Lavender (Rare)</span><span>20%</span></div>'
-    + '<div class="rate-row"><span>👑 Golden Rose (Legend)</span><span>5%</span></div>'
+       + '<div class="rate-trigger-wrap">'
+    + '<button class="rate-trigger" id="rateTrigger">📊 Lihat Peluang Bunga</button>'
     + '</div>';
-
   root.querySelectorAll('.garden-slot[data-book-id]').forEach(el => {
     el.addEventListener('click', () => {
       location.href = 'index.html#/book/' + el.dataset.bookId;
     });
   });
+  
+  const rateBtn = document.getElementById('rateTrigger');
+  if (rateBtn) rateBtn.addEventListener('click', openRatePopup);
 }
 
-async function boot() {
+function openRatePopup() {
+  const existing = document.getElementById('ratePopup');
+  if (existing) return;
+
+  const popupHTML =
+    '<div class="rate-popup-backdrop" id="ratePopup">'
+    + '<div class="rate-popup">'
+    + '<div class="rate-popup-head">'
+    + '<h3>📊 Peluang Bunga</h3>'
+    + '<button class="rate-popup-close" id="rateClose">✕</button>'
+    + '</div>'
+    + '<div class="rate-list">'
+    + '<div class="rate-item common">'
+    + '<div class="ri-name"><span class="ri-icon common">🌼</span> Daisy</div>'
+    + '<div class="ri-pct">25%</div>'
+    + '</div>'
+    + '<div class="rate-item common">'
+    + '<div class="ri-name"><span class="ri-icon common">🌸</span> Mawar</div>'
+    + '<div class="ri-pct">25%</div>'
+    + '</div>'
+    + '<div class="rate-item common">'
+    + '<div class="ri-name"><span class="ri-icon common">🌻</span> Matahari</div>'
+    + '<div class="ri-pct">25%</div>'
+    + '</div>'
+    + '<div class="rate-item rare">'
+    + '<div class="ri-name"><span class="ri-icon rare">💜</span> Lavender</div>'
+    + '<div class="ri-pct">20%</div>'
+    + '</div>'
+    + '<div class="rate-item legend">'
+    + '<div class="ri-name"><span class="ri-icon legend">👑</span> Golden Rose</div>'
+    + '<div class="ri-pct">5%</div>'
+    + '</div>'
+    + '</div>'
+    + '<div class="rate-popup-note">'
+    + 'Setiap buku yang selesai dibaca mendapat 1 bunga.<br>'
+    + 'Jenis bunga dipilih acak dari 5 varian di atas.'
+    + '</div>'
+    + '</div>'
+    + '</div>';
+
+  document.body.insertAdjacentHTML('beforeend', popupHTML);
+
+  const popup = document.getElementById('ratePopup');
+  requestAnimationFrame(() => popup.classList.add('open'));
+
+  document.getElementById('rateClose').addEventListener('click', closeRatePopup);
+  popup.addEventListener('click', e => {
+    if (e.target.id === 'ratePopup') closeRatePopup();
+  });
+  document.addEventListener('keydown', escHandler);
+}
+
+function closeRatePopup() {
+  const popup = document.getElementById('ratePopup');
+  if (!popup) return;
+  popup.classList.remove('open');
+  setTimeout(() => popup.remove(), 250);
+  document.removeEventListener('keydown', escHandler);
+}
+
+function escHandler(e) {
+  if (e.key === 'Escape') closeRatePopup();
+}
+  async function boot() {
   const root = document.getElementById('garden-root');
   try {
     const { data: { session } } = await supabase.auth.getSession();
