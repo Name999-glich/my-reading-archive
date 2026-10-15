@@ -340,7 +340,8 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
     <a class="brand" href="#/home"><span class="brand-mark"></span> My Reading Archive</a>
     <nav class="nav" id="mainNav"></nav>
     <div class="topbar-actions">
-      <button class="btn btn-primary btn-sm" data-action="add-book" id="addBtn">🌸 Tambah Buku</button>
+     <button class="btn btn-primary btn-sm" data-action="add-book" id="addBtn">🌸 Tambah Buku</button>
+<a class="btn btn-ghost btn-sm" href="garden.html">🌷 Taman</a>
       <button class="icon-btn" id="signOutBtn" title="Keluar" style="display:none">⏻</button>
     </div>
   </div>
@@ -573,7 +574,6 @@ const NAV = [
   { hash:'#/want',       label:'Want to Read',       short:'Ingin',    icon:'✨' },
   { hash:'#/favorites',  label:'Favorites',          short:'Favorit',  icon:'★' },
   { hash:'#/stats',      label:'Reading Statistics', short:'Statistik',icon:'📊' },
-  { hash:'#/garden',     label:'Taman Bunga',        short:'Taman',    icon:'🌷' },
 ];
 function renderNav() {
   $('#mainNav').innerHTML = NAV.map(n =>
@@ -1262,7 +1262,6 @@ function render(scrollTop = true) {
     case 'want':       html = viewCollection({ key:'want', status:'want' }); break;
     case 'favorites':  html = viewCollection({ key:'favorites', favoritesOnly:true }); break;
     case 'stats':      html = viewStats(); break;
-          case 'garden':     html = viewGarden(); break;
     case 'book':       html = viewBookDetail(param); break;
     default:           html = viewHome();
   }
