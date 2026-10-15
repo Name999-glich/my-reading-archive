@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>My Reading Archive · Flower Garden</title>
+<title>My Reading Archive</title>
 <meta name="theme-color" content="#3D2B3D">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,26 +11,26 @@
 <style>
 :root{
   --blush:#F7CAC9; --rose:#E8A0BF; --lavender:#C8A2C8; --sage:#A8C09A;
-  --butter:#F4E4A6; --coral:#F4A896; --plum:#3D2B3D; --cream:#FFF8F0;
+  --butter:#F4E4A6; --coral:#F4A896; --cream:#FFF8F0;
   --surface:rgba(255,248,240,.07); --surface-2:rgba(255,248,240,.12);
   --border:rgba(255,248,240,.15); --muted:rgba(255,248,240,.62);
   --radius:16px; --shadow:0 18px 44px -20px rgba(45,20,45,.75);
-  --font-display:'Cormorant Garamond',Georgia,'Times New Roman',serif;
+  --font-display:'Cormorant Garamond',Georgia,serif;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;min-height:100vh;color:var(--cream);background:#3D2B3D;
-  font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
-  -webkit-font-smoothing:antialiased;overflow-x:hidden;}
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
 body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
   background:radial-gradient(1100px 620px at 78% -12%, rgba(244,228,166,.20), transparent 62%),
     radial-gradient(820px 520px at 6% -8%, rgba(247,202,201,.18), transparent 60%),
     radial-gradient(900px 620px at 94% 16%, rgba(232,160,191,.20), transparent 62%),
     radial-gradient(1200px 800px at 50% 118%, rgba(200,162,200,.35), transparent 65%),
-    linear-gradient(180deg,#2f2030 0%,#3d2b3d 45%,#2f2030 100%);}
+    linear-gradient(180deg,#2f2030 0%,#3d2b3d 45%,#2f2030 100%)}
 img{display:block;max-width:100%}
 a{color:inherit}
-h1,h2,h3{font-family:var(--font-display);font-weight:600;letter-spacing:.01em;margin:0}
+h1,h2,h3{font-family:var(--font-display);font-weight:600;margin:0}
 .wrap{max-width:1180px;margin:0 auto;padding:0 20px}
 .topbar{position:sticky;top:0;z-index:40;border-bottom:1px solid var(--border);
   background:linear-gradient(180deg,rgba(61,43,61,.92),rgba(61,43,61,.62));
@@ -42,7 +42,7 @@ h1,h2,h3{font-family:var(--font-display);font-weight:600;letter-spacing:.01em;ma
   background:radial-gradient(circle at 35% 30%,#FFF8F0,var(--rose) 45%,var(--lavender) 75%,var(--coral));
   box-shadow:0 0 18px rgba(232,160,191,.6)}
 .nav{display:flex;gap:2px;margin-left:auto;flex-wrap:wrap}
-.nav a{color:var(--muted);text-decoration:none;font-size:.82rem;padding:8px 11px;border-radius:10px;transition:.2s;white-space:nowrap}
+.nav a{color:var(--muted);text-decoration:none;font-size:.82rem;padding:8px 11px;border-radius:10px;transition:.2s}
 .nav a:hover{color:var(--cream);background:var(--surface)}
 .nav a.active{color:var(--rose);background:rgba(232,160,191,.14)}
 .topbar-actions{display:flex;gap:8px;align-items:center}
@@ -52,30 +52,29 @@ h1,h2,h3{font-family:var(--font-display);font-weight:600;letter-spacing:.01em;ma
 .btn:disabled{opacity:.6;cursor:not-allowed}
 .btn-primary{background:linear-gradient(135deg,var(--rose),var(--coral));color:#3d2030;
   box-shadow:0 10px 26px -12px rgba(232,160,191,.8)}
-.btn-primary:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 16px 32px -12px rgba(232,160,191,.95)}
+.btn-primary:hover:not(:disabled){transform:translateY(-1px)}
 .btn-ghost{background:var(--surface);color:var(--cream);border-color:var(--border)}
 .btn-ghost:hover{background:var(--surface-2)}
 .btn-danger{background:rgba(232,160,191,.18);color:#ffd9e6;border-color:rgba(232,160,191,.5)}
-.btn-danger:hover{background:rgba(232,160,191,.3)}
 .btn-sm{padding:8px 13px;font-size:.8rem}
 .icon-btn{background:transparent;border:none;color:var(--muted);font-size:1.1rem;cursor:pointer;
   width:34px;height:34px;border-radius:10px;transition:.2s}
 .icon-btn:hover{background:var(--surface);color:var(--cream)}
 .hero{position:relative;border-radius:26px;overflow:hidden;margin:26px 0;
-  border:1px solid var(--border);box-shadow:var(--shadow);min-height:340px;display:flex;align-items:flex-end}
+  border:1px solid var(--border);box-shadow:var(--shadow);min-height:320px;display:flex;align-items:flex-end}
 .hero-sky{position:absolute;inset:0}
 .hero-sky svg{width:100%;height:100%;display:block}
-.hero-content{position:relative;padding:36px 32px 32px;width:100%;
+.hero-content{position:relative;padding:32px;width:100%;
   background:linear-gradient(0deg,rgba(45,25,45,.88) 0%,rgba(45,25,45,.55) 45%,transparent 100%)}
 .eyebrow{font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;color:var(--butter);margin:0 0 10px;font-weight:500}
-.hero h1{font-size:clamp(2rem,5.5vw,3.2rem);line-height:1.05;margin:0 0 8px;text-shadow:0 4px 30px rgba(0,0,0,.5)}
+.hero h1{font-size:clamp(2rem,5.5vw,3.2rem);line-height:1.05;margin:0 0 8px}
 .tagline{font-family:var(--font-display);font-style:italic;font-size:clamp(1rem,2.2vw,1.2rem);
   color:var(--blush);margin:0 0 20px}
 .hero-actions{display:flex;gap:10px;flex-wrap:wrap}
 .section{margin:32px 0}
 .section-head{display:flex;align-items:baseline;justify-content:space-between;gap:14px;margin-bottom:14px}
 .section-head h2{font-size:1.4rem}
-.section-head a{color:var(--rose);text-decoration:none;font-size:.82rem;opacity:.9}
+.section-head a{color:var(--rose);text-decoration:none;font-size:.82rem}
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
 .stat-card{background:linear-gradient(160deg,rgba(255,248,240,.09),rgba(255,248,240,.025));
   border:1px solid var(--border);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);
@@ -103,7 +102,7 @@ h1,h2,h3{font-family:var(--font-display);font-weight:600;letter-spacing:.01em;ma
   background:rgba(45,25,45,.6);backdrop-filter:blur(8px);color:rgba(255,248,240,.6);
   font-size:.95rem;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center}
 .fav-btn:hover{background:rgba(45,25,45,.85);color:var(--rose)}
-.fav-btn.on{color:var(--rose);text-shadow:0 0 12px rgba(232,160,191,.8)}
+.fav-btn.on{color:var(--rose)}
 .book-title{font-size:.92rem;margin:11px 0 3px;line-height:1.3;font-weight:600;
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .book-author{font-size:.76rem;color:var(--muted);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -113,14 +112,10 @@ h1,h2,h3{font-family:var(--font-display);font-weight:600;letter-spacing:.01em;ma
 .toolbar .grow{flex:1 1 220px;min-width:180px}
 select,input,textarea{font:inherit;font-size:.88rem;color:var(--cream);background:rgba(255,248,240,.06);
   border:1px solid var(--border);border-radius:11px;padding:10px 12px;outline:none;width:100%;transition:.2s}
-select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),
-  linear-gradient(135deg,var(--muted) 50%,transparent 50%);
-  background-position:calc(100% - 18px) 50%,calc(100% - 13px) 50%;
-  background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:34px;cursor:pointer}
 select option{background:#3d2b3d;color:var(--cream)}
 input:focus,select:focus,textarea:focus{border-color:rgba(232,160,191,.6);box-shadow:0 0 0 3px rgba(232,160,191,.13)}
 input::placeholder,textarea::placeholder{color:rgba(255,248,240,.35)}
-textarea{resize:vertical;min-height:92px;line-height:1.6}
+textarea{resize:vertical;min-height:80px;line-height:1.6}
 .result-count{font-size:.78rem;color:var(--muted);margin:6px 0 18px}
 .empty{text-align:center;padding:48px 20px;border:1px dashed var(--border);border-radius:var(--radius);
   background:rgba(255,248,240,.03)}
@@ -143,13 +138,11 @@ textarea{resize:vertical;min-height:92px;line-height:1.6}
 .chart{display:flex;align-items:flex-end;gap:8px;height:200px;padding:16px 4px 0;border-bottom:1px solid var(--border)}
 .bar-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:6px;min-width:0}
 .bar{width:100%;max-width:44px;border-radius:7px 7px 3px 3px;
-  background:linear-gradient(180deg,var(--butter),var(--coral));
-  box-shadow:0 0 22px -6px rgba(244,228,166,.6);transition:height .5s cubic-bezier(.2,.7,.3,1)}
+  background:linear-gradient(180deg,var(--butter),var(--coral));transition:height .5s}
 .bar-val{font-size:.7rem;color:var(--rose);font-weight:600;height:14px}
 .bar-label{font-size:.66rem;color:var(--muted);white-space:nowrap;overflow:hidden}
 .genre-row{margin-bottom:14px}
 .genre-row .gr-top{display:flex;justify-content:space-between;font-size:.85rem;margin-bottom:6px}
-.genre-row .gr-top span:last-child{color:var(--muted);font-size:.78rem}
 .gr-bar{height:7px;border-radius:5px;background:rgba(255,248,240,.09);overflow:hidden}
 .gr-bar i{display:block;height:100%;border-radius:5px;background:linear-gradient(90deg,var(--sage),var(--blush),var(--rose))}
 .history-item{display:flex;justify-content:space-between;gap:14px;padding:14px 0;
@@ -159,13 +152,10 @@ textarea{resize:vertical;min-height:92px;line-height:1.6}
 .history-item p{margin:0;font-size:.78rem;color:var(--muted)}
 .history-date{font-size:.76rem;color:var(--muted);white-space:nowrap;text-align:right}
 .modal-backdrop{position:fixed;inset:0;z-index:90;background:rgba(30,18,30,.78);
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-  display:flex;align-items:flex-start;justify-content:center;padding:28px 16px;overflow-y:auto}
+  backdrop-filter:blur(8px);display:flex;align-items:flex-start;justify-content:center;padding:28px 16px;overflow-y:auto}
 .modal{width:100%;max-width:660px;border-radius:20px;padding:24px;
   background:linear-gradient(165deg,#4a3348,#33202f 70%);
-  border:1px solid var(--border);box-shadow:0 40px 90px -30px #000;
-  animation:pop .25s cubic-bezier(.2,.8,.3,1)}
-@keyframes pop{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+  border:1px solid var(--border);box-shadow:0 40px 90px -30px #000}
 .modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
 .modal-head h2{font-size:1.5rem}
 .modal-foot{display:flex;justify-content:flex-end;gap:10px;margin-top:24px;padding-top:18px;border-top:1px solid var(--border)}
@@ -182,8 +172,8 @@ textarea{resize:vertical;min-height:92px;line-height:1.6}
 .hint{font-size:.72rem;color:var(--muted);margin:2px 0 0}
 .star-input{display:flex;gap:6px}
 .star-input button{background:none;border:none;font-size:1.5rem;color:rgba(255,248,240,.25);
-  cursor:pointer;padding:0 2px;transition:.15s;line-height:1}
-.star-input button.on{color:var(--rose);text-shadow:0 0 14px rgba(232,160,191,.7)}
+  cursor:pointer;padding:0 2px;line-height:1}
+.star-input button.on{color:var(--rose)}
 .check-row{display:flex;align-items:center;gap:10px;margin-bottom:14px}
 .check-row input{width:auto;accent-color:var(--rose);width:18px;height:18px;cursor:pointer}
 .check-row label{font-size:.86rem;color:var(--cream);cursor:pointer}
@@ -221,12 +211,11 @@ textarea{resize:vertical;min-height:92px;line-height:1.6}
   .detail{grid-template-columns:1fr;gap:22px}
   .detail-cover{max-width:220px;margin:0 auto}
   .grid-2{grid-template-columns:1fr}
-  .hero{min-height:300px;border-radius:20px}
+  .hero{min-height:280px;border-radius:20px}
   .book-grid{grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:16px 12px}
   .modal{padding:20px;border-radius:16px}
   .modal-backdrop{padding:14px 10px}
 }
-@media (max-width:380px){ .book-grid{grid-template-columns:repeat(2,1fr)} }
 </style>
 </head>
 <body>
@@ -243,10 +232,8 @@ textarea{resize:vertical;min-height:92px;line-height:1.6}
 </header>
 
 <main class="wrap" id="view"></main>
-
 <nav class="bottom-nav" id="bottomNav"></nav>
 <button class="fab" data-action="add-book" aria-label="Tambahkan Buku">+</button>
-
 <div id="modal-root"></div>
 
 <script type="module">
@@ -301,10 +288,27 @@ function placeholderCover(book) {
   const c1 = palette[seed % palette.length];
   const c2 = palette[(seed + 3) % palette.length];
   const c3 = palette[(seed + 5) % palette.length];
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="300" height="450" viewBox="0 0 300 450"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3D2B3D"/><stop offset="50%" stop-color="${c2}"/><stop offset="100%" stop-color="${c1}"/></linearGradient><radialGradient id="glow" cx="50%" cy="40%" r="60%"><stop offset="0%" stop-color="${c3}" stop-opacity="0.5"/><stop offset="100%" stop-color="${c3}" stop-opacity="0"/></radialGradient></defs><rect width="300" height="450" fill="url(#g)"/><rect width="300" height="450" fill="url(#glow)"/><g opacity="0.55"><circle cx="60" cy="90" r="22" fill="${c1}"/><circle cx="60" cy="90" r="10" fill="#FFF8F0"/><circle cx="240" cy="130" r="16" fill="${c3}"/><circle cx="240" cy="130" r="7" fill="#FFF8F0"/><circle cx="80" cy="360" r="18" fill="${c2}"/><circle cx="80" cy="360" r="8" fill="#FFF8F0"/><circle cx="220" cy="380" r="14" fill="${c1}"/><circle cx="220" cy="380" r="6" fill="#FFF8F0"/></g><text x="150" y="230" text-anchor="middle" font-family="Georgia,serif" font-size="76" fill="#FFF8F0" opacity="0.94">${esc(initials)}</text></svg>`;
+  const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="300" height="450" viewBox="0 0 300 450">'
+    + '<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1">'
+    + '<stop offset="0%" stop-color="#3D2B3D"/><stop offset="50%" stop-color="' + c2 + '"/>'
+    + '<stop offset="100%" stop-color="' + c1 + '"/></linearGradient>'
+    + '<radialGradient id="glow" cx="50%" cy="40%" r="60%">'
+    + '<stop offset="0%" stop-color="' + c3 + '" stop-opacity="0.5"/>'
+    + '<stop offset="100%" stop-color="' + c3 + '" stop-opacity="0"/></radialGradient></defs>'
+    + '<rect width="300" height="450" fill="url(#g)"/>'
+    + '<rect width="300" height="450" fill="url(#glow)"/>'
+    + '<g opacity="0.55"><circle cx="60" cy="90" r="22" fill="' + c1 + '"/>'
+    + '<circle cx="60" cy="90" r="10" fill="#FFF8F0"/>'
+    + '<circle cx="240" cy="130" r="16" fill="' + c3 + '"/>'
+    + '<circle cx="240" cy="130" r="7" fill="#FFF8F0"/>'
+    + '<circle cx="80" cy="360" r="18" fill="' + c2 + '"/>'
+    + '<circle cx="80" cy="360" r="8" fill="#FFF8F0"/>'
+    + '<circle cx="220" cy="380" r="14" fill="' + c1 + '"/>'
+    + '<circle cx="220" cy="380" r="6" fill="#FFF8F0"/></g>'
+    + '<text x="150" y="230" text-anchor="middle" font-family="Georgia,serif" font-size="76" '
+    + 'fill="#FFF8F0" opacity="0.94">' + esc(initials) + '</text></svg>';
   return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
 }
-
 let _db = null;
 function db() {
   if (_db) return Promise.resolve(_db);
@@ -337,4 +341,730 @@ const Store = {
     if (CLOUD) {
       const { data: { user } } = await supabase.auth.getUser();
       this.userId = user?.id ?? null;
-      if (!this.userId) { this.books = []; return
+      if (!this.userId) { this.books = []; return; }
+      const { data, error } = await supabase.from('books').select('*')
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+      this.books = data || [];
+    } else {
+      this.books = (await idbAll('books'))
+        .sort((a, b) => String(b.created_at || '').localeCompare(String(a.created_at || '')));
+      for (const b of this.books) {
+        if (b.cover_path && !this.urls.has(b.cover_path)) {
+          const blob = await idbGet('files', b.cover_path);
+          if (blob) this.urls.set(b.cover_path, URL.createObjectURL(blob));
+        }
+      }
+    }
+  },
+  coverSrc(b) {
+    if (b.cover_url) return b.cover_url;
+    if (b.cover_path && this.urls.has(b.cover_path)) return this.urls.get(b.cover_path);
+    return placeholderCover(b);
+  },
+  async save({ id = null, values, file = null, removeCover = false }) {
+    if (CLOUD) {
+      const uidCur = this.userId;
+      let cover_path = values.cover_path || null;
+      let cover_url  = values.cover_url  || null;
+      const oldPath = cover_path;
+      if (file) {
+        const path = uidCur + '/' + uid() + '.' + extOf(file);
+        const up = await supabase.storage.from(CFG.BUCKET).upload(path, file, {
+          contentType: file.type || 'image/jpeg', cacheControl: '31536000', upsert: false
+        });
+        if (up.error) throw new Error('Upload cover gagal: ' + up.error.message);
+        cover_path = path;
+        cover_url = supabase.storage.from(CFG.BUCKET).getPublicUrl(path).data.publicUrl;
+      } else if (removeCover) {
+        cover_path = null; cover_url = null;
+      }
+      const row = { ...values, cover_path, cover_url };
+      delete row.id; delete row.created_at; delete row.user_id;
+      let saved;
+      if (id) {
+        const { data, error } = await supabase.from('books').update(row).eq('id', id).select().single();
+        if (error) throw new Error(error.message);
+        saved = data;
+      } else {
+        const { data, error } = await supabase.from('books')
+          .insert({ ...row, user_id: uidCur }).select().single();
+        if (error) throw new Error(error.message);
+        saved = data;
+      }
+      if (oldPath && oldPath !== cover_path) {
+        await supabase.storage.from(CFG.BUCKET).remove([oldPath]);
+      }
+      return saved;
+    }
+    const now = new Date().toISOString();
+    const existing = id ? this.books.find(b => b.id === id) : null;
+    let cover_path = values.cover_path || null;
+    if (file) {
+      const path = 'local/' + uid() + '.' + extOf(file);
+      await idbPut('files', file, path);
+      if (cover_path && this.urls.has(cover_path)) {
+        URL.revokeObjectURL(this.urls.get(cover_path));
+        this.urls.delete(cover_path);
+      }
+      cover_path = path;
+      this.urls.set(path, URL.createObjectURL(file));
+    } else if (removeCover) {
+      if (cover_path) {
+        await idbDel('files', cover_path).catch(() => {});
+        if (this.urls.has(cover_path)) {
+          URL.revokeObjectURL(this.urls.get(cover_path));
+          this.urls.delete(cover_path);
+        }
+      }
+      cover_path = null;
+    }
+    const book = { ...values, id: id || uid(), cover_path, cover_url: null,
+      created_at: existing?.created_at || now, updated_at: now };
+    await idbPut('books', book);
+    return book;
+  },
+  async remove(book) {
+    if (CLOUD) {
+      if (book.cover_path) await supabase.storage.from(CFG.BUCKET).remove([book.cover_path]);
+      const { error } = await supabase.from('books').delete().eq('id', book.id);
+      if (error) throw new Error(error.message);
+    } else {
+      if (book.cover_path) {
+        await idbDel('files', book.cover_path).catch(() => {});
+        if (this.urls.has(book.cover_path)) {
+          URL.revokeObjectURL(this.urls.get(book.cover_path));
+          this.urls.delete(book.cover_path);
+        }
+      }
+      await idbDel('books', book.id);
+    }
+  }
+};
+function bookValues(b) {
+  return {
+    title: b.title, author: b.author || null, genre: b.genre || null,
+    publisher: b.publisher || null, year: b.year || null, isbn: b.isbn || null,
+    status: b.status || 'want', date_started: b.date_started || null,
+    date_finished: b.date_finished || null, rating: b.rating ? Number(b.rating) : null,
+    synopsis: b.synopsis || null, notes: b.notes || null, favorite: !!b.favorite,
+    cover_path: b.cover_path || null, cover_url: b.cover_url || null
+  };
+}
+const NAV = [
+  { hash:'#/home',       label:'Home',               short:'Home',     icon:'🏠' },
+  { hash:'#/collection', label:'My Collection',      short:'Koleksi',  icon:'📚' },
+  { hash:'#/reading',    label:'Currently Reading',  short:'Dibaca',   icon:'🔖' },
+  { hash:'#/want',       label:'Want to Read',       short:'Ingin',    icon:'✨' },
+  { hash:'#/favorites',  label:'Favorites',          short:'Favorit',  icon:'★' },
+  { hash:'#/stats',      label:'Reading Statistics', short:'Statistik',icon:'📊' }
+];
+function renderNav() {
+  $('#mainNav').innerHTML = NAV.map(n =>
+    '<a href="' + n.hash + '" data-nav="' + n.hash.slice(2) + '">' + n.label + '</a>').join('');
+  $('#bottomNav').innerHTML = NAV.map(n =>
+    '<a href="' + n.hash + '" data-nav="' + n.hash.slice(2) + '"><span class="ic">' + n.icon + '</span>' + n.short + '</a>').join('');
+}
+function setActiveNav(page) {
+  const key = (page === 'book') ? 'collection' : page;
+  $$('[data-nav]').forEach(a => a.classList.toggle('active', a.dataset.nav === key));
+}
+function parseHash() {
+  const raw = location.hash.replace(/^#\/?/, '') || 'home';
+  const [page, param] = raw.split('/');
+  return { page, param };
+}
+function bookCard(b) {
+  return '<article class="book-card" data-action="open-book" data-id="' + b.id + '">'
+    + '<div class="cover"><img loading="lazy" src="' + Store.coverSrc(b) + '" alt="Cover ' + esc(b.title) + '">'
+    + (b.status ? '<span class="badge ' + STATUS_CLASS[b.status] + '">' + STATUS[b.status] + '</span>' : '')
+    + '<button class="fav-btn ' + (b.favorite ? 'on' : '') + '" data-action="toggle-fav" data-id="' + b.id + '" title="Favorit">' + (b.favorite ? '★' : '☆') + '</button>'
+    + '</div>'
+    + '<h3 class="book-title">' + esc(b.title) + '</h3>'
+    + '<p class="book-author">' + esc(b.author || 'Tanpa penulis') + '</p>'
+    + (b.rating ? '<div class="stars">' + '★'.repeat(b.rating) + '☆'.repeat(5 - b.rating) + '</div>' : '')
+    + '</article>';
+}
+const bookGrid = list => '<div class="book-grid">' + list.map(bookCard).join('') + '</div>';
+function emptyState(title, text, action) {
+  return '<div class="empty"><div class="empty-icon">🌸</div><h3>' + esc(title) + '</h3>'
+    + '<p>' + esc(text) + '</p>' + (action || '') + '</div>';
+}
+const HERO_SVG = '<div class="hero-sky"><svg viewBox="0 0 1200 420" preserveAspectRatio="xMidYMid slice">'
+  + '<defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">'
+  + '<stop offset="0%" stop-color="#3D2B3D"/><stop offset="35%" stop-color="#625477"/>'
+  + '<stop offset="65%" stop-color="#C8A2C8"/><stop offset="85%" stop-color="#E8A0BF"/>'
+  + '<stop offset="100%" stop-color="#F7CAC9"/></linearGradient>'
+  + '<radialGradient id="glow" cx="50%" cy="50%" r="50%">'
+  + '<stop offset="0%" stop-color="#FFF8F0" stop-opacity="0.9"/>'
+  + '<stop offset="40%" stop-color="#F4E4A6" stop-opacity="0.5"/>'
+  + '<stop offset="100%" stop-color="#F4E4A6" stop-opacity="0"/></radialGradient></defs>'
+  + '<rect width="1200" height="420" fill="url(#sky)"/>'
+  + '<circle cx="880" cy="300" r="240" fill="url(#glow)"/>'
+  + '<circle cx="880" cy="300" r="52" fill="#FFF8F0" opacity="0.85"/>'
+  + '<g opacity="0.65"><circle cx="180" cy="330" r="26" fill="#F7CAC9"/><circle cx="180" cy="330" r="11" fill="#FFF8F0"/>'
+  + '<circle cx="320" cy="360" r="20" fill="#E8A0BF"/><circle cx="320" cy="360" r="9" fill="#FFF8F0"/>'
+  + '<circle cx="520" cy="340" r="24" fill="#C8A2C8"/><circle cx="520" cy="340" r="10" fill="#FFF8F0"/>'
+  + '<circle cx="700" cy="370" r="18" fill="#F4A896"/><circle cx="700" cy="370" r="8" fill="#FFF8F0"/>'
+  + '<circle cx="1020" cy="350" r="22" fill="#F4E4A6"/><circle cx="1020" cy="350" r="9" fill="#FFF8F0"/></g>'
+  + '<path d="M0 320 L200 300 L420 322 L640 296 L880 324 L1080 302 L1200 322 L1200 420 L0 420Z" fill="#3a2c3d" opacity="0.75"/>'
+  + '<path d="M0 370 L260 352 L520 378 L800 350 L1060 378 L1200 362 L1200 420 L0 420Z" fill="#2f2030"/>'
+  + '</svg></div>';
+function viewHome() {
+  const books = Store.books;
+  const finished = books.filter(b => b.status === 'finished');
+  const reading  = books.filter(b => b.status === 'reading');
+  const want     = books.filter(b => b.status === 'want');
+  const favs     = books.filter(b => b.favorite);
+  const latest   = books.slice(0, 6);
+  const card = (icon, num, label) => '<div class="stat-card"><div class="stat-icon">' + icon + '</div>'
+    + '<div class="stat-num">' + num + '</div><div class="stat-label">' + label + '</div></div>';
+  return '<section class="hero">' + HERO_SVG
+    + '<div class="hero-content"><p class="eyebrow">Taman Bacaan Pribadi</p>'
+    + '<h1>My Reading Archive</h1>'
+    + '<p class="tagline">Setiap buku menumbuhkan satu bunga di tamanmu.</p>'
+    + '<div class="hero-actions"><button class="btn btn-primary" data-action="add-book">🌸 Tambahkan Buku</button>'
+    + '<a class="btn btn-ghost" href="#/collection">Lihat Koleksi</a></div></div></section>'
+    + '<section class="stats-grid">'
+    + card('📖', finished.length, 'Selesai Dibaca')
+    + card('🔖', reading.length, 'Sedang Dibaca')
+    + card('✨', want.length, 'Ingin Dibaca')
+    + card('★', favs.length, 'Favorit')
+    + '</section>'
+    + '<section class="section"><div class="section-head"><h2>Buku Terakhir Ditambahkan</h2>'
+    + '<a href="#/collection">Semua →</a></div>'
+    + (latest.length ? bookGrid(latest)
+      : emptyState('Taman bacaan masih kosong', 'Tanam buku pertamamu di sini.',
+        '<button class="btn btn-primary" data-action="add-book">🌸 Tambahkan Buku</button>'))
+    + '</section>'
+    + '<section class="section"><div class="section-head"><h2>Koleksi Favorit</h2>'
+    + '<a href="#/favorites">Semua →</a></div>'
+    + (favs.length ? bookGrid(favs.slice(0, 6))
+      : emptyState('Belum ada favorit', 'Tandai buku dengan bintang untuk menyimpannya di sini.'))
+    + '</section>';
+}
+let currentPreset = { key: 'collection' };
+const SORTERS = {
+  added:  (a, b) => String(b.created_at || '').localeCompare(String(a.created_at || '')),
+  title:  (a, b) => String(a.title || '').localeCompare(String(b.title || ''), 'id'),
+  author: (a, b) => String(a.author || '').localeCompare(String(b.author || ''), 'id'),
+  rating: (a, b) => (b.rating || 0) - (a.rating || 0)
+};
+function computeList() {
+  const f = state.filters;
+  let list = Store.books.slice();
+  if (currentPreset.status) list = list.filter(b => b.status === currentPreset.status);
+  if (currentPreset.favoritesOnly) list = list.filter(b => b.favorite);
+  if (f.q) {
+    const q = f.q.toLowerCase();
+    list = list.filter(b => String(b.title || '').toLowerCase().includes(q)
+      || String(b.author || '').toLowerCase().includes(q));
+  }
+  if (f.genre) list = list.filter(b => (b.genre || '') === f.genre);
+  if (f.status && !currentPreset.status) list = list.filter(b => b.status === f.status);
+  list.sort(SORTERS[f.sort] || SORTERS.added);
+  return list;
+}
+function viewCollection(preset) {
+  currentPreset = preset;
+  const genres = [...new Set(Store.books.map(b => b.genre).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'id'));
+  const list = computeList();
+  const headings = {
+    collection: ['My Collection', 'Semua buku dalam taman bacaanmu.'],
+    reading:    ['Currently Reading', 'Buku yang sedang kamu nikmati sekarang.'],
+    want:       ['Want to Read', 'Antrean bacaan yang menunggu giliran.'],
+    favorites:  ['Favorites', 'Buku-buku yang paling berkesan.']
+  };
+  const [title, sub] = headings[preset.key] || headings.collection;
+  return '<div class="section" style="margin-top:28px">'
+    + '<div class="section-head" style="margin-bottom:4px"><h2 style="font-size:1.9rem">' + title + '</h2></div>'
+    + '<p style="color:var(--muted);font-size:.88rem;margin:0 0 6px">' + sub + '</p></div>'
+    + '<div class="toolbar"><div class="grow"><input id="searchInput" type="search" placeholder="Cari judul atau penulis…"></div>'
+    + '<div style="flex:0 1 160px"><select id="genreFilter"><option value="">Semua Genre</option>'
+    + genres.map(g => '<option value="' + esc(g) + '">' + esc(g) + '</option>').join('') + '</select></div>'
+    + (preset.status ? '' : '<div style="flex:0 1 170px"><select id="statusFilter"><option value="">Semua Status</option>'
+      + '<option value="want">Ingin Dibaca</option><option value="reading">Sedang Dibaca</option>'
+      + '<option value="finished">Selesai Dibaca</option></select></div>')
+    + '<div style="flex:0 1 170px"><select id="sortSelect"><option value="added">Terbaru</option>'
+    + '<option value="title">Judul A–Z</option><option value="author">Penulis A–Z</option>'
+    + '<option value="rating">Rating</option></select></div></div>'
+    + '<p class="result-count" id="resultCount">' + list.length + ' buku</p>'
+    + '<div id="gridWrap">'
+    + (list.length ? bookGrid(list)
+      : emptyState('Tidak ada buku', 'Coba ubah pencarian atau filter.',
+        '<button class="btn btn-primary" data-action="add-book">🌸 Tambahkan Buku</button>'))
+    + '</div>';
+}
+function refreshGrid() {
+  const wrap = $('#gridWrap');
+  if (!wrap) return;
+  const list = computeList();
+  wrap.innerHTML = list.length ? bookGrid(list)
+    : emptyState('Tidak ada buku', 'Coba ubah pencarian atau filter.',
+      '<button class="btn btn-primary" data-action="add-book">🌸 Tambahkan Buku</button>');
+  const c = $('#resultCount');
+  if (c) c.textContent = list.length + ' buku';
+}
+  function viewBookDetail(id) {
+  const b = Store.books.find(x => x.id === id);
+  if (!b) {
+    return '<div style="margin-top:60px">' + emptyState('Buku tidak ditemukan',
+      'Buku ini mungkin sudah dihapus.',
+      '<a class="btn btn-ghost" href="#/collection">Kembali ke Koleksi</a>') + '</div>';
+  }
+  const meta = [
+    ['Genre', b.genre || '—'],
+    ['Penerbit', b.publisher || '—'],
+    ['Tahun Terbit', b.year || '—'],
+    ['ISBN', b.isbn || '—'],
+    ['Tanggal Mulai', b.date_started ? fmtDate(b.date_started) : '—'],
+    ['Tanggal Selesai', b.date_finished ? fmtDate(b.date_finished) : '—'],
+    ['Ditambahkan', fmtDate(b.created_at)]
+  ];
+  return '<a class="back-link" href="#/collection">← Kembali ke koleksi</a>'
+    + '<div class="detail"><div class="detail-cover"><img src="' + Store.coverSrc(b) + '" alt="Cover"></div>'
+    + '<div class="detail-info"><span class="badge ' + STATUS_CLASS[b.status] + '" style="position:static;display:inline-block">' + STATUS[b.status] + '</span>'
+    + '<h1>' + esc(b.title) + '</h1>'
+    + '<p class="detail-author">' + esc(b.author || 'Tanpa penulis') + '</p>'
+    + '<div class="stars big">' + (b.rating ? '★'.repeat(b.rating) + '☆'.repeat(5 - b.rating) : '☆☆☆☆☆') + '</div>'
+    + '<div class="detail-meta">'
+    + meta.map(([k, v]) => '<div><span>' + k + '</span><strong>' + esc(v) + '</strong></div>').join('')
+    + '</div>'
+    + '<div class="detail-actions">'
+    + '<button class="btn btn-primary" data-action="edit-book" data-id="' + b.id + '">Edit Buku</button>'
+    + '<button class="btn btn-ghost" data-action="toggle-fav" data-id="' + b.id + '">' + (b.favorite ? '★ Favorit' : '☆ Jadikan Favorit') + '</button>'
+    + '<button class="btn btn-danger" data-action="delete-book" data-id="' + b.id + '">Hapus</button>'
+    + '<select id="detailStatus" data-id="' + b.id + '" style="flex:0 1 190px">'
+    + '<option value="want" ' + (b.status === 'want' ? 'selected' : '') + '>Ingin Dibaca</option>'
+    + '<option value="reading" ' + (b.status === 'reading' ? 'selected' : '') + '>Sedang Dibaca</option>'
+    + '<option value="finished" ' + (b.status === 'finished' ? 'selected' : '') + '>Selesai Dibaca</option>'
+    + '</select></div></div></div>'
+    + '<section class="section"><div class="section-head"><h2>Sinopsis</h2></div>'
+    + '<p class="prose">' + (b.synopsis ? esc(b.synopsis) : '<span style="color:var(--muted)">Belum ada sinopsis.</span>') + '</p></section>'
+    + '<section class="section"><div class="section-head"><h2>Catatan Pribadi & Ulasan</h2></div>'
+    + '<p class="prose">' + (b.notes ? esc(b.notes) : '<span style="color:var(--muted)">Belum ada catatan.</span>') + '</p></section>';
+}
+function viewStats() {
+  const books = Store.books;
+  const finished = books.filter(b => b.status === 'finished');
+  const rated = books.filter(b => b.rating > 0);
+  const avg = rated.length ? (rated.reduce((s, b) => s + Number(b.rating), 0) / rated.length) : 0;
+  const now = new Date();
+  const months = [];
+  for (let i = 11; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    months.push({
+      key: d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'),
+      label: d.toLocaleDateString('id-ID', { month: 'short' }),
+      count: 0
+    });
+  }
+  finished.forEach(b => {
+    const d = parseDate(b.date_finished || b.updated_at || b.created_at);
+    if (!d) return;
+    const key = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+    const m = months.find(x => x.key === key);
+    if (m) m.count++;
+  });
+  const maxMonth = Math.max(1, ...months.map(m => m.count));
+  const genreCount = {};
+  books.forEach(b => { if (b.genre) genreCount[b.genre] = (genreCount[b.genre] || 0) + 1; });
+  const topGenres = Object.entries(genreCount).sort((a, b) => b[1] - a[1]).slice(0, 6);
+  const maxGenre = Math.max(1, ...topGenres.map(g => g[1]));
+  const history = finished.slice().sort((a, b) =>
+    String(b.date_finished || b.updated_at || '').localeCompare(String(a.date_finished || a.updated_at || '')));
+  const card = (icon, num, label) => '<div class="stat-card"><div class="stat-icon">' + icon + '</div>'
+    + '<div class="stat-num">' + num + '</div><div class="stat-label">' + label + '</div></div>';
+  return '<div class="section" style="margin-top:28px">'
+    + '<div class="section-head" style="margin-bottom:4px"><h2 style="font-size:1.9rem">Reading Statistics</h2></div>'
+    + '<p style="color:var(--muted);font-size:.88rem;margin:0">Dihitung otomatis dari data arsipmu.</p></div>'
+    + '<section class="stats-grid">'
+    + card('📚', books.length, 'Total Buku')
+    + card('✅', finished.length, 'Selesai Dibaca')
+    + card('⭐', avg ? avg.toFixed(1) : '—', 'Rata-rata Rating')
+    + card('🌸', topGenres.length ? topGenres[0][0] : '—', 'Genre Terfavorit')
+    + '</section>'
+    + '<section class="section"><div class="section-head"><h2>Buku Selesai per Bulan</h2></div>'
+    + '<div class="chart">'
+    + months.map(m => '<div class="bar-col"><span class="bar-val">' + (m.count || '') + '</span>'
+      + '<div class="bar" style="height:' + Math.max(3, (m.count / maxMonth) * 100) + '%"></div>'
+      + '<span class="bar-label">' + m.label + '</span></div>').join('')
+    + '</div></section>'
+    + '<section class="section"><div class="section-head"><h2>Genre yang Paling Sering Dibaca</h2></div>'
+    + (topGenres.length ? topGenres.map(([g, n]) =>
+        '<div class="genre-row"><div class="gr-top"><span>' + esc(g) + '</span><span>' + n + ' buku</span></div>'
+        + '<div class="gr-bar"><i style="width:' + (n / maxGenre) * 100 + '%"></i></div></div>').join('')
+      : '<p style="color:var(--muted);font-size:.88rem">Belum ada data genre.</p>')
+    + '</section>'
+    + '<section class="section"><div class="section-head"><h2>Riwayat Membaca</h2></div>'
+    + (history.length ? history.map(b => '<div class="history-item"><div style="min-width:0">'
+        + '<h4><a href="#/book/' + b.id + '" style="text-decoration:none">' + esc(b.title) + '</a></h4>'
+        + '<p>' + esc(b.author || 'Tanpa penulis') + (b.rating ? ' · ' + '★'.repeat(b.rating) : '') + '</p></div>'
+        + '<div class="history-date">' + fmtDate(b.date_finished || b.updated_at) + '</div></div>').join('')
+      : emptyState('Belum ada riwayat', 'Tandai buku sebagai "Selesai Dibaca" untuk melihat riwayat.'))
+    + '</section>';
+}
+const modalRoot = $('#modal-root');
+function showModal(html) {
+  modalRoot.innerHTML = '<div class="modal-backdrop" id="backdrop"><div class="modal" role="dialog">' + html + '</div></div>';
+  document.body.style.overflow = 'hidden';
+  $('#backdrop').addEventListener('mousedown', e => { if (e.target.id === 'backdrop') closeModal(); });
+}
+function closeModal() {
+  modalRoot.innerHTML = '';
+  document.body.style.overflow = '';
+  if (formState.previewUrl && formState.previewUrl.startsWith('blob:')) {
+    URL.revokeObjectURL(formState.previewUrl);
+  }
+  formState = { file:null, removeCover:false, rating:0, previewUrl:null, id:null, existing:null };
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+let formState = { file:null, removeCover:false, rating:0, previewUrl:null, id:null, existing:null };
+function openBookForm(book) {
+  const isEdit = !!book;
+  const b = book || { status:'want', rating:0, favorite:false, title:'' };
+  const genres = [...new Set(Store.books.map(x => x.genre).filter(Boolean))].sort();
+  formState = {
+    file: null, removeCover: false, rating: Number(b.rating) || 0,
+    previewUrl: isEdit ? Store.coverSrc(b) : placeholderCover({ title:'Buku Baru' }),
+    id: book?.id || null, existing: book || null
+  };
+  showModal(
+    '<div class="modal-head"><h2>' + (isEdit ? 'Edit Buku' : 'Tambahkan Buku') + '</h2>'
+    + '<button class="icon-btn" data-action="close-modal">✕</button></div>'
+    + '<form id="bookForm" novalidate>'
+    + '<div class="uploader"><div class="upload-preview"><img id="previewImg" src="' + formState.previewUrl + '" alt="Preview"></div>'
+    + '<div class="upload-actions"><div class="row"><button type="button" class="btn btn-ghost btn-sm" id="pickBtn">Pilih Foto</button>'
+    + '<button type="button" class="btn btn-ghost btn-sm" id="camBtn">Kamera</button></div>'
+    + '<div class="row"><button type="button" class="btn btn-ghost btn-sm" id="phBtn">Pakai Placeholder</button>'
+    + '<button type="button" class="btn btn-danger btn-sm" id="rmBtn">Hapus Foto</button></div>'
+    + '<p class="hint">JPG, JPEG, PNG, atau WebP · maksimal 50 MB.</p></div>'
+    + '<input type="file" id="fileInput" accept="image/jpeg,image/jpg,image/png,image/webp" hidden>'
+    + '<input type="file" id="camInput" accept="image/*" capture="environment" hidden></div>'
+    + '<div class="field"><label for="f_title">Judul Buku *</label>'
+    + '<input id="f_title" type="text" required placeholder="Judul buku" value="' + esc(b.title || '') + '"></div>'
+    + '<div class="grid-2"><div class="field"><label for="f_author">Penulis</label>'
+    + '<input id="f_author" type="text" placeholder="Nama penulis" value="' + esc(b.author || '') + '"></div>'
+    + '<div class="field"><label for="f_genre">Genre</label>'
+    + '<input id="f_genre" type="text" list="genreList" placeholder="Fiksi, dll" value="' + esc(b.genre || '') + '">'
+    + '<datalist id="genreList">' + genres.map(g => '<option value="' + esc(g) + '">').join('') + '</datalist></div></div>'
+    + '<div class="grid-2"><div class="field"><label for="f_publisher">Penerbit</label>'
+    + '<input id="f_publisher" type="text" placeholder="Nama penerbit" value="' + esc(b.publisher || '') + '"></div>'
+    + '<div class="field"><label for="f_year">Tahun Terbit</label>'
+    + '<input id="f_year" type="text" inputmode="numeric" placeholder="2024" value="' + esc(b.year || '') + '"></div></div>'
+    + '<div class="grid-2"><div class="field"><label for="f_isbn">ISBN</label>'
+    + '<input id="f_isbn" type="text" placeholder="978-…" value="' + esc(b.isbn || '') + '"></div>'
+    + '<div class="field"><label for="f_status">Status Membaca</label>'
+    + '<select id="f_status">'
+    + '<option value="want" ' + (b.status === 'want' ? 'selected' : '') + '>Ingin Dibaca</option>'
+    + '<option value="reading" ' + (b.status === 'reading' ? 'selected' : '') + '>Sedang Dibaca</option>'
+    + '<option value="finished" ' + (b.status === 'finished' ? 'selected' : '') + '>Selesai Dibaca</option>'
+    + '</select></div></div>'
+    + '<div class="grid-2"><div class="field"><label for="f_start">Tanggal Mulai</label>'
+    + '<input id="f_start" type="date" value="' + (b.date_started || '') + '"></div>'
+    + '<div class="field"><label for="f_finish">Tanggal Selesai</label>'
+    + '<input id="f_finish" type="date" value="' + (b.date_finished || '') + '"></div></div>'
+    + '<div class="field"><label>Rating Pribadi</label><div class="star-input" id="starInput">'
+    + [1,2,3,4,5].map(n => '<button type="button" data-star="' + n + '" class="' + (formState.rating >= n ? 'on' : '') + '">★</button>').join('')
+    + '</div></div>'
+    + '<div class="field"><label for="f_synopsis">Sinopsis</label>'
+    + '<textarea id="f_synopsis" placeholder="Ringkasan cerita…">' + esc(b.synopsis || '') + '</textarea></div>'
+    + '<div class="field"><label for="f_notes">Catatan Pribadi</label>'
+    + '<textarea id="f_notes" placeholder="Kesan, kutipan, ulasan…">' + esc(b.notes || '') + '</textarea></div>'
+    + '<div class="check-row"><input type="checkbox" id="f_fav" ' + (b.favorite ? 'checked' : '') + '>'
+    + '<label for="f_fav">Tandai sebagai favorit ★</label></div>'
+    + '<div class="modal-foot"><button type="button" class="btn btn-ghost" data-action="close-modal">Batal</button>'
+    + '<button type="submit" class="btn btn-primary" id="saveBtn">Simpan Buku</button></div></form>'
+  );
+  const fileInput = $('#fileInput');
+  const camInput  = $('#camInput');
+  const previewImg = $('#previewImg');
+  const setPreview = src => { previewImg.src = src; };
+  function handleFile(file) {
+    if (!file) return;
+    const okType = ['image/jpeg','image/jpg','image/png','image/webp'].includes(file.type)
+      || /\.(jpe?g|png|webp)$/i.test(file.name);
+    if (!okType) { toast('Format harus JPG, PNG, atau WebP', 'err'); return; }
+    if (file.size > 50 * 1024 * 1024) { toast('Ukuran maksimal 50 MB', 'err'); return; }
+    if (formState.previewUrl && formState.previewUrl.startsWith('blob:')) {
+      URL.revokeObjectURL(formState.previewUrl);
+    }
+    formState.file = file;
+    formState.removeCover = false;
+    formState.previewUrl = URL.createObjectURL(file);
+    setPreview(formState.previewUrl);
+  }
+  $('#pickBtn').addEventListener('click', () => fileInput.click());
+  $('#camBtn').addEventListener('click', () => camInput.click());
+  fileInput.addEventListener('change', () => { handleFile(fileInput.files[0]); fileInput.value = ''; });
+  camInput.addEventListener('change', () => { handleFile(camInput.files[0]); camInput.value = ''; });
+  $('#rmBtn').addEventListener('click', () => {
+    if (formState.previewUrl && formState.previewUrl.startsWith('blob:')) {
+      URL.revokeObjectURL(formState.previewUrl);
+    }
+    formState.file = null;
+    formState.removeCover = true;
+    formState.previewUrl = placeholderCover({ title: $('#f_title').value || 'Buku Baru' });
+    setPreview(formState.previewUrl);
+  });
+  $('#phBtn').addEventListener('click', () => $('#rmBtn').click());
+  $('#starInput').addEventListener('click', e => {
+    const btn = e.target.closest('[data-star]');
+    if (!btn) return;
+    const val = Number(btn.dataset.star);
+    formState.rating = (formState.rating === val) ? 0 : val;
+    $$('#starInput button').forEach(x => x.classList.toggle('on', Number(x.dataset.star) <= formState.rating));
+  });
+  $('#bookForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const title = $('#f_title').value.trim();
+    if (!title) { toast('Judul wajib diisi', 'err'); return; }
+    const values = {
+      title,
+      author: $('#f_author').value.trim() || null,
+      genre: $('#f_genre').value.trim() || null,
+      publisher: $('#f_publisher').value.trim() || null,
+      year: $('#f_year').value.trim() || null,
+      isbn: $('#f_isbn').value.trim() || null,
+      status: $('#f_status').value,
+      date_started: $('#f_start').value || null,
+      date_finished: $('#f_finish').value || null,
+      rating: formState.rating || null,
+      synopsis: $('#f_synopsis').value.trim() || null,
+      notes: $('#f_notes').value.trim() || null,
+      favorite: $('#f_fav').checked,
+      cover_path: formState.existing?.cover_path || null,
+      cover_url: formState.existing?.cover_url || null
+    };
+    const saveBtn = $('#saveBtn');
+    saveBtn.disabled = true;
+    saveBtn.textContent = 'Menyimpan…';
+    try {
+      await Store.save({ id: formState.id, values, file: formState.file, removeCover: formState.removeCover });
+      await Store.load();
+      closeModal();
+      render(false);
+      toast(isEdit ? 'Buku diperbarui 🌸' : 'Buku ditambahkan 🌸');
+    } catch (err) {
+      console.error(err);
+      saveBtn.disabled = false;
+      saveBtn.textContent = 'Simpan Buku';
+      toast('Gagal: ' + (err.message || err), 'err');
+    }
+  });
+}
+  async function toggleFav(id) {
+  const b = Store.books.find(x => x.id === id);
+  if (!b) return;
+  const prev = !!b.favorite;
+  b.favorite = !prev;
+  softRefresh();
+  try {
+    await Store.save({ id, values: bookValues(b) });
+    await Store.load();
+    softRefresh();
+    toast(b.favorite ? 'Ditandai favorit ★' : 'Dihapus dari favorit');
+  } catch (err) {
+    await Store.load();
+    softRefresh();
+    toast('Gagal: ' + err.message, 'err');
+  }
+}
+function confirmDelete(id) {
+  const b = Store.books.find(x => x.id === id);
+  if (!b) return;
+  showModal(
+    '<div class="modal-head"><h2>Hapus Buku</h2>'
+    + '<button class="icon-btn" data-action="close-modal">✕</button></div>'
+    + '<p class="confirm-text">Yakin ingin menghapus <strong>' + esc(b.title) + '</strong>? '
+    + 'Foto cover dan seluruh datanya akan ikut terhapus permanen.</p>'
+    + '<div class="modal-foot"><button class="btn btn-ghost" data-action="close-modal">Batal</button>'
+    + '<button class="btn btn-danger" id="confirmDel">Hapus Buku</button></div>'
+  );
+  $('#confirmDel').addEventListener('click', async () => {
+    const btn = $('#confirmDel');
+    btn.disabled = true;
+    btn.textContent = 'Menghapus…';
+    try {
+      await Store.remove(b);
+      await Store.load();
+      closeModal();
+      if (parseHash().page === 'book') location.hash = '#/collection';
+      else render(false);
+      toast('Buku dihapus');
+    } catch (err) {
+      btn.disabled = false;
+      btn.textContent = 'Hapus Buku';
+      toast('Gagal hapus: ' + err.message, 'err');
+    }
+  });
+}
+function softRefresh() {
+  if ($('#gridWrap')) refreshGrid();
+  else render(false);
+}
+let state = { filters: { q:'', genre:'', status:'', sort:'added' } };
+function render(scrollTop = true) {
+  const { page, param } = parseHash();
+  let html = '';
+  switch (page) {
+    case 'home':       html = viewHome(); break;
+    case 'collection': html = viewCollection({ key:'collection' }); break;
+    case 'reading':    html = viewCollection({ key:'reading', status:'reading' }); break;
+    case 'want':       html = viewCollection({ key:'want', status:'want' }); break;
+    case 'favorites':  html = viewCollection({ key:'favorites', favoritesOnly:true }); break;
+    case 'stats':      html = viewStats(); break;
+    case 'book':       html = viewBookDetail(param); break;
+    default:           html = viewHome();
+  }
+  $('#view').innerHTML = html;
+  setActiveNav(page);
+  bindView();
+  if (scrollTop) window.scrollTo({ top:0, behavior:'auto' });
+}
+function bindView() {
+  const q = $('#searchInput');
+  if (q) {
+    q.value = state.filters.q;
+    q.addEventListener('input', () => { state.filters.q = q.value; refreshGrid(); });
+  }
+  const g = $('#genreFilter');
+  if (g) {
+    g.value = state.filters.genre;
+    g.addEventListener('change', () => { state.filters.genre = g.value; refreshGrid(); });
+  }
+  const s = $('#statusFilter');
+  if (s) {
+    s.value = state.filters.status;
+    s.addEventListener('change', () => { state.filters.status = s.value; refreshGrid(); });
+  }
+  const so = $('#sortSelect');
+  if (so) {
+    so.value = state.filters.sort;
+    so.addEventListener('change', () => { state.filters.sort = so.value; refreshGrid(); });
+  }
+  const ds = $('#detailStatus');
+  if (ds) {
+    ds.addEventListener('change', async () => {
+      const b = Store.books.find(x => x.id === ds.dataset.id);
+      if (!b) return;
+      b.status = ds.value;
+      try {
+        await Store.save({ id: b.id, values: bookValues(b) });
+        await Store.load();
+        render(false);
+        toast('Status diperbarui');
+      } catch (err) {
+        await Store.load();
+        render(false);
+        toast('Gagal: ' + err.message, 'err');
+      }
+    });
+  }
+}
+document.addEventListener('click', async e => {
+  const el = e.target.closest('[data-action]');
+  if (!el) return;
+  const { action, id } = el.dataset;
+  if (action === 'add-book') {
+    e.preventDefault();
+    openBookForm(null);
+  } else if (action === 'open-book') {
+    location.hash = '#/book/' + id;
+  } else if (action === 'edit-book') {
+    e.preventDefault();
+    const b = Store.books.find(x => x.id === id);
+    if (b) openBookForm(b);
+  } else if (action === 'delete-book') {
+    e.preventDefault();
+    confirmDelete(id);
+  } else if (action === 'toggle-fav') {
+    e.preventDefault();
+    e.stopPropagation();
+    await toggleFav(id);
+  } else if (action === 'close-modal') {
+    e.preventDefault();
+    closeModal();
+  }
+});
+function renderAuth(message = '') {
+  $('#mainNav').style.display = 'none';
+  $('#addBtn').style.display = 'none';
+  $('#bottomNav').style.display = 'none';
+  $('.fab').style.display = 'none';
+  $('#signOutBtn').style.display = 'none';
+  $('#view').innerHTML =
+    '<div class="auth-wrap">'
+    + '<h1>🌸 My Reading Archive</h1>'
+    + '<p class="sub">Masuk untuk membuka taman bacaan pribadimu. Koleksi dan foto covermu tersimpan aman.</p>'
+    + (message ? '<p class="sub" style="color:var(--blush)">' + esc(message) + '</p>' : '')
+    + '<form id="authForm">'
+    + '<div class="field"><label for="a_email">Email</label>'
+    + '<input id="a_email" type="email" required autocomplete="email" placeholder="nama@email.com"></div>'
+    + '<div class="field"><label for="a_pass">Kata Sandi</label>'
+    + '<input id="a_pass" type="password" required minlength="6" autocomplete="current-password" placeholder="Minimal 6 karakter"></div>'
+    + '<div class="modal-foot" style="border:none;padding-top:6px">'
+    + '<button type="button" class="btn btn-ghost" id="signUpBtn">Daftar</button>'
+    + '<button type="submit" class="btn btn-primary" id="signInBtn">Masuk</button>'
+    + '</div></form></div>';
+  $('#authForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const email = $('#a_email').value.trim();
+    const password = $('#a_pass').value;
+    $('#signInBtn').disabled = true;
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    $('#signInBtn').disabled = false;
+    if (error) { toast('Gagal masuk: ' + error.message, 'err'); return; }
+    await boot();
+  });
+  $('#signUpBtn').addEventListener('click', async () => {
+    const email = $('#a_email').value.trim();
+    const password = $('#a_pass').value;
+    if (!email || password.length < 6) {
+      toast('Isi email dan kata sandi minimal 6 karakter', 'err');
+      return;
+    }
+    const { data, error } = await supabase.auth.signUp({ email, password });
+    if (error) { toast('Gagal daftar: ' + error.message, 'err'); return; }
+    if (!data.session) {
+      toast('Cek email konfirmasi, lalu masuk kembali.');
+      return;
+    }
+    await boot();
+  });
+}
+async function boot() {
+  renderNav();
+  if (CLOUD) {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) { renderAuth(); return; }
+    Store.userId = session.user.id;
+    $('#mainNav').style.display = '';
+    $('#addBtn').style.display = '';
+    $('#bottomNav').style.display = '';
+    $('.fab').style.display = '';
+    $('#signOutBtn').style.display = '';
+    supabase.auth.onAuthStateChange((evt) => {
+      if (evt === 'SIGNED_OUT') { Store.books = []; renderAuth(); }
+    });
+  }
+  try {
+    await Store.load();
+  } catch (err) {
+    console.error(err);
+    toast('Gagal memuat koleksi: ' + err.message, 'err');
+  }
+  if (!location.hash) location.hash = '#/home';
+  window.addEventListener('hashchange', () => render(true));
+  render(true);
+}
+$('#signOutBtn').addEventListener('click', async () => {
+  if (!CLOUD) return;
+  await supabase.auth.signOut();
+  Store.books = [];
+  renderAuth();
+});
+boot();
+</script>
+</body>
+</html>
