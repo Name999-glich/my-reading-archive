@@ -216,6 +216,48 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
   .modal{padding:20px;border-radius:16px}
   .modal-backdrop{padding:14px 10px}
 }
+/* 🌸 Animasi Taman Bunga */
+@keyframes float-petal {
+  0%   { transform: translateY(-10%) translateX(0) rotate(0deg); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateY(420px) translateX(60px) rotate(360deg); opacity: 0; }
+}
+@keyframes sway-grass {
+  0%, 100% { transform: skewX(-3deg); }
+  50%      { transform: skewX(3deg); }
+}
+@keyframes sway-flower {
+  0%, 100% { transform: rotate(-4deg); }
+  50%      { transform: rotate(4deg); }
+}
+@keyframes butterfly {
+  0%   { transform: translate(0, 0) rotate(0deg); }
+  25%  { transform: translate(40px, -20px) rotate(10deg); }
+  50%  { transform: translate(80px, 10px) rotate(-10deg); }
+  75%  { transform: translate(40px, -10px) rotate(5deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+@keyframes sun-pulse {
+  0%, 100% { opacity: 0.85; transform: scale(1); }
+  50%      { opacity: 1; transform: scale(1.05); }
+}
+@keyframes cloud-drift {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(40px); }
+}
+.hero-sky { overflow: hidden; }
+.petal {
+  position: absolute; top: -20px;
+  animation: float-petal 12s linear infinite;
+  pointer-events: none;
+}
+.petal svg { display: block; }
+.grass { animation: sway-grass 3s ease-in-out infinite; transform-origin: bottom center; }
+.flower-sway { animation: sway-flower 4s ease-in-out infinite; transform-origin: bottom center; }
+.butterfly { animation: butterfly 8s ease-in-out infinite; transform-origin: center; }
+.sun-glow { animation: sun-pulse 5s ease-in-out infinite; transform-origin: center; }
+.cloud { animation: cloud-drift 20s ease-in-out infinite alternate; }
 </style>
 </head>
 <body>
@@ -490,26 +532,153 @@ function emptyState(title, text, action) {
   return '<div class="empty"><div class="empty-icon">🌸</div><h3>' + esc(title) + '</h3>'
     + '<p>' + esc(text) + '</p>' + (action || '') + '</div>';
 }
-const HERO_SVG = '<div class="hero-sky"><svg viewBox="0 0 1200 420" preserveAspectRatio="xMidYMid slice">'
-  + '<defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">'
-  + '<stop offset="0%" stop-color="#3D2B3D"/><stop offset="35%" stop-color="#625477"/>'
-  + '<stop offset="65%" stop-color="#C8A2C8"/><stop offset="85%" stop-color="#E8A0BF"/>'
-  + '<stop offset="100%" stop-color="#F7CAC9"/></linearGradient>'
-  + '<radialGradient id="glow" cx="50%" cy="50%" r="50%">'
-  + '<stop offset="0%" stop-color="#FFF8F0" stop-opacity="0.9"/>'
-  + '<stop offset="40%" stop-color="#F4E4A6" stop-opacity="0.5"/>'
-  + '<stop offset="100%" stop-color="#F4E4A6" stop-opacity="0"/></radialGradient></defs>'
-  + '<rect width="1200" height="420" fill="url(#sky)"/>'
-  + '<circle cx="880" cy="300" r="240" fill="url(#glow)"/>'
-  + '<circle cx="880" cy="300" r="52" fill="#FFF8F0" opacity="0.85"/>'
-  + '<g opacity="0.65"><circle cx="180" cy="330" r="26" fill="#F7CAC9"/><circle cx="180" cy="330" r="11" fill="#FFF8F0"/>'
-  + '<circle cx="320" cy="360" r="20" fill="#E8A0BF"/><circle cx="320" cy="360" r="9" fill="#FFF8F0"/>'
-  + '<circle cx="520" cy="340" r="24" fill="#C8A2C8"/><circle cx="520" cy="340" r="10" fill="#FFF8F0"/>'
-  + '<circle cx="700" cy="370" r="18" fill="#F4A896"/><circle cx="700" cy="370" r="8" fill="#FFF8F0"/>'
-  + '<circle cx="1020" cy="350" r="22" fill="#F4E4A6"/><circle cx="1020" cy="350" r="9" fill="#FFF8F0"/></g>'
-  + '<path d="M0 320 L200 300 L420 322 L640 296 L880 324 L1080 302 L1200 322 L1200 420 L0 420Z" fill="#3a2c3d" opacity="0.75"/>'
-  + '<path d="M0 370 L260 352 L520 378 L800 350 L1060 378 L1200 362 L1200 420 L0 420Z" fill="#2f2030"/>'
-  + '</svg></div>';
+const HERO_SVG = `
+<div class="hero-sky">
+<svg viewBox="0 0 1200 420" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3D2B3D"/>
+      <stop offset="35%" stop-color="#625477"/>
+      <stop offset="65%" stop-color="#C8A2C8"/>
+      <stop offset="85%" stop-color="#E8A0BF"/>
+      <stop offset="100%" stop-color="#F7CAC9"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFF8F0" stop-opacity="0.9"/>
+      <stop offset="40%" stop-color="#F4E4A6" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#F4E4A6" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="hillFar" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#6b7d5c"/>
+      <stop offset="100%" stop-color="#4a5a3f"/>
+    </linearGradient>
+    <linearGradient id="hillNear" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#52643f"/>
+      <stop offset="100%" stop-color="#2f3a25"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Langit -->
+  <rect width="1200" height="420" fill="url(#sky)"/>
+
+  <!-- Matahari berdenyut -->
+  <g class="sun-glow">
+    <circle cx="880" cy="280" r="240" fill="url(#glow)"/>
+    <circle cx="880" cy="280" r="52" fill="#FFF8F0" opacity="0.9"/>
+  </g>
+
+  <!-- Awan bergerak -->
+  <g class="cloud" opacity="0.35">
+    <ellipse cx="280" cy="90" rx="90" ry="16" fill="#FFF8F0"/>
+    <ellipse cx="340" cy="80" rx="60" ry="12" fill="#FFF8F0"/>
+  </g>
+  <g class="cloud" style="animation-duration:28s" opacity="0.28">
+    <ellipse cx="700" cy="120" rx="70" ry="12" fill="#FFF8F0"/>
+    <ellipse cx="760" cy="112" rx="50" ry="10" fill="#FFF8F0"/>
+  </g>
+
+  <!-- Bukit jauh -->
+  <path d="M0 300 Q 300 240 600 290 T 1200 280 L1200 420 L0 420Z" fill="url(#hillFar)" opacity="0.75"/>
+  <!-- Bukit dekat -->
+  <path d="M0 350 Q 400 300 800 350 T 1200 340 L1200 420 L0 420Z" fill="url(#hillNear)"/>
+
+  <!-- Rumput bergoyang -->
+  <g class="grass" fill="#A8C09A" opacity="0.85">
+    <path d="M100 420 Q 105 380 110 420Z"/>
+    <path d="M140 420 Q 148 375 155 420Z"/>
+    <path d="M180 420 Q 186 385 192 420Z"/>
+    <path d="M240 420 Q 246 370 253 420Z"/>
+    <path d="M300 420 Q 308 382 315 420Z"/>
+    <path d="M420 420 Q 428 372 436 420Z"/>
+    <path d="M500 420 Q 508 385 515 420Z"/>
+    <path d="M620 420 Q 626 378 632 420Z"/>
+    <path d="M720 420 Q 728 370 736 420Z"/>
+    <path d="M820 420 Q 828 382 835 420Z"/>
+    <path d="M920 420 Q 928 375 936 420Z"/>
+    <path d="M1020 420 Q 1028 380 1035 420Z"/>
+    <path d="M1100 420 Q 1108 372 1115 420Z"/>
+  </g>
+
+  <!-- Bunga bergoyang -->
+  <g class="flower-sway">
+    <g transform="translate(200, 400)">
+      <rect x="-2" y="0" width="4" height="30" fill="#6b8e5a"/>
+      <circle cx="0" cy="-6" r="9" fill="#F7CAC9"/>
+      <circle cx="0" cy="-6" r="4" fill="#FFF8F0"/>
+      <circle cx="-8" cy="-2" r="7" fill="#F7CAC9"/>
+      <circle cx="8" cy="-2" r="7" fill="#F7CAC9"/>
+      <circle cx="0" cy="-14" r="7" fill="#F7CAC9"/>
+    </g>
+    <g transform="translate(380, 405)">
+      <rect x="-2" y="0" width="4" height="26" fill="#6b8e5a"/>
+      <circle cx="0" cy="-6" r="8" fill="#E8A0BF"/>
+      <circle cx="0" cy="-6" r="3.5" fill="#FFF8F0"/>
+      <circle cx="-7" cy="-2" r="6" fill="#E8A0BF"/>
+      <circle cx="7" cy="-2" r="6" fill="#E8A0BF"/>
+    </g>
+    <g transform="translate(560, 402)">
+      <rect x="-2" y="0" width="4" height="28" fill="#6b8e5a"/>
+      <circle cx="0" cy="-6" r="10" fill="#C8A2C8"/>
+      <circle cx="0" cy="-6" r="4" fill="#FFF8F0"/>
+      <circle cx="-9" cy="-2" r="8" fill="#C8A2C8"/>
+      <circle cx="9" cy="-2" r="8" fill="#C8A2C8"/>
+      <circle cx="0" cy="-16" r="8" fill="#C8A2C8"/>
+    </g>
+    <g transform="translate(760, 408)">
+      <rect x="-2" y="0" width="4" height="24" fill="#6b8e5a"/>
+      <circle cx="0" cy="-6" r="8" fill="#F4A896"/>
+      <circle cx="0" cy="-6" r="3.5" fill="#FFF8F0"/>
+      <circle cx="-7" cy="-2" r="6" fill="#F4A896"/>
+      <circle cx="7" cy="-2" r="6" fill="#F4A896"/>
+    </g>
+    <g transform="translate(950, 404)">
+      <rect x="-2" y="0" width="4" height="26" fill="#6b8e5a"/>
+      <circle cx="0" cy="-6" r="9" fill="#F4E4A6"/>
+      <circle cx="0" cy="-6" r="3.5" fill="#FFF8F0"/>
+      <circle cx="-8" cy="-2" r="7" fill="#F4E4A6"/>
+      <circle cx="8" cy="-2" r="7" fill="#F4E4A6"/>
+    </g>
+  </g>
+
+  <!-- Kupu-kupu terbang -->
+  <g class="butterfly" transform="translate(500, 200)">
+    <ellipse cx="-8" cy="0" rx="7" ry="9" fill="#E8A0BF" opacity="0.85"/>
+    <ellipse cx="8" cy="0" rx="7" ry="9" fill="#E8A0BF" opacity="0.85"/>
+    <ellipse cx="-6" cy="-8" rx="5" ry="6" fill="#C8A2C8" opacity="0.85"/>
+    <ellipse cx="6" cy="-8" rx="5" ry="6" fill="#C8A2C8" opacity="0.85"/>
+    <rect x="-1" y="-6" width="2" height="14" fill="#3D2B3D"/>
+  </g>
+
+  <g class="butterfly" style="animation-duration:11s" transform="translate(900, 160)">
+    <ellipse cx="-6" cy="0" rx="5" ry="7" fill="#F4E4A6" opacity="0.85"/>
+    <ellipse cx="6" cy="0" rx="5" ry="7" fill="#F4E4A6" opacity="0.85"/>
+    <rect x="-1" y="-5" width="2" height="11" fill="#3D2B3D"/>
+  </g>
+</svg>
+
+<!-- Kelopak bunga berjatuhan -->
+<div class="petal" style="left:8%;  animation-delay:0s">
+  <svg width="18" height="18" viewBox="0 0 20 20"><ellipse cx="10" cy="10" rx="8" ry="5" fill="#F7CAC9" opacity="0.9"/></svg>
+</div>
+<div class="petal" style="left:22%; animation-delay:2.5s">
+  <svg width="14" height="14" viewBox="0 0 20 20"><ellipse cx="10" cy="10" rx="8" ry="5" fill="#E8A0BF" opacity="0.9"/></svg>
+</div>
+<div class="petal" style="left:38%; animation-delay:5s">
+  <svg width="16" height="16" viewBox="0 0 20 20"><ellipse cx="10" cy="10" rx="8" ry="5" fill="#C8A2C8" opacity="0.9"/></svg>
+</div>
+<div class="petal" style="left:52%; animation-delay:1s">
+  <svg width="12" height="12" viewBox="0 0 20 20"><ellipse cx="10" cy="10" rx="8" ry="5" fill="#F4A896" opacity="0.9"/></svg>
+</div>
+<div class="petal" style="left:68%; animation-delay:3.5s">
+  <svg width="15" height="15" viewBox="0 0 20 20"><ellipse cx="10" cy="10" rx="8" ry="5" fill="#F7CAC9" opacity="0.9"/></svg>
+</div>
+<div class="petal" style="left:82%; animation-delay:6s">
+  <svg width="13" height="13" viewBox="0 0 20 20"><ellipse cx="10" cy="10" rx="8" ry="5" fill="#F4E4A6" opacity="0.9"/></svg>
+</div>
+<div class="petal" style="left:92%; animation-delay:4s">
+  <svg width="17" height="17" viewBox="0 0 20 20"><ellipse cx="10" cy="10" rx="8" ry="5" fill="#E8A0BF" opacity="0.9"/></svg>
+</div>
+</div>`;
 function viewHome() {
   const books = Store.books;
   const finished = books.filter(b => b.status === 'finished');
