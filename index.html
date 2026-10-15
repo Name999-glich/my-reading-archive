@@ -1000,7 +1000,7 @@ function openBookForm(book) {
             <button type="button" class="btn btn-ghost btn-sm" id="phBtn">Pakai Placeholder</button>
             <button type="button" class="btn btn-danger btn-sm" id="rmBtn">Hapus Foto</button>
           </div>
-          <p class="hint">JPG, JPEG, PNG, atau WebP · maksimal 5 MB. Foto tersimpan permanen di arsip.</p>
+          <p class="hint">JPG, JPEG, PNG, atau WebP · maksimal 50 MB. Foto tersimpan permanen di arsip.</p>
         </div>
         <input type="file" id="fileInput" accept="image/jpeg,image/jpg,image/png,image/webp" hidden>
         <input type="file" id="camInput" accept="image/*" capture="environment" hidden>
@@ -1085,7 +1085,7 @@ function openBookForm(book) {
     const okType = ['image/jpeg','image/jpg','image/png','image/webp'].includes(file.type)
       || /\.(jpe?g|png|webp)$/i.test(file.name);
     if (!okType) { toast('Format harus JPG, JPEG, PNG, atau WebP', 'err'); return; }
-    if (file.size > 5 * 1024 * 1024) { toast('Ukuran foto maksimal 5 MB', 'err'); return; }
+    if (file.size > 50 * 1024 * 1024) { toast('Ukuran foto maksimal 50 MB', 'err'); return; }
 
     if (formState.previewUrl && formState.previewUrl.startsWith('blob:')) {
       URL.revokeObjectURL(formState.previewUrl);
