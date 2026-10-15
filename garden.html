@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Taman Bunga · My Reading Archive</title>
+<meta name="theme-color" content="#3D2B3D">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blush:#F7CAC9; --rose:#E8A0BF; --lavender:#C8A2C8; --sage:#A8C09A;
+  --butter:#F4E4A6; --coral:#F4A896; --cream:#FFF8F0;
+  --surface:rgba(255,248,240,.07); --surface-2:rgba(255,248,240,.12);
+  --border:rgba(255,248,240,.15); --muted:rgba(255,248,240,.62);
+  --radius:16px; --shadow:0 18px 44px -20px rgba(45,20,45,.75);
+  --font-display:'Cormorant Garamond',Georgia,serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  min-height:100vh;color:var(--cream);background:#3D2B3D;
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+body::before{
+  content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(1100px 620px at 78% -12%, rgba(244,228,166,.20), transparent 62%),
+    radial-gradient(820px 520px at 6% -8%, rgba(247,202,201,.18), transparent 60%),
+    radial-gradient(900px 620px at 94% 16%, rgba(232,160,191,.20), transparent 62%),
+    radial-gradient(1200px 800px at 50% 118%, rgba(200,162,200,.35), transparent 65%),
+    linear-gradient(180deg,#2f2030 0%,#3d2b3d 45%,#2f2030 100%);
+}
+img{display:block;max-width:100%}
+a{color:inherit}
+h1,h2,h3{font-family:var(--font-display);font-weight:600;margin:0}
+
+/* Top bar */
+.topbar{
+  position:sticky;top:0;z-index:40;
+  border-bottom:1px solid var(--border);
+  background:linear-gradient(180deg,rgba(61,43,61,.92),rgba(61,43,61,.62));
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+}
+.topbar-inner{
+  display:flex;align-items:center;gap:14px;
+  height:60px;max-width:1000px;margin:0 auto;padding:0 20px;
+}
+.brand{
+  display:flex;align-items:center;gap:10px;text-decoration:none;
+  font-family:var(--font-display);font-size:1.1rem;font-weight:600;
+}
+.brand-mark{
+  width:24px;height:24px;border-radius:50%;flex:0 0 auto;
+  background:radial-gradient(circle at 35% 30%,#FFF8F0,var(--rose) 45%,var(--lavender) 75%,var(--coral));
+  box-shadow:0 0 18px rgba(232,160,191,.6);
+}
+.topbar-actions{margin-left:auto;display:flex;gap:8px;align-items:center}
+.btn{
+  font:inherit;cursor:pointer;border:1px solid transparent;
+  border-radius:11px;padding:9px 15px;font-size:.85rem;font-weight:500;
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  transition:.2s;text-decoration:none;line-height:1.2;
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--rose),var(--coral));color:#3d2030;
+  box-shadow:0 8px 22px -10px rgba(232,160,191,.8);
+}
+.btn-primary:hover{transform:translateY(-1px)}
+.btn-ghost{
+  background:var(--surface);color:var(--cream);border-color:var(--border);
+}
+.btn-ghost:hover{background:var(--surface-2)}
+
+/* Container */
+.wrap{max-width:1000px;margin:0 auto;padding:0 16px 40px}
+
+/* Header */
+.garden-header{text-align:center;padding:28px 0 20px}
+.garden-header h1{
+  font-size:clamp(2rem,5.5vw,3rem);line-height:1.1;
+  margin-bottom:10px;
+}
+.garden-header h1 .icon{opacity:.9;margin-right:4px}
+.garden-header p{
+  color:var(--muted);font-size:.92rem;margin:0;
+  max-width:520px;margin-left:auto;margin-right:auto;
+}
+
+/* Taman view */
+.garden-view{
+  border-radius:24px;overflow:hidden;
+  border:1px solid var(--border);box-shadow:var(--shadow);
+  background:#3d4d2f;position:relative;
+}
+.grass-field{
+  position:relative;aspect-ratio:6 / 5;
+  background:
+    repeating-linear-gradient(45deg,
+      transparent 0px, transparent 6px,
+      rgba(255,255,255,.02) 6px, rgba(255,255,255,.02) 7px),
+    repeating-linear-gradient(-45deg,
+      transparent 0px, transparent 8px,
+      rgba(0,0,0,.04) 8px, rgba(0,0,0,.04) 9px),
+    radial-gradient(circle at 50% 50%,
+      #6b7d4f 0%, #5c6b42 50%, #4a5836 100%);
+  overflow:hidden;
+}
+.grass-field::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(255,248,240,.06) 0%, transparent 30%),
+    radial-gradient(circle at 80% 70%, rgba(255,248,240,.04) 0%, transparent 35%);
+}
+
+/* Empty state */
+.empty-message{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;
+  color:var(--cream);gap:6px;padding:20px;
+}
+.empty-message .emoji{font-size:3.2rem;opacity:.8;margin-bottom:10px}
+.empty-message p{margin:0;font-size:1rem}
+.empty-message .sub{color:var(--muted);font-size:.84rem}
+
+/* Grid bunga */
+.garden-grid-top{
+  position:absolute;inset:0;
+  display:grid;grid-template-columns:repeat(6, 1fr);grid-template-rows:repeat(5, 1fr);
+  padding:4% 6%;gap:2%;z-index:2;
+}
+.garden-slot{
+  position:relative;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:transform .25s;
+  animation:growFlower .9s cubic-bezier(.2,.8,.3,1) both;
+}
+.garden-slot.empty{cursor:default;animation:none}
+.garden-slot:not(.empty):hover{transform:scale(1.18);z-index:5}
+.garden-slot svg{
+  width:100%;height:100%;max-width:100%;
+  filter:drop-shadow(0 2px 3px rgba(0,0,0,.35));
+}
+@keyframes growFlower{
+  0%   {transform:scale(0) rotate(-30deg);opacity:0}
+  60%  {transform:scale(1.15) rotate(5deg);opacity:1}
+  100% {transform:scale(1) rotate(0deg);opacity:1}
+}
+.garden-slot.rare svg{filter:drop-shadow(0 0 6px rgba(200,162,200,.8))}
+.garden-slot.legend svg{filter:drop-shadow(0 0 10px rgba(244,228,166,.95))}
+.garden-slot.legend{
+  animation:growFlower .9s cubic-bezier(.2,.8,.3,1) both,
+             legendPulse 2.5s ease-in-out infinite 1s;
+}
+@keyframes legendPulse{
+  0%,100%{filter:drop-shadow(0 0 6px rgba(244,228,166,.7))}
+  50%    {filter:drop-shadow(0 0 14px rgba(244,228,166,1))}
+}
+
+/* Footer info */
+.garden-footer{
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:12px;margin-top:18px;
+  color:var(--muted);font-size:.85rem;
+}
+
+/* Rarity panel */
+.rarity-panel{
+  display:grid;grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));
+  gap:12px;margin-top:24px;
+}
+.rarity-card{
+  background:linear-gradient(160deg, rgba(255,248,240,.08), rgba(255,248,240,.02));
+  border:1px solid var(--border);border-radius:14px;
+  padding:14px 16px;text-align:center;position:relative;overflow:hidden;
+}
+.rarity-card::after{
+  content:'';position:absolute;top:-20px;right:-20px;
+  width:70px;height:70px;border-radius:50%;opacity:.25;
+}
+.rarity-card.common::after{background:radial-gradient(circle, #A8C09A, transparent 70%)}
+.rarity-card.rare::after  {background:radial-gradient(circle, #C8A2C8, transparent 70%)}
+.rarity-card.legend::after{background:radial-gradient(circle, #F4E4A6, transparent 70%)}
+.rarity-card .rc-label{
+  font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:4px;
+}
+.rarity-card .rc-count{
+  font-family:var(--font-display);font-size:1.8rem;
+  line-height:1;margin-bottom:4px;
+}
+.rarity-card .rc-percent{font-size:.72rem;color:var(--muted)}
+.rarity-card.common .rc-count{color:#A8C09A}
+.rarity-card.rare .rc-count  {color:#C8A2C8}
+.rarity-card.legend .rc-count{color:#F4E4A6}
+
+/* Drop rate info */
+.drop-rate-info{
+  margin-top:20px;padding:16px 18px;
+  background:rgba(255,248,240,.04);border:1px solid var(--border);
+  border-radius:14px;font-size:.82rem;color:var(--muted);line-height:1.7;
+}
+.drop-rate-info strong{color:var(--cream)}
+.drop-rate-info .rate-row{display:flex;justify-content:space-between;padding:4px 0}
+.drop-rate-info .rate-row span:first-child{color:var(--cream)}
+
+/* Loading / auth */
+.state-box{
+  max-width:420px;margin:12vh auto;padding:32px;border-radius:22px;
+  background:linear-gradient(165deg, rgba(255,248,240,.10), rgba(255,248,240,.03));
+  border:1px solid var(--border);box-shadow:var(--shadow);text-align:center;
+}
+.state-box h1{font-size:1.7rem;margin-bottom:8px}
+.state-box p{color:var(--muted);font-size:.88rem;margin:0 0 20px;line-height:1.6}
+.spinner{
+  width:36px;height:36px;border-radius:50%;
+  border:3px solid rgba(255,248,240,.15);
+  border-top-color:var(--rose);
+  margin:0 auto 12px;
+  animation:spin 1s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Responsive */
+@media (max-width:600px){
+  .topbar-inner{height:54px;padding:0 14px}
+  .brand{font-size:1rem}
+  .brand-mark{width:20px;height:20px}
+  .btn{padding:8px 12px;font-size:.8rem}
+  .garden-header{padding:20px 0 14px}
+  .garden-view{border-radius:16px}
+  .empty-message .emoji{font-size:2.4rem}
+  .empty-message p{font-size:.88rem}
+  .empty-message .sub{font-size:.78rem}
+  .rarity-card .rc-count{font-size:1.5rem}
+  .drop-rate-info{font-size:.78rem}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html">
+      <span class="brand-mark"></span> My Reading Archive
+    </a>
+    <div class="topbar-actions">
+      <a class="btn btn-ghost" href="index.html">← Koleksi</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="garden-header">
+    <h1><span class="icon">🌷</span> Taman Bunga</h1>
+    <p>Setiap buku yang selesai kamu baca menumbuhkan satu bunga di padang ini.</p>
+  </div>
+
+  <div id="garden-root">
+    <div class="state-box">
+      <div class="spinner"></div>
+      <p>Memuat taman…</p>
+    </div>
+  </div>
+</main>
+
+<script type="module">
+// Kode JavaScript akan masuk di PESAN 2
+</script>
+</body>
+</html>
+/* ============================ KONFIGURASI ============================ */
+const CFG = {
+  SUPABASE_URL: 'https://fntuwxpxxeezijtoabth.supabase.co',
+  SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZudHV3eHB4eGVlemlqdG9hYnRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIwNTI3MzksImV4cCI6MjEwNzYyODczOX0.cuQumMCw4x8GJSo3hISjLVJO6ZCAtakVJ6dSSIkparA',
+  BUCKET: 'covers'
+};
+
+const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2');
+const supabase = createClient(CFG.SUPABASE_URL, CFG.SUPABASE_ANON_KEY, {
+  auth: { persistSession: true, autoRefreshToken: true }
+});
+
+const $ = (s, r = document) => r.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c =>
+  ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+
+/* ============================ 5 BUNGA + RARITY ============================ */
+const FLOWER_TYPES = [
+  // Common (3 varian, total 75%)
+  { name: 'Daisy',       color: '#FFF8F0', accent: '#F4E4A6', rarity: 'common', rate: 25 },
+  { name: 'Mawar',       color: '#E8A0BF', accent: '#F7CAC9', rarity: 'common', rate: 25 },
+  { name: 'Matahari',    color: '#F4E4A6', accent: '#F4A896', rarity: 'common', rate: 25 },
+  // Rare (1 varian, 20%)
+  { name: 'Lavender',    color: '#C8A2C8', accent: '#F7CAC9', rarity: 'rare',   rate: 20 },
+  // Legend (1 varian, 5%)
+  { name: 'Golden Rose', color: '#F4E4A6', accent: '#F4A896', rarity: 'legend', rate: 5 }
+];
+
+/* Pilih bunga berdasarkan judul buku (deterministik) */
+function flowerForBook(book) {
+  const seedStr = book.title || 'X';
+  const seed = Array.from(seedStr).reduce((a, c) => a + c.charCodeAt(0), 0);
+  const roll = seed % 100;
+  if (roll < 25) return FLOWER_TYPES[0]; // Daisy
+  if (roll < 50) return FLOWER_TYPES[1]; // Mawar
+  if (roll < 75) return FLOWER_TYPES[2]; // Matahari
+  if (roll < 95) return FLOWER_TYPES[3]; // Lavender
+  return FLOWER_TYPES[4];                 // Golden Rose
+}
+
+/* ============================ SVG BUNGA (dari atas) ============================ */
+function flowerTopView(type) {
+  const c = type.color, a = type.accent;
+
+  if (type.rarity === 'legend') {
+    return `
+    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="35" cy="62" rx="16" ry="8" fill="#7d9465" transform="rotate(-30 35 62)"/>
+      <ellipse cx="65" cy="62" rx="16" ry="8" fill="#7d9465" transform="rotate(30 65 62)"/>
+      <ellipse cx="50" cy="78" rx="14" ry="7" fill="#8fa878"/>
+      <circle cx="50" cy="38" r="15" fill="#E9B44C"/>
+      <circle cx="35" cy="48" r="14" fill="#E9B44C"/>
+      <circle cx="65" cy="48" r="14" fill="#E9B44C"/>
+      <circle cx="41" cy="61" r="14" fill="#F4E4A6"/>
+      <circle cx="59" cy="61" r="14" fill="#F4E4A6"/>
+      <circle cx="50" cy="50" r="10" fill="#D98245"/>
+      <circle cx="50" cy="50" r="5" fill="#FFF8F0"/>
+      <circle cx="50" cy="50" r="2.5" fill="#E9B44C"/>
+      <text x="18" y="22" font-size="10" fill="#FFF8F0" opacity="0.9">✦</text>
+      <text x="78" y="28" font-size="8" fill="#FFF8F0" opacity="0.8">✦</text>
+      <text x="15" y="80" font-size="7" fill="#FFF8F0" opacity="0.7">✦</text>
+    </svg>`;
+  }
+
+  if (type.rarity === 'rare') {
+    return `
+    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="35" cy="62" rx="16" ry="8" fill="#7d9465" transform="rotate(-30 35 62)"/>
+      <ellipse cx="65" cy="62" rx="16" ry="8" fill="#7d9465" transform="rotate(30 65 62)"/>
+      <circle cx="50" cy="32" r="12" fill="${c}"/>
+      <circle cx="32" cy="42" r="12" fill="${c}"/>
+      <circle cx="68" cy="42" r="12" fill="${c}"/>
+      <circle cx="32" cy="58" r="12" fill="${c}"/>
+      <circle cx="68" cy="58" r="12" fill="${c}"/>
+      <circle cx="50" cy="68" r="12" fill="${c}"/>
+      <circle cx="50" cy="50" r="9" fill="${a}"/>
+      <circle cx="50" cy="50" r="4" fill="#FFF8F0"/>
+    </svg>`;
+  }
+
+  // Common
+  return `
+  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="35" cy="60" rx="16" ry="8" fill="#7d9465" transform="rotate(-30 35 60)"/>
+    <ellipse cx="65" cy="60" rx="16" ry="8" fill="#7d9465" transform="rotate(30 65 60)"/>
+    <ellipse cx="50" cy="75" rx="14" ry="7" fill="#8fa878"/>
+    <circle cx="50" cy="38" r="14" fill="${c}"/>
+    <circle cx="36" cy="48" r="13" fill="${c}"/>
+    <circle cx="64" cy="48" r="13" fill="${c}"/>
+    <circle cx="42" cy="60" r="13" fill="${c}"/>
+    <circle cx="58" cy="60" r="13" fill="${c}"/>
+    <circle cx="50" cy="50" r="9" fill="${a}"/>
+    <circle cx="50" cy="50" r="5" fill="#FFF8F0"/>
+    <circle cx="50" cy="50" r="2.5" fill="${c}"/>
+  </svg>`;
+}
+
+/* ============================ RENDER TAMAN ============================ */
+function renderGarden(books) {
+  const finished = books.filter(b => b.status === 'finished');
+  const total = finished.length;
+  const root = $('#garden-root');
+
+  // Kosong → padang rumput
+  if (!total) {
+    root.innerHTML = `
+      <div class="garden-view">
+        <div class="grass-field">
+          <div class="empty-message">
+            <div class="emoji">🌱</div>
+            <p>Padang ini masih kosong.</p>
+            <p class="sub">Selesaikan buku pertamamu untuk menumbuhkan bunga.</p>
+          </div>
+        </div>
+      </div>
+      <div class="garden-footer">
+        <span>0 buku selesai · 0 bunga tumbuh</span>
+      </div>`;
+    return;
+  }
+
+  // Generate posisi bunga di grid 6x5
+  const flowers = finished.map((b, idx) => {
+    const seed = Array.from(b.title || 'X').reduce((a, c) => a + c.charCodeAt(0), idx);
+    const t = flowerForBook(b);
+    const col = (seed * 7 + idx * 3) % 6;
+    const row = Math.floor((seed * 13 + idx * 5) % 5);
+    return { book: b, flower: t, col, row };
+  });
+
+  const COLS = 6, ROWS = 5;
+  const slots = Array.from({ length: COLS * ROWS }, () => null);
+  flowers.forEach(f => {
+    const idx = f.row * COLS + f.col;
+    if (!slots[idx]) slots[idx] = f;
+  });
+
+  const slotsHTML = slots.map(f => {
+    if (!f) return `<div class="garden-slot empty"></div>`;
+    const t = f.flower;
+    return `
+      <div class="garden-slot ${t.rarity}"
+           data-book-id="${f.book.id}"
+           title="${esc(f.book.title)} · ${t.name} (${t.rarity})">
+        ${flowerTopView(t)}
+      </div>`;
+  }).join('');
+
+  // Hitung rarity
+  const rarityCount = { common: 0, rare: 0, legend: 0 };
+  flowers.forEach(f => { rarityCount[f.flower.rarity]++; });
+  const pct = n => total ? Math.round((n / total) * 100) : 0;
+
+  root.innerHTML = `
+    <div class="garden-view">
+      <div class="grass-field">
+        <div class="garden-grid-top">${slotsHTML}</div>
+      </div>
+    </div>
+
+    <div class="garden-footer">
+      <span>${total} buku selesai · ${total} bunga tumbuh</span>
+    </div>
+
+    <div class="rarity-panel">
+      <div class="rarity-card common">
+        <div class="rc-label">Common</div>
+        <div class="rc-count">${rarityCount.common}</div>
+        <div class="rc-percent">${pct(rarityCount.common)}% dari tamanmu</div>
+      </div>
+      <div class="rarity-card rare">
+        <div class="rc-label">Rare</div>
+        <div class="rc-count">${rarityCount.rare}</div>
+        <div class="rc-percent">${pct(rarityCount.rare)}% dari tamanmu</div>
+      </div>
+      <div class="rarity-card legend">
+        <div class="rc-label">Legend</div>
+        <div class="rc-count">${rarityCount.legend}</div>
+        <div class="rc-percent">${pct(rarityCount.legend)}% dari tamanmu</div>
+      </div>
+    </div>
+
+    <div class="drop-rate-info">
+      <div style="margin-bottom:8px"><strong>Peluang muncul per buku:</strong></div>
+      <div class="rate-row"><span>🌼 Daisy (Common)</span><span>25%</span></div>
+      <div class="rate-row"><span>🌸 Mawar (Common)</span><span>25%</span></div>
+      <div class="rate-row"><span>🌻 Matahari (Common)</span><span>25%</span></div>
+      <div class="rate-row"><span>💜 Lavender (Rare)</span><span>20%</span></div>
+      <div class="rate-row"><span>👑 Golden Rose (Legend)</span><span>5%</span></div>
+    </div>`;
+
+  // Klik bunga → buka detail di index.html
+  root.querySelectorAll('.garden-slot[data-book-id]').forEach(el => {
+    el.addEventListener('click', () => {
+      const id = el.dataset.bookId;
+      location.href = 'index.html#/book/' + id;
+    });
+  });
+}
+
+/* ============================ AUTH & LOAD ============================ */
+async function boot() {
+  const root = $('#garden-root');
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+
+    // Belum login → tampilkan pesan
+    if (!session) {
+      root.innerHTML = `
+        <div class="state-box">
+          <h1>🌸 Belum Masuk</h1>
+          <p>Silakan login dulu di halaman utama untuk melihat tamanmu.</p>
+          <a class="btn btn-primary" href="index.html">Buka Halaman Utama</a>
+        </div>`;
+      return;
+    }
+
+    // Ambil buku dari Supabase
+    const { data, error } = await supabase
+      .from('books')
+      .select('*')
+      .eq('user_id', session.user.id)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    renderGarden(data || []);
+  } catch (err) {
+    console.error(err);
+    root.innerHTML = `
+      <div class="state-box">
+        <h1>⚠️ Gagal Memuat</h1>
+        <p>${esc(err.message || 'Terjadi kesalahan')}</p>
+        <a class="btn btn-ghost" href="index.html">← Kembali</a>
+      </div>`;
+  }
+}
+
+boot();
+    </script>
+</body>
+</html>
+    
