@@ -470,6 +470,155 @@ h1,h2,h3{font-family:var(--font-display);font-weight:600;margin:0}
   .rate-popup-head h3{font-size:1.2rem}
   .rate-item .ri-name{font-size:.82rem}
 }
+  /* 🌸 Tombol Koleksi Bunga */
+.collection-trigger{
+  font:inherit;cursor:pointer;border:1px solid var(--border);
+  background:linear-gradient(135deg, rgba(168,192,154,.20), rgba(244,228,166,.10));
+  color:var(--cream);border-radius:12px;padding:11px 22px;
+  font-size:.88rem;font-weight:500;display:inline-flex;
+  align-items:center;gap:8px;transition:.2s;
+}
+.collection-trigger:hover{
+  background:linear-gradient(135deg, rgba(168,192,154,.30), rgba(244,228,166,.18));
+  transform:translateY(-1px);
+  box-shadow:0 10px 22px -12px rgba(168,192,154,.7);
+}
+
+/* Popup Koleksi */
+.collection-popup-backdrop{
+  position:fixed;inset:0;z-index:105;
+  background:rgba(25,15,25,.82);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;opacity:0;pointer-events:none;transition:opacity .25s;
+}
+.collection-popup-backdrop.open{opacity:1;pointer-events:auto}
+.collection-popup{
+  width:100%;max-width:520px;max-height:85vh;overflow-y:auto;
+  border-radius:22px;padding:24px;
+  background:linear-gradient(165deg,#4a3348,#2a1e2a 75%);
+  border:1px solid var(--border);
+  box-shadow:0 40px 90px -30px #000, 0 0 50px -15px rgba(232,160,191,.3);
+  transform:translateY(14px) scale(.96);
+  transition:transform .28s cubic-bezier(.2,.8,.3,1);
+}
+.collection-popup-backdrop.open .collection-popup{transform:none}
+.collection-head{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;
+}
+.collection-head h3{
+  font-family:var(--font-display);font-size:1.5rem;margin:0;
+}
+.collection-close{
+  background:transparent;border:none;color:var(--muted);
+  font-size:1.2rem;cursor:pointer;width:34px;height:34px;
+  border-radius:10px;transition:.2s;
+}
+.collection-close:hover{background:var(--surface);color:var(--cream)}
+
+/* Total card */
+.collection-total{
+  text-align:center;padding:20px 16px;border-radius:16px;
+  background:linear-gradient(135deg,rgba(232,160,191,.15),rgba(200,162,200,.10));
+  border:1px solid rgba(232,160,191,.3);
+  margin-bottom:20px;position:relative;overflow:hidden;
+}
+.collection-total::after{
+  content:'';position:absolute;top:-30px;right:-30px;
+  width:120px;height:120px;border-radius:50%;
+  background:radial-gradient(circle,rgba(244,228,166,.3),transparent 70%);
+  pointer-events:none;
+}
+.collection-total .ct-label{
+  font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:6px;
+}
+.collection-total .ct-value{
+  font-family:var(--font-display);font-size:3rem;line-height:1;
+  color:var(--rose);margin-bottom:4px;
+  text-shadow:0 0 20px rgba(232,160,191,.5);
+}
+.collection-total .ct-sub{font-size:.82rem;color:var(--muted)}
+
+/* Rarity breakdown */
+.collection-rarity-list{
+  display:flex;flex-direction:column;gap:10px;
+}
+.collection-rarity-item{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 16px;border-radius:14px;
+  background:rgba(255,248,240,.04);
+  border:1px solid var(--border);
+  transition:.2s;
+}
+.collection-rarity-item .cri-icon{
+  width:42px;height:42px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.3rem;flex:0 0 auto;
+}
+.collection-rarity-item.common .cri-icon{
+  background:radial-gradient(circle, rgba(168,192,154,.4), rgba(168,192,154,.15));
+  border:1px solid rgba(168,192,154,.5);
+}
+.collection-rarity-item.rare .cri-icon{
+  background:radial-gradient(circle, rgba(200,162,200,.4), rgba(200,162,200,.15));
+  border:1px solid rgba(200,162,200,.55);
+  box-shadow:0 0 12px -2px rgba(200,162,200,.5);
+}
+.collection-rarity-item.legend .cri-icon{
+  background:radial-gradient(circle, rgba(244,228,166,.45), rgba(233,180,76,.20));
+  border:1px solid rgba(244,228,166,.6);
+  box-shadow:0 0 14px -2px rgba(244,228,166,.6);
+}
+.collection-rarity-item.secret .cri-icon{
+  background:radial-gradient(circle, rgba(60,60,60,.6), rgba(30,30,30,.8));
+  border:1px solid rgba(180,180,180,.5);
+  box-shadow:0 0 14px -2px rgba(180,180,180,.5);
+}
+.collection-rarity-item .cri-info{flex:1;min-width:0}
+.collection-rarity-item .cri-name{
+  font-size:.92rem;color:var(--cream);font-weight:500;
+  margin-bottom:2px;
+}
+.collection-rarity-item .cri-bar{
+  height:5px;border-radius:3px;
+  background:rgba(255,248,240,.08);
+  overflow:hidden;margin-top:6px;
+}
+.collection-rarity-item .cri-bar i{
+  display:block;height:100%;border-radius:3px;
+  transition:width .6s ease;
+}
+.collection-rarity-item.common .cri-bar i{background:linear-gradient(90deg,#A8C09A,#8fa878)}
+.collection-rarity-item.rare .cri-bar i{background:linear-gradient(90deg,#C8A2C8,#A88BB0)}
+.collection-rarity-item.legend .cri-bar i{background:linear-gradient(90deg,#F4E4A6,#E9B44C)}
+.collection-rarity-item.secret .cri-bar i{background:linear-gradient(90deg,#8B7B8B,#3D2B3D)}
+.collection-rarity-item .cri-count{
+  font-family:var(--font-display);font-size:1.6rem;
+  line-height:1;color:var(--cream);min-width:44px;text-align:right;
+}
+.collection-rarity-item .cri-pct{
+  font-size:.72rem;color:var(--muted);text-align:right;
+  min-width:44px;
+}
+.collection-note{
+  margin-top:18px;padding:12px 16px;
+  background:rgba(255,248,240,.04);
+  border:1px solid var(--border);
+  border-radius:12px;
+  font-size:.76rem;color:var(--muted);
+  line-height:1.6;text-align:center;
+  font-style:italic;
+}
+@media (max-width:600px){
+  .collection-popup{padding:20px;border-radius:18px;max-height:80vh}
+  .collection-head h3{font-size:1.3rem}
+  .collection-total .ct-value{font-size:2.4rem}
+  .collection-rarity-item{padding:12px 14px}
+  .collection-rarity-item .cri-icon{width:36px;height:36px;font-size:1.1rem}
+  .collection-rarity-item .cri-count{font-size:1.4rem;min-width:38px}
+}
   /* Responsive */
 @media (max-width:600px){
   .topbar-inner{height:54px;padding:0 14px}
@@ -649,6 +798,7 @@ function flowerTopView(type) {
 }
 
 function renderGarden(books) {
+    window.__gardenBooks = books;
   const finished = books.filter(b => b.status === 'finished');
   const total = finished.length;
   const root = document.getElementById('garden-root');
@@ -707,9 +857,10 @@ function renderGarden(books) {
     + '<div class="rc-percent">' + pct(rarityCount.legend) + '% dari tamanmu</div></div>'
     + '</div>'
     + '<div class="drop-rate-info">'
-       + '<div class="rate-trigger-wrap">'
-    + '<button class="rate-trigger" id="rateTrigger">📊 Lihat Peluang Bunga</button>'
-    + '</div>';
+      + '<div class="rate-trigger-wrap">'
++ '<button class="rate-trigger" id="rateTrigger">📊 Lihat Peluang Bunga</button>'
++ '<button class="collection-trigger" id="collectionTrigger">🌸 Koleksi Bunga</button>'
++ '</div>';
   root.querySelectorAll('.garden-slot[data-book-id]').forEach(el => {
     el.addEventListener('click', () => {
       location.href = 'index.html#/book/' + el.dataset.bookId;
@@ -718,6 +869,8 @@ function renderGarden(books) {
   
   const rateBtn = document.getElementById('rateTrigger');
   if (rateBtn) rateBtn.addEventListener('click', openRatePopup);
+  const collBtn = document.getElementById('collectionTrigger');
+if (collBtn) collBtn.addEventListener('click', openCollectionPopup);
 }
 
 function openFlowerDetail(flower) {
@@ -760,6 +913,88 @@ function closeFlowerDetail() {
   if (!popup) return;
   popup.classList.remove('open');
   setTimeout(() => popup.remove(), 250);
+}
+ function openCollectionPopup() {
+  const existing = document.getElementById('collectionPopup');
+  if (existing) return;
+
+  const finished = (window.__gardenBooks || []).filter(b => b.status === 'finished');
+  const total = finished.length;
+
+  // Hitung per rarity
+  const rarityCount = { common: 0, rare: 0, legend: 0, secret: 0 };
+  const flowerDetail = {};
+  finished.forEach(b => {
+    const t = flowerForBook(b);
+    rarityCount[t.rarity] = (rarityCount[t.rarity] || 0) + 1;
+    flowerDetail[t.name] = (flowerDetail[t.name] || 0) + 1;
+  });
+
+  const pct = n => total ? Math.round((n / total) * 100) : 0;
+
+  const rarityLabels = {
+    common: { icon: '🌼', label: 'Common',  color: '#A8C09A' },
+    rare:   { icon: '💜', label: 'Rare',    color: '#C8A2C8' },
+    legend: { icon: '👑', label: 'Legend',  color: '#F4E4A6' },
+    secret: { icon: '🌺', label: 'Secret',  color: '#B8B8B8' }
+  };
+
+  const rarityRows = ['common', 'rare', 'legend', 'secret'].map(r => {
+    const info = rarityLabels[r];
+    const count = rarityCount[r] || 0;
+    const p = pct(count);
+    return '<div class="collection-rarity-item ' + r + '">'
+      + '<div class="cri-icon">' + info.icon + '</div>'
+      + '<div class="cri-info">'
+      + '<div class="cri-name">' + info.label + '</div>'
+      + '<div class="cri-bar"><i style="width:' + p + '%"></i></div>'
+      + '</div>'
+      + '<div class="cri-count">' + count + '</div>'
+      + '<div class="cri-pct">' + p + '%</div>'
+      + '</div>';
+  }).join('');
+
+  const popupHTML =
+    '<div class="collection-popup-backdrop" id="collectionPopup">'
+    + '<div class="collection-popup">'
+    + '<div class="collection-head">'
+    + '<h3>🌸 Koleksi Bunga</h3>'
+    + '<button class="collection-close" id="collectionClose">✕</button>'
+    + '</div>'
+    + '<div class="collection-total">'
+    + '<div class="ct-label">Total Bunga Dimiliki</div>'
+    + '<div class="ct-value">' + total + '</div>'
+    + '<div class="ct-sub">dari ' + (window.__gardenBooks?.length || 0) + ' buku di arsipmu</div>'
+    + '</div>'
+    + '<div class="collection-rarity-list">' + rarityRows + '</div>'
+    + '<div class="collection-note">'
+    + 'Setiap buku yang selesai dibaca menumbuhkan 1 bunga di tamanmu.<br>'
+    + 'Kumpulkan semua rarity — termasuk Secret yang sangat langka (1%)!'
+    + '</div>'
+    + '</div>'
+    + '</div>';
+
+  document.body.insertAdjacentHTML('beforeend', popupHTML);
+  const popup = document.getElementById('collectionPopup');
+  requestAnimationFrame(() => popup.classList.add('open'));
+
+  document.getElementById('collectionClose').addEventListener('click', closeCollectionPopup);
+  popup.addEventListener('click', e => {
+    if (e.target.id === 'collectionPopup') closeCollectionPopup();
+  });
+  document.addEventListener('keydown', escCollectionHandler);
+}
+
+function closeCollectionPopup() {
+  const popup = document.getElementById('collectionPopup');
+  if (!popup) return;
+  popup.classList.remove('open');
+  setTimeout(() => popup.remove(), 250);
+  document.removeEventListener('keydown', escCollectionHandler);
+}
+
+function escCollectionHandler(e) {
+  if (e.key === 'Escape') closeCollectionPopup();
 }
   function openRatePopup() {
   const existing = document.getElementById('ratePopup');
@@ -819,10 +1054,10 @@ function closeRatePopup() {
   setTimeout(() => popup.remove(), 250);
   document.removeEventListener('keydown', escHandler);
 }
-
 function escHandler(e) {
   if (e.key === 'Escape') {
     closeFlowerDetail();
+    closeCollectionPopup();
     closeRatePopup();
   }
 }
