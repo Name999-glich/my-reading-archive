@@ -136,9 +136,19 @@ h1,h2,h3{font-family:var(--font-display);font-weight:600;margin:0}
   animation:growFlower .9s cubic-bezier(.2,.8,.3,1) both;
 }
 .garden-slot.empty{cursor:default;animation:none}
-.garden-slot:not(.empty):hover{transform:scale(1.18);z-index:5}
+.garden-slot:not(.empty):hover{transform:scale(1.15);z-index:5}
+.garden-flower-wrap{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+}
 .garden-slot svg{
-  width:100%;height:100%;max-width:100%;
+  width:85%;height:85%;max-width:85%;
+  flex:0 1 auto;
   filter:drop-shadow(0 2px 3px rgba(0,0,0,.35));
 }
 @keyframes growFlower{
@@ -619,6 +629,81 @@ h1,h2,h3{font-family:var(--font-display);font-weight:600;margin:0}
   .collection-rarity-item .cri-icon{width:36px;height:36px;font-size:1.1rem}
   .collection-rarity-item .cri-count{font-size:1.4rem;min-width:38px}
 }
+/* 🌸 Nama Bunga di Taman */
+.garden-flower-name{
+  display:block;
+  text-align:center;
+  font-family:var(--font-display);
+  font-size:.72rem;
+  font-weight:600;
+  letter-spacing:.02em;
+  line-height:1.15;
+  margin-top:4px;
+  padding:0 2px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  max-width:100%;
+  pointer-events:none;
+  transition:transform .25s;
+}
+.garden-slot:hover .garden-flower-name{
+  transform:scale(1.08);
+}
+
+/* Common — tenang, warna hijau sage */
+.garden-slot.common .garden-flower-name{
+  color:#c4d8b8;
+  text-shadow:0 1px 2px rgba(0,0,0,.5);
+}
+
+/* Rare — glow ungu lembut + pulse halus */
+.garden-slot.rare .garden-flower-name{
+  color:#e0c8e0;
+  text-shadow:0 0 6px rgba(200,162,200,.7), 0 1px 2px rgba(0,0,0,.6);
+  animation:nameRarePulse 3s ease-in-out infinite;
+}
+@keyframes nameRarePulse{
+  0%,100%{opacity:1; transform:scale(1)}
+  50%    {opacity:.85; transform:scale(1.04)}
+}
+
+/* Legend — emas + glow kuat + shimmer bergerak */
+.garden-slot.legend .garden-flower-name{
+  color:#FFF8E0;
+  text-shadow:0 0 8px rgba(244,228,166,.9),
+              0 0 16px rgba(233,180,76,.7),
+              0 1px 2px rgba(0,0,0,.6);
+  background:linear-gradient(90deg,
+    #F4E4A6 0%, #FFF8F0 25%, #E9B44C 50%, #FFF8F0 75%, #F4E4A6 100%);
+  background-size:200% 100%;
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:nameLegendShimmer 3s linear infinite;
+}
+@keyframes nameLegendShimmer{
+  0%  {background-position:200% 50%}
+  100%{background-position:-200% 50%}
+}
+
+/* Secret — abu misterius + shake halus + glow gelap */
+.garden-slot.secret .garden-flower-name{
+  color:#D4D4D4;
+  text-shadow:0 0 8px rgba(180,180,180,.7),
+              0 0 14px rgba(80,60,80,.6),
+              0 1px 2px rgba(0,0,0,.8);
+  animation:nameSecretShake 4s ease-in-out infinite;
+  letter-spacing:.04em;
+}
+@keyframes nameSecretShake{
+  0%,100%{transform:translateX(0) rotate(0deg)}
+  15%    {transform:translateX(-.5px) rotate(-.5deg)}
+  30%    {transform:translateX(.5px) rotate(.5deg)}
+  45%    {transform:translateX(-.3px) rotate(-.3deg)}
+  60%    {transform:translateX(.3px) rotate(.3deg)}
+  75%    {transform:translateX(0) rotate(0deg)}
+}
   /* Responsive */
 @media (max-width:600px){
   .topbar-inner{height:54px;padding:0 14px}
@@ -684,7 +769,7 @@ const FLOWER_TYPES = [
     desc: 'Bunga sederhana yang selalu ceria.' },
   { name: 'Mawar',         color: '#E8A0BF', accent: '#F7CAC9', rarity: 'common', rate: 23,
     desc: 'Simbol cinta klasik yang tak pernah pudar.' },
-  { name: 'Matahari',      color: '#F4E4A6', accent: '#F4A896', rarity: 'common', rate: 23,
+  { name: 'Matahari',      color: '#F4E4A6', accent: '#F4A896', rarity: 'common', rate: 22,
     desc: 'Selalu menghadap ke arah cahaya.' },
   { name: 'Lavender',      color: '#C8A2C8', accent: '#F7CAC9', rarity: 'rare',   rate: 20,
     desc: 'Wangi menenangkan, jarang ditemui.' },
@@ -692,39 +777,55 @@ const FLOWER_TYPES = [
     desc: 'Mawar emas legendaris, simbol kejayaan.' },
   { name: 'Blue Rose',     color: '#7FB3D5', accent: '#FFF8F0', rarity: 'legend', rate: 5,
     desc: 'Mawar biru mistis — mustahil di alam nyata.' },
-  { name: 'Bunga Bangkai', color: '#3D2B3D', accent: '#8B7B8B', rarity: 'secret', rate: 1,
-    desc: 'Bunga langka dari dunia lain. Aura abu & misteri.' }
+  { name: 'Bunga Bangkai', color: '#3D2B3D', accent: '#8B7B8B', rarity: 'secret', rate: 2,
+    desc: 'Bunga mekar dari dunia lain. Aura abu & misteri yang memikat.' }
 ];
 function flowerForBook(book) {
   const seedStr = book.title || 'X';
   const seed = Array.from(seedStr).reduce((a, c) => a + c.charCodeAt(0), 0);
-  const roll = seed % 100;
-  if (roll < 23) return FLOWER_TYPES[0];  // Daisy — 23%
-  if (roll < 46) return FLOWER_TYPES[1];  // Mawar — 23%
-  if (roll < 69) return FLOWER_TYPES[2];  // Matahari — 23%
-  if (roll < 89) return FLOWER_TYPES[3];  // Lavender — 20%
-  if (roll < 94) return FLOWER_TYPES[4];  // Golden Rose — 5%
-  if (roll < 99) return FLOWER_TYPES[5];  // Blue Rose — 5%
-  return FLOWER_TYPES[6];                 // Bunga Bangkai — 1%
+  const roll = seed % 1000;
+  if (roll < 230) return FLOWER_TYPES[0];  // Daisy — 23.0%
+  if (roll < 460) return FLOWER_TYPES[1];  // Mawar — 23.0%
+  if (roll < 680) return FLOWER_TYPES[2];  // Matahari — 22.0%
+  if (roll < 880) return FLOWER_TYPES[3];  // Lavender — 20.0%
+  if (roll < 930) return FLOWER_TYPES[4];  // Golden Rose — 5.0%
+  if (roll < 980) return FLOWER_TYPES[5];  // Blue Rose — 5.0%
+  return FLOWER_TYPES[6];                  // Bunga Bangkai — 2.0% ✅
 }
 function flowerTopView(type) {
   const c = type.color, a = type.accent;
 
-  /* 🌺 SECRET — Bunga Bangkai */
+  /* 🌺 SECRET — Bunga Bangkai MEKAR */
   if (type.name === 'Bunga Bangkai') {
     return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">'
-      + '<path d="M50 95 Q48 70 50 45" stroke="#2a1e2a" stroke-width="4" fill="none" stroke-linecap="round"/>'
-      + '<path d="M50 82 Q30 74 24 60 Q38 68 50 78Z" fill="#3a2c3d"/>'
-      + '<path d="M50 74 Q70 66 76 52 Q62 60 50 70Z" fill="#3a2c3d"/>'
-      + '<path d="M50 50 Q38 20 50 8 Q62 20 50 50Z" fill="#4a3348"/>'
-      + '<path d="M50 50 Q32 30 38 14 Q52 26 50 50Z" fill="#3D2B3D"/>'
-      + '<path d="M50 50 Q68 30 62 14 Q48 26 50 50Z" fill="#3D2B3D"/>'
-      + '<ellipse cx="50" cy="48" rx="6" ry="9" fill="#8B7B8B"/>'
-      + '<ellipse cx="50" cy="48" rx="3" ry="5" fill="#B8B8B8"/>'
-      + '<circle cx="30" cy="40" r="1.5" fill="#B8B8B8" opacity="0.8"/>'
-      + '<circle cx="72" cy="35" r="1.2" fill="#D4D4D4" opacity="0.7"/>'
-      + '<circle cx="38" cy="22" r="1" fill="#B8B8B8" opacity="0.6"/>'
-      + '<circle cx="62" cy="24" r="1.3" fill="#C8C8C8" opacity="0.7"/>'
+      // Batang
+      + '<path d="M50 98 Q48 75 50 55" stroke="#2a1e2a" stroke-width="4" fill="none" stroke-linecap="round"/>'
+      // Daun besar di bawah
+      + '<path d="M50 92 Q25 82 18 65 Q35 74 50 85Z" fill="#3a2c3d"/>'
+      + '<path d="M50 88 Q75 78 82 60 Q65 70 50 82Z" fill="#3a2c3d"/>'
+      // Kelopak luar (mekar lebar ke kiri-kanan)
+      + '<path d="M50 60 Q18 45 12 22 Q35 32 50 55Z" fill="#4a3348"/>'
+      + '<path d="M50 60 Q82 45 88 22 Q65 32 50 55Z" fill="#4a3348"/>'
+      // Kelopak tengah (miring ke atas)
+      + '<path d="M50 58 Q30 38 28 14 Q45 28 50 52Z" fill="#3D2B3D"/>'
+      + '<path d="M50 58 Q70 38 72 14 Q55 28 50 52Z" fill="#3D2B3D"/>'
+      // Kelopak atas (menjulang tinggi)
+      + '<path d="M50 55 Q42 30 50 5 Q58 30 50 55Z" fill="#2a1e2a"/>'
+      + '<path d="M50 55 Q38 32 42 8 Q52 26 50 55Z" fill="#3D2B3D"/>'
+      + '<path d="M50 55 Q62 32 58 8 Q48 26 50 55Z" fill="#3D2B3D"/>'
+      // Putik / bagian tengah mekar
+      + '<ellipse cx="50" cy="50" rx="8" ry="12" fill="#8B7B8B"/>'
+      + '<ellipse cx="50" cy="50" rx="4" ry="7" fill="#B8B8B8"/>'
+      + '<ellipse cx="50" cy="46" rx="2" ry="4" fill="#FFF8F0" opacity="0.5"/>'
+      // Aura abu beterbangan
+      + '<circle cx="22" cy="35" r="2" fill="#B8B8B8" opacity="0.85"/>'
+      + '<circle cx="78" cy="28" r="1.6" fill="#D4D4D4" opacity="0.75"/>'
+      + '<circle cx="30" cy="20" r="1.3" fill="#B8B8B8" opacity="0.65"/>'
+      + '<circle cx="72" cy="18" r="1.5" fill="#C8C8C8" opacity="0.7"/>'
+      + '<circle cx="15" cy="60" r="1.2" fill="#D4D4D4" opacity="0.6"/>'
+      + '<circle cx="85" cy="55" r="1.4" fill="#B8B8B8" opacity="0.65"/>'
+      + '<circle cx="40" cy="10" r="1" fill="#FFF8F0" opacity="0.4"/>'
+      + '<circle cx="60" cy="8" r="1.1" fill="#FFF8F0" opacity="0.45"/>'
       + '</svg>';
   }
 
@@ -828,15 +929,18 @@ function renderGarden(books) {
     if (!slots[idx]) slots[idx] = f;
   });
 
-  let slotsHTML = '';
+    let slotsHTML = '';
   slots.forEach(f => {
     if (!f) { slotsHTML += '<div class="garden-slot empty"></div>'; return; }
     const t = f.flower;
     slotsHTML += '<div class="garden-slot ' + t.rarity + '" data-book-id="' + f.book.id + '" '
       + 'title="' + esc(f.book.title) + ' · ' + t.name + ' (' + t.rarity + ')">'
-      + flowerTopView(t) + '</div>';
+      + '<div class="garden-flower-wrap">'
+      + flowerTopView(t)
+      + '<span class="garden-flower-name">' + esc(t.name) + '</span>'
+      + '</div>'
+      + '</div>';
   });
-
   const rarityCount = { common: 0, rare: 0, legend: 0 };
   flowers.forEach(f => { rarityCount[f.flower.rarity]++; });
   const pct = n => total ? Math.round((n / total) * 100) : 0;
@@ -845,17 +949,6 @@ function renderGarden(books) {
     + '<div class="garden-grid-top">' + slotsHTML + '</div>'
     + '</div></div>'
     + '<div class="garden-footer"><span>' + total + ' buku selesai · ' + total + ' bunga tumbuh</span></div>'
-    + '<div class="rarity-panel">'
-    + '<div class="rarity-card common"><div class="rc-label">Common</div>'
-    + '<div class="rc-count">' + rarityCount.common + '</div>'
-    + '<div class="rc-percent">' + pct(rarityCount.common) + '% dari tamanmu</div></div>'
-    + '<div class="rarity-card rare"><div class="rc-label">Rare</div>'
-    + '<div class="rc-count">' + rarityCount.rare + '</div>'
-    + '<div class="rc-percent">' + pct(rarityCount.rare) + '% dari tamanmu</div></div>'
-    + '<div class="rarity-card legend"><div class="rc-label">Legend</div>'
-    + '<div class="rc-count">' + rarityCount.legend + '</div>'
-    + '<div class="rc-percent">' + pct(rarityCount.legend) + '% dari tamanmu</div></div>'
-    + '</div>'
     + '<div class="drop-rate-info">'
       + '<div class="rate-trigger-wrap">'
 + '<button class="rate-trigger" id="rateTrigger">📊 Lihat Peluang Bunga</button>'
