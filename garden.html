@@ -1224,43 +1224,7 @@ function escCollectionHandler(e) {
 
   document.addEventListener('keydown', escHandler);
 }
-  const popupHTML =
-    '<div class="rate-popup-backdrop" id="ratePopup">'
-    + '<div class="rate-popup">'
-    + '<div class="rate-popup-head">'
-    + '<h3>📊 Peluang Bunga</h3>'
-    + '<button class="rate-popup-close" id="rateClose">✕</button>'
-    + '</div>'
-    + '<div class="rate-list">' + items + '</div>'
-    + '<div class="rate-popup-note">'
-    + 'Setiap buku yang selesai dibaca mendapat 1 bunga.<br>'
-    + 'Klik bunga untuk melihat detailnya.'
-    + '</div>'
-    + '</div>'
-    + '</div>';
-
-  document.body.insertAdjacentHTML('beforeend', popupHTML);
-  const popup = document.getElementById('ratePopup');
-  requestAnimationFrame(() => popup.classList.add('open'));
-
-  document.getElementById('rateClose').addEventListener('click', closeRatePopup);
-  popup.addEventListener('click', e => {
-    if (e.target.id === 'ratePopup') closeRatePopup();
-  });
-
-  // Klik item bunga → buka detail bunga
-  popup.querySelectorAll('.rate-item[data-flower-idx]').forEach(el => {
-    el.style.cursor = 'pointer';
-    el.addEventListener('click', () => {
-      const idx = Number(el.dataset.flowerIdx);
-      const flower = FLOWER_TYPES[idx];
-      if (flower) openFlowerDetail(flower);
-    });
-  });
-
-  document.addEventListener('keydown', escHandler);
-}
-function closeRatePopup() {
+ function closeRatePopup() {
   const popup = document.getElementById('ratePopup');
   if (!popup) return;
   popup.classList.remove('open');
