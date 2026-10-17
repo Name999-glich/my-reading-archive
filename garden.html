@@ -828,6 +828,7 @@ h1,h2,h3{font-family:var(--font-display);font-weight:600;margin:0}
     <p>Setiap buku yang selesai kamu baca menumbuhkan satu bunga di padang ini.</p>
   </div>
 
+  <div id="seed-container"></div>
   <div id="garden-root">
     <div class="state-box">
       <div class="spinner"></div>
@@ -1033,8 +1034,32 @@ function flowerTopView(type) {
     + '</svg>';
 }
 
-function renderGarden(books) {
+function renderGarden(books, seeds = []) {
     window.__gardenBooks = books;
+      // 🌱 Render Kotak Seed Pack
+    const seedContainer = document.getElementById('seed-container');
+    if (seedContainer) {
+      if (seeds.length === 0) {
+        seedContainer.innerHTML = ''; // Sembunyikan jika tidak ada seed
+      } else {
+        let seedsHTML = '<div style="margin-top:24px;text-align:center;">'
+          + '<h3 style="font-family:var(--font-display);font-size:1.2rem;color:var(--cream);margin-bottom:12px;">'
+          + '🎁 Seed Pack Tersedia (' + seeds.length + ')</h3>'
+          + '<div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;">';
+          
+        seeds.forEach(seed => {
+          seedsHTML += '<button class="rate-trigger" style="padding:16px 24px;font-size:1rem;flex-direction:column;gap:6px;" '
+            + 'onclick="openSeedGacha(\'' + seed.id + '\', \'' + esc(seed.book_title) + '\')">'
+            + '<span style="font-size:2rem;">🌱</span>'
+            + '<span style="font-size:0.7rem;color:var(--muted);max-width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'
+            + esc(seed.book_title) + '</span>'
+            + '</button>';
+        });
+        
+        seedsHTML += '</div></div>';
+        seedContainer.innerHTML = seedsHTML;
+      }
+    }
   const finished = books.filter(b => b.status === 'finished');
   const total = finished.length;
   const root = document.getElementById('garden-root');
@@ -1324,6 +1349,21 @@ function escHandler(e) {
     closeRatePopup();
   }
 }
+ /* 🌱 Ambil daftar Seed yang belum dibuka */
+async function loadSeeds(userId) {
+  const { data, error } = await supabase
+    .from('seeds')
+    .select('*')
+    .eq('user_id', userId)
+    .eq('status', 'unopened') // Hanya ambil yang belum dibuka
+    .order('created_at', { ascending: true });
+
+  if (error) {
+    console.error('Gagal load seeds:', error);
+    return [];
+  }
+  return data || [];
+}
   async function boot() {
   const root = document.getElementById('garden-root');
   try {
@@ -1334,10 +1374,16 @@ function escHandler(e) {
         + '<a class="btn btn-primary" href="index.html">Buka Halaman Utama</a></div>';
       return;
     }
-    const { data, error } = await supabase.from('books').select('*')
+       // 1. Ambil data buku
+    const { data: books, error: errBooks } = await supabase.from('books').select('*')
       .eq('user_id', session.user.id).order('created_at', { ascending: false });
-    if (error) throw error;
-    renderGarden(data || []);
+    if (errBooks) throw errBooks;
+    
+    // 2. Ambil data seed yang belum dibuka
+    const unopenedSeeds = await loadSeeds(session.user.id);
+    
+    // 3. Render taman (kirim data buku & seed)
+    renderGarden(books || [], unopenedSeeds);
   } catch (err) {
     console.error(err);
     root.innerHTML = '<div class="state-box"><h1>⚠️ Gagal Memuat</h1>'
