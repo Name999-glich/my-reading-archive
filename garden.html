@@ -1552,10 +1552,13 @@ async function loadSeeds(userId) {
   }
   return data || [];
 }
+ /* Daftarkan fungsi ke window agar bisa dipanggil dari HTML */
 window.openSeedGacha = openSeedGacha;
-  window.resetToSeed = resetToSeed;
+window.resetToSeed = resetToSeed;
 window.closeGachaAndReload = closeGachaAndReload;
-  async function boot() {
+
+/* Fungsi Boot Utama */
+async function boot() {
   const root = document.getElementById('garden-root');
   try {
     const { data: { session } } = await supabase.auth.getSession();
@@ -1565,16 +1568,25 @@ window.closeGachaAndReload = closeGachaAndReload;
         + '<a class="btn btn-primary" href="index.html">Buka Halaman Utama</a></div>';
       return;
     }
-       // 1. Ambil data buku
+    
+    // 1. Ambil data buku
     const { data: books, error: errBooks } = await supabase.from('books').select('*')
       .eq('user_id', session.user.id).order('created_at', { ascending: false });
     if (errBooks) throw errBooks;
     
-   // 2. Ambil SEMUA data seed
-const allSeeds = await loadSeeds(session.user.id);
-
-// 3. Render taman
-renderGarden(books || [], allSeeds);
+    // 2. Ambil SEMUA data seed
+    const allSeeds = await loadSeeds(session.user.id);
+    
+    // 3. Render taman
+    renderGarden(books || [], allSeeds);
+    
+  } catch (err) {
+    console.error(err);
+    root.innerHTML = '<div class="state-box"><h1>⚠️ Gagal Memuat</h1>'
+      + '<p>' + esc(err.message || 'Terjadi kesalahan') + '</p>'
+      + '<a class="btn btn-ghost" href="index.html">← Kembali</a></div>';
+  }
+}
   } catch (err) {
     console.error(err);
     root.innerHTML = '<div class="state-box"><h1>⚠️ Gagal Memuat</h1>'
