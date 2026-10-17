@@ -764,33 +764,81 @@ const $ = (s, r = document) => r.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c =>
   ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
 
+/* ============================================================
+   🎰 GACHA SYSTEM — 2 TAHAP
+   Tahap 1: Roll Rarity (Common / Rare / Legend / Secret)
+   Tahap 2: Roll Bunga di dalam rarity tersebut
+   ============================================================ */
+
+/* Daftar semua bunga yang ada */
 const FLOWER_TYPES = [
-  { name: 'Daisy',         color: '#FFF8F0', accent: '#F4E4A6', rarity: 'common', rate: 23,
+  // === COMMON ===
+  { name: 'Daisy',         color: '#FFF8F0', accent: '#F4E4A6', rarity: 'common', rate: 24.67,
     desc: 'Bunga sederhana yang selalu ceria.' },
-  { name: 'Mawar',         color: '#E8A0BF', accent: '#F7CAC9', rarity: 'common', rate: 23,
+  { name: 'Mawar',         color: '#E8A0BF', accent: '#F7CAC9', rarity: 'common', rate: 24.67,
     desc: 'Simbol cinta klasik yang tak pernah pudar.' },
-  { name: 'Matahari',      color: '#F4E4A6', accent: '#F4A896', rarity: 'common', rate: 22,
+  { name: 'Matahari',      color: '#F4E4A6', accent: '#F4A896', rarity: 'common', rate: 24.66,
     desc: 'Selalu menghadap ke arah cahaya.' },
+  
+  // === RARE ===
   { name: 'Lavender',      color: '#C8A2C8', accent: '#F7CAC9', rarity: 'rare',   rate: 20,
     desc: 'Wangi menenangkan, jarang ditemui.' },
-  { name: 'Golden Rose',   color: '#F4E4A6', accent: '#F4A896', rarity: 'legend', rate: 5,
+  
+  // === LEGEND ===
+  { name: 'Golden Rose',   color: '#F4E4A6', accent: '#F4A896', rarity: 'legend', rate: 2,
     desc: 'Mawar emas legendaris, simbol kejayaan.' },
-  { name: 'Blue Rose',     color: '#7FB3D5', accent: '#FFF8F0', rarity: 'legend', rate: 5,
+  { name: 'Blue Rose',     color: '#7FB3D5', accent: '#FFF8F0', rarity: 'legend', rate: 2,
     desc: 'Mawar biru mistis — mustahil di alam nyata.' },
+  
+  // === SECRET ===
   { name: 'Bunga Bangkai', color: '#3D2B3D', accent: '#8B7B8B', rarity: 'secret', rate: 2,
     desc: 'Bunga mekar dari dunia lain. Aura abu & misteri yang memikat.' }
 ];
+
+/* ============================================================
+   🎰 TAHAP 1 — Rarity Rates (Total: 100%)
+   ============================================================ */
+const RARITY_RATES = {
+  common: 74,   // 74% — peluang dapat rarity Common
+  rare:   20,   // 20% — peluang dapat rarity Rare
+  legend: 4,    // 4%  — peluang dapat rarity Legend
+  secret: 2     // 2%  — peluang dapat rarity Secret (sangat langka!)
+};
+
+/* ============================================================
+   🎰 TAHAP 2 — Flower Pool (Bunga di dalam tiap Rarity)
+   ============================================================ */
+const RARITY_POOL = {
+  common: ['Daisy', 'Mawar', 'Matahari'],          // 3 bunga, masing-masing ~33.3%
+  rare:   ['Lavender'],                             // 1 bunga, 100%
+  legend: ['Golden Rose', 'Blue Rose'],             // 2 bunga, masing-masing 50%
+  secret: ['Bunga Bangkai']                         // 1 bunga, 100%
+};
+
+/* ============================================================
+   🎰 FUNGSI UTAMA GACHA — 2 TAHAP
+   ============================================================ */
 function flowerForBook(book) {
   const seedStr = book.title || 'X';
-  const seed = Array.from(seedStr).reduce((a, c) => a + c.charCodeAt(0), 0);
-  const roll = seed % 1000;
-  if (roll < 230) return FLOWER_TYPES[0];  // Daisy — 23.0%
-  if (roll < 460) return FLOWER_TYPES[1];  // Mawar — 23.0%
-  if (roll < 680) return FLOWER_TYPES[2];  // Matahari — 22.0%
-  if (roll < 880) return FLOWER_TYPES[3];  // Lavender — 20.0%
-  if (roll < 930) return FLOWER_TYPES[4];  // Golden Rose — 5.0%
-  if (roll < 980) return FLOWER_TYPES[5];  // Blue Rose — 5.0%
-  return FLOWER_TYPES[6];                  // Bunga Bangkai — 2.0% ✅
+  const baseSeed = Array.from(seedStr).reduce((a, c) => a + c.charCodeAt(0), 0);
+
+  /* ---------- TAHAP 1: Roll Rarity ---------- */
+  // Pakai seed yang berbeda dari roll bunga (×7)
+  const rarityRoll = (baseSeed * 7) % 100;  // 0 - 99
+  let pickedRarity;
+  if (rarityRoll < 74)       pickedRarity = 'common';   // 0-73   → 74%
+  else if (rarityRoll < 94)  pickedRarity = 'rare';     // 74-93  → 20%
+  else if (rarityRoll < 98)  pickedRarity = 'legend';   // 94-97  → 4%
+  else                       pickedRarity = 'secret';   // 98-99  → 2%
+
+  /* ---------- TAHAP 2: Roll Bunga dalam Rarity ---------- */
+  const pool = RARITY_POOL[pickedRarity];
+  // Pakai seed yang berbeda lagi (×13) supaya hasilnya beda dari roll rarity
+  const flowerRoll = (baseSeed * 13) % pool.length;
+  const flowerName = pool[flowerRoll];
+
+  /* ---------- Kembalikan bunga ---------- */
+  return FLOWER_TYPES.find(f => f.name === flowerName) || FLOWER_TYPES[0];
 }
 function flowerTopView(type) {
   const c = type.color, a = type.accent;
@@ -1089,21 +1137,93 @@ function closeCollectionPopup() {
 function escCollectionHandler(e) {
   if (e.key === 'Escape') closeCollectionPopup();
 }
-  function openRatePopup() {
+ function openRatePopup() {
   const existing = document.getElementById('ratePopup');
   if (existing) return;
 
-  const items = FLOWER_TYPES.map((t, i) => {
-    const icon = t.rarity === 'secret' ? '🌺'
-              : t.rarity === 'legend' ? (t.name === 'Blue Rose' ? '🌹' : '👑')
-              : t.rarity === 'rare'   ? '💜'
-              : (t.name === 'Daisy' ? '🌼' : t.name === 'Mawar' ? '🌸' : '🌻');
-    return '<div class="rate-item ' + t.rarity + '" data-flower-idx="' + i + '">'
-      + '<div class="ri-name"><span class="ri-icon ' + t.rarity + '">' + icon + '</span> ' + t.name + '</div>'
-      + '<div class="ri-pct">' + t.rate + '%</div>'
+  const rarityLabels = {
+    common: { icon: '🌼', label: 'Common',  color: '#A8C09A' },
+    rare:   { icon: '💜', label: 'Rare',    color: '#C8A2C8' },
+    legend: { icon: '👑', label: 'Legend',  color: '#F4E4A6' },
+    secret: { icon: '🌺', label: 'Secret',  color: '#B8B8B8' }
+  };
+
+  // === TAHAP 1: Rarity ===
+  const raritySection = ['common', 'rare', 'legend', 'secret'].map(r => {
+    const info = rarityLabels[r];
+    return '<div class="rate-item ' + r + '" data-rarity="' + r + '">'
+      + '<div class="ri-name"><span class="ri-icon ' + r + '">' + info.icon + '</span> '
+      + info.label + '</div>'
+      + '<div class="ri-pct">' + RARITY_RATES[r] + '%</div>'
       + '</div>';
   }).join('');
 
+  // === TAHAP 2: Bunga di dalam rarity ===
+  const flowerSections = ['common', 'rare', 'legend', 'secret'].map(r => {
+    const pool = RARITY_POOL[r];
+    const perFlower = (RARITY_RATES[r] / pool.length).toFixed(2);
+    const items = pool.map(name => {
+      const icon = r === 'secret' ? '🌺'
+                : r === 'legend' ? (name === 'Blue Rose' ? '🌹' : '👑')
+                : r === 'rare'   ? '💜'
+                : (name === 'Daisy' ? '🌼' : name === 'Mawar' ? '🌸' : '🌻');
+      return '<div class="rate-item ' + r + '" data-flower-name="' + name + '">'
+        + '<div class="ri-name"><span class="ri-icon ' + r + '">' + icon + '</span> '
+        + name + '</div>'
+        + '<div class="ri-pct">' + perFlower + '%</div>'
+        + '</div>';
+    }).join('');
+    return items;
+  }).join('');
+
+  const popupHTML =
+    '<div class="rate-popup-backdrop" id="ratePopup">'
+    + '<div class="rate-popup">'
+    + '<div class="rate-popup-head">'
+    + '<h3>📊 Peluang Gacha</h3>'
+    + '<button class="rate-popup-close" id="rateClose">✕</button>'
+    + '</div>'
+
+    // === TAHAP 1 ===
+    + '<div style="margin-bottom:8px;font-size:.72rem;letter-spacing:.14em;'
+    + 'text-transform:uppercase;color:var(--muted);text-align:center;font-weight:600">'
+    + '🎰 Tahap 1 — Rarity</div>'
+    + '<div class="rate-list">' + raritySection + '</div>'
+
+    // === TAHAP 2 ===
+    + '<div style="margin-top:20px;margin-bottom:8px;font-size:.72rem;'
+    + 'letter-spacing:.14em;text-transform:uppercase;color:var(--muted);'
+    + 'text-align:center;font-weight:600">🎰 Tahap 2 — Bunga</div>'
+    + '<div class="rate-list">' + flowerSections + '</div>'
+
+    + '<div class="rate-popup-note">'
+    + 'Rarity diacak dulu, lalu bunga diacak dari rarity tersebut.<br>'
+    + 'Klik bunga untuk melihat detailnya.'
+    + '</div>'
+    + '</div>'
+    + '</div>';
+
+  document.body.insertAdjacentHTML('beforeend', popupHTML);
+  const popup = document.getElementById('ratePopup');
+  requestAnimationFrame(() => popup.classList.add('open'));
+
+  document.getElementById('rateClose').addEventListener('click', closeRatePopup);
+  popup.addEventListener('click', e => {
+    if (e.target.id === 'ratePopup') closeRatePopup();
+  });
+
+  // Klik item bunga → buka detail bunga
+  popup.querySelectorAll('.rate-item[data-flower-name]').forEach(el => {
+    el.style.cursor = 'pointer';
+    el.addEventListener('click', () => {
+      const name = el.dataset.flowerName;
+      const flower = FLOWER_TYPES.find(f => f.name === name);
+      if (flower) openFlowerDetail(flower);
+    });
+  });
+
+  document.addEventListener('keydown', escHandler);
+}
   const popupHTML =
     '<div class="rate-popup-backdrop" id="ratePopup">'
     + '<div class="rate-popup">'
