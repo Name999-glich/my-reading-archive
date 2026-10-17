@@ -704,6 +704,93 @@ h1,h2,h3{font-family:var(--font-display);font-weight:600;margin:0}
   60%    {transform:translateX(.3px) rotate(.3deg)}
   75%    {transform:translateX(0) rotate(0deg)}
 }
+ /* 📊 Accordion di Popup Gacha */
+.rate-rarity-group{
+  border-radius:10px;
+  background:rgba(255,248,240,.03);
+  border:1px solid rgba(255,248,240,.08);
+  margin-bottom:8px;
+  overflow:hidden;
+}
+.rate-rarity-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 14px;cursor:pointer;
+  transition:background .2s;
+}
+.rate-rarity-header:hover{
+  background:rgba(255,248,240,.06);
+}
+.rate-rarity-header .ri-name{
+  display:flex;align-items:center;gap:10px;
+  font-size:.92rem;color:var(--cream);
+}
+.rate-rarity-header .ri-pct{
+  font-family:var(--font-display);font-size:1.1rem;
+  font-weight:600;margin-left:auto;margin-right:12px;
+}
+.rate-rarity-header.common .ri-pct{color:#A8C09A}
+.rate-rarity-header.rare .ri-pct{color:var(--lavender)}
+.rate-rarity-header.legend .ri-pct{color:var(--butter)}
+.rate-rarity-header.secret .ri-pct{color:#D4D4D4}
+
+/* Panah */
+.rate-arrow{
+  display:inline-block;font-size:.8rem;color:var(--muted);
+  transition:transform .3s cubic-bezier(.2,.8,.3,1);
+}
+.rate-rarity-group.open .rate-arrow{
+  transform:rotate(180deg);
+}
+
+/* Isi (Bunga di dalamnya) */
+.rate-rarity-content{
+  max-height:0;overflow:hidden;
+  transition:max-height .4s cubic-bezier(.2,.8,.3,1), padding .3s;
+  padding:0 14px;
+  background:rgba(0,0,0,.15);
+}
+.rate-rarity-group.open .rate-rarity-content{
+  max-height:300px;
+  padding:8px 14px 12px;
+}
+.rate-rarity-content .rate-item{
+  padding:8px 0;border-bottom:1px dashed rgba(255,248,240,.1);
+  cursor:pointer;
+}
+.rate-rarity-content .rate-item:last-child{border-bottom:none;}
+
+/* 🌷 Taman Bisa Digeser (Scroll) */
+.garden-grid-top{
+  position:absolute;inset:0;
+  display:grid;
+  grid-template-columns:repeat(6, 1fr);
+  grid-template-rows:repeat(5, 1fr);
+  padding:4% 6%;gap:2%;z-index:2;
+  /* Fitur Scroll */
+  overflow:auto;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(255,248,240,.3) transparent;
+}
+.garden-grid-top::-webkit-scrollbar{
+  width:8px;height:8px;
+}
+.garden-grid-top::-webkit-scrollbar-track{
+  background:rgba(0,0,0,.2);border-radius:4px;
+}
+.garden-grid-top::-webkit-scrollbar-thumb{
+  background:rgba(255,248,240,.3);border-radius:4px;
+}
+.garden-grid-top::-webkit-scrollbar-thumb:hover{
+  background:rgba(255,248,240,.5);
+}
+@media (max-width:600px){
+  .garden-grid-top{
+    grid-template-columns:repeat(4, 1fr);
+    grid-template-rows:repeat(auto, 1fr);
+    padding:4%;
+  }
+}
   /* Responsive */
 @media (max-width:600px){
   .topbar-inner{height:54px;padding:0 14px}
@@ -1142,38 +1229,42 @@ function escCollectionHandler(e) {
   if (existing) return;
 
   const rarityLabels = {
-    common: { icon: '🌼', label: 'Common',  color: '#A8C09A' },
-    rare:   { icon: '💜', label: 'Rare',    color: '#C8A2C8' },
-    legend: { icon: '👑', label: 'Legend',  color: '#F4E4A6' },
-    secret: { icon: '🌺', label: 'Secret',  color: '#B8B8B8' }
+    common: { icon: '🌼', label: 'Common' },
+    rare:   { icon: '💜', label: 'Rare' },
+    legend: { icon: '👑', label: 'Legend' },
+    secret: { icon: '🌺', label: 'Secret' }
   };
 
-  // === TAHAP 1: Rarity ===
-  const raritySection = ['common', 'rare', 'legend', 'secret'].map(r => {
+  // Bikin Accordion per Rarity
+  const rarityGroups = ['common', 'rare', 'legend', 'secret'].map(r => {
     const info = rarityLabels[r];
-    return '<div class="rate-item ' + r + '" data-rarity="' + r + '">'
-      + '<div class="ri-name"><span class="ri-icon ' + r + '">' + info.icon + '</span> '
-      + info.label + '</div>'
-      + '<div class="ri-pct">' + RARITY_RATES[r] + '%</div>'
-      + '</div>';
-  }).join('');
-
-  // === TAHAP 2: Bunga di dalam rarity ===
-  const flowerSections = ['common', 'rare', 'legend', 'secret'].map(r => {
     const pool = RARITY_POOL[r];
-    const perFlower = (RARITY_RATES[r] / pool.length).toFixed(2);
-    const items = pool.map(name => {
+    
+    // ✨ LOGIKA BARU: 100% dibagi rata untuk semua bunga di rarity ini
+    const perFlower = (100 / pool.length).toFixed(2);
+
+    // List bunga di dalam rarity ini
+    const flowersHTML = pool.map(name => {
       const icon = r === 'secret' ? '🌺'
                 : r === 'legend' ? (name === 'Blue Rose' ? '🌹' : '👑')
                 : r === 'rare'   ? '💜'
                 : (name === 'Daisy' ? '🌼' : name === 'Mawar' ? '🌸' : '🌻');
       return '<div class="rate-item ' + r + '" data-flower-name="' + name + '">'
-        + '<div class="ri-name"><span class="ri-icon ' + r + '">' + icon + '</span> '
-        + name + '</div>'
+        + '<div class="ri-name"><span class="ri-icon ' + r + '">' + icon + '</span> ' + name + '</div>'
         + '<div class="ri-pct">' + perFlower + '%</div>'
         + '</div>';
     }).join('');
-    return items;
+
+    return '<div class="rate-rarity-group" data-rarity="' + r + '">'
+      + '<div class="rate-rarity-header ' + r + '">'
+      + '<div class="ri-name"><span class="ri-icon ' + r + '">' + info.icon + '</span> ' + info.label + '</div>'
+      + '<div class="ri-pct">' + RARITY_RATES[r] + '%</div>'
+      + '<span class="rate-arrow">▼</span>'
+      + '</div>'
+      + '<div class="rate-rarity-content">'
+      + flowersHTML
+      + '</div>'
+      + '</div>';
   }).join('');
 
   const popupHTML =
@@ -1183,23 +1274,10 @@ function escCollectionHandler(e) {
     + '<h3>📊 Peluang Gacha</h3>'
     + '<button class="rate-popup-close" id="rateClose">✕</button>'
     + '</div>'
-
-    // === TAHAP 1 ===
-    + '<div style="margin-bottom:8px;font-size:.72rem;letter-spacing:.14em;'
-    + 'text-transform:uppercase;color:var(--muted);text-align:center;font-weight:600">'
-    + '🎰 Tahap 1 — Rarity</div>'
-    + '<div class="rate-list">' + raritySection + '</div>'
-
-    // === TAHAP 2 ===
-    + '<div style="margin-top:20px;margin-bottom:8px;font-size:.72rem;'
-    + 'letter-spacing:.14em;text-transform:uppercase;color:var(--muted);'
-    + 'text-align:center;font-weight:600">🎰 Tahap 2 — Bunga</div>'
-    + '<div class="rate-list">' + flowerSections + '</div>'
-
-    + '<div class="rate-popup-note">'
-    + 'Rarity diacak dulu, lalu bunga diacak dari rarity tersebut.<br>'
-    + 'Klik bunga untuk melihat detailnya.'
+    + '<div class="rate-popup-note" style="margin-top:0;margin-bottom:16px">'
+    + 'Klik panah pada rarity untuk melihat peluang bunganya.'
     + '</div>'
+    + '<div class="rate-list">' + rarityGroups + '</div>'
     + '</div>'
     + '</div>';
 
@@ -1212,10 +1290,18 @@ function escCollectionHandler(e) {
     if (e.target.id === 'ratePopup') closeRatePopup();
   });
 
-  // Klik item bunga → buka detail bunga
+  // Buka-tutup panah
+  popup.querySelectorAll('.rate-rarity-header').forEach(header => {
+    header.addEventListener('click', () => {
+      const group = header.parentElement;
+      group.classList.toggle('open');
+    });
+  });
+
+  // Klik bunga untuk detail
   popup.querySelectorAll('.rate-item[data-flower-name]').forEach(el => {
-    el.style.cursor = 'pointer';
-    el.addEventListener('click', () => {
+    el.addEventListener('click', e => {
+      e.stopPropagation();
       const name = el.dataset.flowerName;
       const flower = FLOWER_TYPES.find(f => f.name === name);
       if (flower) openFlowerDetail(flower);
