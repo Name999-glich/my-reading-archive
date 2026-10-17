@@ -1141,7 +1141,7 @@ function renderGarden(books, seeds = []) {
     const t = flowerForBook(b);
     const col = (seed * 7 + idx * 3) % 6;
     const row = Math.floor((seed * 13 + idx * 5) % 5);
-    return { book: b, flower: t, col, row };
+        return { book: originalBook, flower: t, col, row, seedId: seed.id, has_reset: seed.has_reset };
   });
 
   const COLS = 6, ROWS = 5;
@@ -1176,9 +1176,16 @@ function renderGarden(books, seeds = []) {
 + '<button class="rate-trigger" id="rateTrigger">📊 Lihat Peluang Bunga</button>'
 + '<button class="collection-trigger" id="collectionTrigger">🌸 Koleksi Bunga</button>'
 + '</div>';
-  root.querySelectorAll('.garden-slot[data-book-id]').forEach(el => {
-    el.addEventListener('click', () => {
-      location.href = 'index.html#/book/' + el.dataset.bookId;
+   root.querySelectorAll('.garden-slot[data-book-id]').forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      const seedId = el.dataset.seedId;
+      const hasReset = el.dataset.hasReset === 'true';
+      
+      const flowerName = el.getAttribute('title').split('·')[1].split('(')[0].trim();
+      const flower = FLOWER_TYPES.find(f => f.name === flowerName);
+      
+      if (flower) openFlowerDetail(flower, seedId, hasReset);
     });
   });
   
@@ -1261,7 +1268,7 @@ function closeGachaAndReload() {
   if (popup) popup.remove();
   location.reload(); // Reload halaman agar bunga baru muncul di taman
 }
-  function openFlowerDetail(flower) {
+ function openFlowerDetail(flower, seedId = null, hasReset = false) {
   const existing = document.getElementById('flowerDetail');
   if (existing) existing.remove();
 
@@ -1283,6 +1290,11 @@ function closeGachaAndReload() {
     + '<span class="flower-detail-rarity ' + flower.rarity + '">' + flower.rarity + '</span>'
     + '<p class="flower-detail-desc">' + (flower.desc || 'Bunga misterius dari tamanmu.') + '</p>'
     + '<div class="flower-detail-rate">Peluang: <strong>' + flower.rate + '%</strong></div>'
+    
+    // 👇 TAMBAHKAN BARIS INI
+    + (seedId && !hasReset ? '<button class="btn-gacha-close" style="margin-top:16px;background:rgba(232,160,191,.1);border-color:rgba(232,160,191,.3);color:#ffd9e6;" onclick="resetToSeed(\'' + seedId + '\')">🔄 Kembalikan ke Seed (1x)</button>' : '')
+    + (seedId && hasReset ? '<div style="margin-top:16px;font-size:0.75rem;color:var(--muted);font-style:italic;">Kesempatan reset sudah digunakan.</div>' : '')
+    
     + '</div>'
     + '</div>';
 
@@ -1296,7 +1308,27 @@ function closeGachaAndReload() {
   });
 }
 
-function closeFlowerDetail() {
+async function resetToSeed(seedId) {
+  if (!confirm('Yakin ingin mengembalikan bunga ini menjadi Seed? Kesempatan ini hanya bisa dilakukan 1x.')) return;
+
+  try {
+    const { error } = await supabase.from('seeds').update({
+      status: 'unopened',
+      rarity: null,
+      flower_name: null,
+      opened_at: null,
+      has_reset: true // 👈 Kunci permanen
+    }).eq('id', seedId);
+
+    if (error) throw error;
+    
+    closeFlowerDetail();
+    location.reload();
+  } catch (err) {
+    alert('Gagal reset: ' + err.message);
+  }
+}
+  function closeFlowerDetail() {
   const popup = document.getElementById('flowerDetail');
   if (!popup) return;
   popup.classList.remove('open');
@@ -1500,6 +1532,7 @@ async function loadSeeds(userId) {
   return data || [];
 }
 window.openSeedGacha = openSeedGacha;
+  window.resetToSeed = resetToSeed;
 window.closeGachaAndReload = closeGachaAndReload;
   async function boot() {
   const root = document.getElementById('garden-root');
