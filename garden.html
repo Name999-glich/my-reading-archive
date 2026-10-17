@@ -1330,6 +1330,26 @@ async function resetToSeed(seedId) {
     alert('Gagal reset: ' + err.message);
   }
 }
+  async function resetToSeed(seedId) {
+  if (!confirm('Yakin ingin mengembalikan bunga ini menjadi Seed? Kesempatan ini hanya bisa dilakukan 1x.')) return;
+
+  try {
+    const { error } = await supabase.from('seeds').update({
+      status: 'unopened',
+      rarity: null,
+      flower_name: null,
+      opened_at: null,
+      has_reset: true // 👈 Kunci permanen
+    }).eq('id', seedId);
+
+    if (error) throw error;
+    
+    closeFlowerDetail();
+    location.reload();
+  } catch (err) {
+    alert('Gagal reset: ' + err.message);
+  }
+}
   function closeFlowerDetail() {
   const popup = document.getElementById('flowerDetail');
   if (!popup) return;
