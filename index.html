@@ -1188,8 +1188,13 @@ function openBookForm(book) {
     saveBtn.disabled = true;
     saveBtn.textContent = 'Menyimpan…';
     try {
-      await Store.save({ id: formState.id, values, file: formState.file, removeCover: formState.removeCover });
+       const savedBook = await Store.save({ id: formState.id, values, file: formState.file, removeCover: formState.removeCover });
       await Store.load();
+      
+      // 🌱 Cek jika status jadi 'finished' dan belum punya seed
+      if (values.status === 'finished') {
+        await createSeedForBook(savedBook);
+      }
       closeModal();
       render(false);
       toast(isEdit ? 'Buku diperbarui 🌸' : 'Buku ditambahkan 🌸');
@@ -1200,6 +1205,30 @@ function openBookForm(book) {
       toast('Gagal: ' + (err.message || err), 'err');
     }
   });
+}
+ /* 🌱 Fungsi untuk membuat Seed Pack saat buku selesai */
+async function createSeedForBook(book) {
+  if (!CLOUD) return; // Abaikan jika mode lokal
+  
+  // Cek apakah buku ini sudah punya seed
+  const { data: existing } = await supabase
+    .from('seeds')
+    .select('id')
+    .eq('book_id', book.id)
+    .eq('user_id', Store.userId)
+    .maybeSingle();
+    
+  if (existing) return; // Kalau sudah ada, jangan buat lagi
+
+  // Buat seed baru
+  const { error } = await supabase.from('seeds').insert({
+    user_id: Store.userId,
+    book_id: book.id,
+    book_title: book.title,
+    status: 'unopened'
+  });
+
+  if (error) console.error('Gagal membuat seed:', error);
 }
   async function toggleFav(id) {
   const b = Store.books.find(x => x.id === id);
@@ -1296,10 +1325,16 @@ function bindView() {
     ds.addEventListener('change', async () => {
       const b = Store.books.find(x => x.id === ds.dataset.id);
       if (!b) return;
-      b.status = ds.value;
+       b.status = ds.value;
       try {
-        await Store.save({ id: b.id, values: bookValues(b) });
+        const saved = await Store.save({ id: b.id, values: bookValues(b) });
         await Store.load();
+        
+        // 🌱 Cek jika status jadi 'finished' dan belum punya seed
+        if (ds.value === 'finished') {
+          await createSeedForBook(saved);
+        }
+        
         render(false);
         toast('Status diperbarui');
       } catch (err) {
