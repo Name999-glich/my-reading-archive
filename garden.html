@@ -1096,34 +1096,36 @@ function flowerTopView(type) {
     + '</svg>';
 }
 
-function renderGarden(books, seeds = []) {
-    window.__gardenBooks = books;
-      // 🌱 Render Kotak Seed Pack
-    const seedContainer = document.getElementById('seed-container');
-    if (seedContainer) {
-      if (seeds.length === 0) {
-        seedContainer.innerHTML = ''; // Sembunyikan jika tidak ada seed
-      } else {
-        let seedsHTML = '<div style="margin-top:24px;text-align:center;">'
-          + '<h3 style="font-family:var(--font-display);font-size:1.2rem;color:var(--cream);margin-bottom:12px;">'
-          + '🎁 Seed Pack Tersedia (' + seeds.length + ')</h3>'
-          + '<div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;">';
-          
-        seeds.forEach(seed => {
-          seedsHTML += '<button class="rate-trigger" style="padding:16px 24px;font-size:1rem;flex-direction:column;gap:6px;" '
-            + 'onclick="openSeedGacha(\'' + seed.id + '\', \'' + esc(seed.book_title) + '\')">'
-            + '<span style="font-size:2rem;">🌱</span>'
-            + '<span style="font-size:0.7rem;color:var(--muted);max-width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'
-            + esc(seed.book_title) + '</span>'
-            + '</button>';
-        });
+f  window.__gardenBooks = books;
+
+  // Pisahkan seed menjadi yang sudah ditanam & yang belum dibuka
+  const plantedSeeds = seeds.filter(s => s.status === 'planted');
+  const unopenedSeeds = seeds.filter(s => s.status === 'unopened');
+
+  // --- Render Kotak Seed Pack ---
+  const seedContainer = document.getElementById('seed-container');
+  if (seedContainer) {
+    if (unopenedSeeds.length === 0) {
+      seedContainer.innerHTML = ''; 
+    } else {
+      let seedsHTML = '<div style="margin-top:24px;text-align:center;">'
+        + '<h3 style="font-family:var(--font-display);font-size:1.2rem;color:var(--cream);margin-bottom:12px;">'
+        + '🎁 Seed Pack Tersedia (' + unopenedSeeds.length + ')</h3>'
+        + '<div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;">';
         
-        seedsHTML += '</div></div>';
-        seedContainer.innerHTML = seedsHTML;
-      }
+      unopenedSeeds.forEach(seed => {
+        seedsHTML += '<button class="rate-trigger" style="padding:16px 24px;font-size:1rem;flex-direction:column;gap:6px;" '
+          + 'onclick="openSeedGacha(\'' + seed.id + '\', \'' + esc(seed.book_title) + '\')">'
+          + '<span style="font-size:2rem;">🌱</span>'
+          + '<span style="font-size:0.7rem;color:var(--muted);max-width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'
+          + esc(seed.book_title) + '</span>'
+          + '</button>';
+      });
+      seedsHTML += '</div></div>';
+      seedContainer.innerHTML = seedsHTML;
     }
-  const finished = books.filter(b => b.status === 'finished');
-  const total = finished.length;
+  }
+  const total = plantedSeeds.length;
   const root = document.getElementById('garden-root');
 
   if (!total) {
@@ -1136,14 +1138,14 @@ function renderGarden(books, seeds = []) {
     return;
   }
 
-  const flowers = finished.map((b, idx) => {
-    const seed = Array.from(b.title || 'X').reduce((a, c) => a + c.charCodeAt(0), idx);
-    const t = flowerForBook(b);
-    const col = (seed * 7 + idx * 3) % 6;
-    const row = Math.floor((seed * 13 + idx * 5) % 5);
-        return { book: originalBook, flower: t, col, row, seedId: seed.id, has_reset: seed.has_reset };
+  const flowers = plantedSeeds.map((seed, idx) => {
+    const originalBook = books.find(b => b.id === seed.book_id) || { id: seed.book_id, title: seed.book_title };
+    const t = FLOWER_TYPES.find(f => f.name === seed.flower_name) || FLOWER_TYPES[0];
+    const seedStr = Array.from(seed.book_title || 'X').reduce((a, c) => a + c.charCodeAt(0), idx);
+    const col = (seedStr * 7 + idx * 3) % 6;
+    const row = Math.floor((seedStr * 13 + idx * 5) % 5);
+    return { book: originalBook, flower: t, col, row, seedId: seed.id, has_reset: seed.has_reset };
   });
-
   const COLS = 6, ROWS = 5;
   const slots = Array.from({ length: COLS * ROWS }, () => null);
   flowers.forEach(f => {
@@ -1155,7 +1157,7 @@ function renderGarden(books, seeds = []) {
   slots.forEach(f => {
     if (!f) { slotsHTML += '<div class="garden-slot empty"></div>'; return; }
     const t = f.flower;
-    slotsHTML += '<div class="garden-slot ' + t.rarity + '" data-book-id="' + f.book.id + '" '
+        slotsHTML += '<div class="garden-slot ' + t.rarity + '" data-book-id="' + f.book.id + '" data-seed-id="' + f.seedId + '" data-has-reset="' + f.has_reset + '" '
       + 'title="' + esc(f.book.title) + ' · ' + t.name + ' (' + t.rarity + ')">'
       + '<div class="garden-flower-wrap">'
       + flowerTopView(t)
@@ -1522,7 +1524,6 @@ async function loadSeeds(userId) {
     .from('seeds')
     .select('*')
     .eq('user_id', userId)
-    .eq('status', 'unopened') // Hanya ambil yang belum dibuka
     .order('created_at', { ascending: true });
 
   if (error) {
@@ -1549,11 +1550,11 @@ window.closeGachaAndReload = closeGachaAndReload;
       .eq('user_id', session.user.id).order('created_at', { ascending: false });
     if (errBooks) throw errBooks;
     
-    // 2. Ambil data seed yang belum dibuka
-    const unopenedSeeds = await loadSeeds(session.user.id);
-    
-    // 3. Render taman (kirim data buku & seed)
-    renderGarden(books || [], unopenedSeeds);
+   // 2. Ambil SEMUA data seed
+const allSeeds = await loadSeeds(session.user.id);
+
+// 3. Render taman
+renderGarden(books || [], allSeeds);
   } catch (err) {
     console.error(err);
     root.innerHTML = '<div class="state-box"><h1>⚠️ Gagal Memuat</h1>'
