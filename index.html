@@ -36,11 +36,22 @@ h1,h2,h3{font-family:var(--font-display);font-weight:600;margin:0}
   background:linear-gradient(180deg,rgba(61,43,61,.92),rgba(61,43,61,.62));
   backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
 .topbar-inner{display:flex;align-items:center;gap:18px;height:66px;max-width:1180px;margin:0 auto;padding:0 20px}
-.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--font-display);
-  font-size:1.16rem;font-weight:600;white-space:nowrap}
-.brand-mark{width:26px;height:26px;border-radius:50%;flex:0 0 auto;
-  background:radial-gradient(circle at 35% 30%,#FFF8F0,var(--rose) 45%,var(--lavender) 75%,var(--coral));
-  box-shadow:0 0 18px rgba(232,160,191,.6)}
+/* --- BRAND BARU: FOTO PROFIL + USERNAME --- */
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;
+  font-family:var(--font-display);font-size:1.16rem;font-weight:600;white-space:nowrap;
+  transition:opacity .2s; border-radius:12px; padding:4px 8px 4px 4px; margin-left:-8px;}
+.brand:hover{background:var(--surface); opacity:0.9;}
+.brand-avatar{width:36px;height:36px;border-radius:50%;flex:0 0 auto;
+  background:linear-gradient(135deg,var(--rose),var(--lavender));
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-display); font-size:1.2rem; color:#3d2030;
+  border:2px solid var(--border); overflow:hidden;
+  box-shadow:0 0 18px rgba(232,160,191,.4);}
+.brand-avatar img{width:100%;height:100%;object-fit:cover;}
+.brand-text{display:flex;flex-direction:column;line-height:1.15;}
+.brand-name{font-size:1.05rem;}
+.brand-sub{font-size:.65rem;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;font-family:'Inter',sans-serif;}
+/* ------------------------------------------ */
 .nav{display:flex;gap:2px;margin-left:auto;flex-wrap:wrap}
 .nav a{color:var(--muted);text-decoration:none;font-size:.82rem;padding:8px 11px;border-radius:10px;transition:.2s}
 .nav a:hover{color:var(--cream);background:var(--surface)}
@@ -218,6 +229,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
   .book-grid{grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:16px 12px}
   .modal{padding:20px;border-radius:16px}
   .modal-backdrop{padding:14px 10px}
+  .brand-name { font-size: .95rem; }
 }
 /* 🌸 Animasi Taman Bunga */
 @keyframes float-petal {
@@ -396,10 +408,20 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
 .profile-info .profile-email {
   color: var(--muted);
   font-size: .88rem;
-  margin: 0 0 12px;
+  margin: 0 0 6px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.profile-info .profile-id {
+  color: var(--butter);
+  font-size: .75rem;
+  margin: 0 0 12px;
+  font-family: monospace;
+  background: rgba(0,0,0,.2);
+  padding: 4px 8px;
+  border-radius: 6px;
+  display: inline-block;
 }
 .profile-info .profile-tagline {
   font-family: var(--font-display);
@@ -454,11 +476,21 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
 
 <header class="topbar">
   <div class="topbar-inner">
-    <a class="brand" href="#/home"><span class="brand-mark"></span> My Reading Archive</a>
+    <!-- BRAND BARU: Foto profil & Username, link ke #/profile -->
+    <a class="brand" href="#/profile" id="topbarBrand">
+      <div class="brand-avatar" id="brandAvatar">
+         <span id="brandInitial">M</span>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name" id="brandName">My Reading Archive</span>
+        <span class="brand-sub">Profil Pembaca</span>
+      </div>
+    </a>
+    
     <nav class="nav" id="mainNav"></nav>
     <div class="topbar-actions">
      <button class="btn btn-primary btn-sm" data-action="add-book" id="addBtn">🌸 Tambah Buku</button>
-<a class="btn btn-ghost btn-sm" href="garden.html">🌷 Taman</a>
+     <a class="btn btn-ghost btn-sm" href="garden.html">🌷 Taman</a>
       <button class="icon-btn" id="signOutBtn" title="Keluar" style="display:none">⏻</button>
     </div>
   </div>
@@ -771,6 +803,19 @@ function renderNav() {
 function setActiveNav(page) {
   const key = (page === 'book') ? 'collection' : page;
   $$('[data-nav]').forEach(a => a.classList.toggle('active', a.dataset.nav === key));
+}
+// Memperbarui tampilan topbar (avatar & username)
+function updateTopbarBrand() {
+  const name = Store.displayName();
+  $('#brandName').textContent = name;
+  const avatarSrc = Store.profileAvatarSrc();
+  const initial = avatarInitial(name, Store.userEmail);
+  const container = $('#brandAvatar');
+  if (avatarSrc) {
+    container.innerHTML = '<img src="' + esc(avatarSrc) + '" alt="Avatar">';
+  } else {
+    container.innerHTML = '<span id="brandInitial">' + esc(initial) + '</span>';
+  }
 }
 function parseHash() {
   const raw = location.hash.replace(/^#\/?/, '') || 'home';
@@ -1136,8 +1181,10 @@ function viewProfile() {
   const username = Store.profile?.username || email.split('@')[0];
   const avatarUrl = Store.profileAvatarSrc();
   const initial = avatarInitial(username, email);
+  
+  // ID Pembaca Unik (UUID dari auth)
+  const readerId = Store.userId || 'Tidak tersedia';
 
-  // Ringkasan taman (dari buku selesai)
   const flowerCounts = {};
   finished.forEach(b => {
     const t = flowerForBook(b);
@@ -1159,6 +1206,8 @@ function viewProfile() {
     + '<p class="eyebrow" style="margin-bottom:6px">Profil Pembaca</p>'
     + '<h1>' + esc(username) + '</h1>'
     + '<p class="profile-email">📧 ' + esc(email) + '</p>'
+    // Menampilkan ID Pembaca unik
+    + '<p class="profile-id" title="ID unik pembaca">ID: ' + esc(readerId) + '</p>'
     + '<p class="profile-tagline">“Setiap buku adalah taman yang tumbuh dalam dirimu.”</p>'
     + '<button class="btn btn-primary btn-sm profile-edit-btn" data-action="edit-profile">✏️ Edit Profil</button>'
     + '</div></div>'
@@ -1169,7 +1218,7 @@ function viewProfile() {
     + card('★', favs.length, 'Favorit')
     + '</section>'
     + '<section class="section"><div class="section-head"><h2>Ringkasan Tamanmu</h2>'
-    + '<a href="#/profile" data-action="goto-garden">Lihat Taman →</a></div>'
+    + '<a href="garden.html">Lihat Taman →</a></div>'
     + '<div class="profile-garden-summary">'
     + card('🌷', totalFlowers, 'Bunga Tumbuh')
     + card('🌼', totalFlowerTypes, 'Jenis Bunga')
@@ -1284,6 +1333,7 @@ function openProfileForm() {
       });
       await Store.loadProfile();
       closeModal();
+      updateTopbarBrand();
       render(false);
       toast('Profil diperbarui 🌸');
     } catch (err) {
@@ -1740,6 +1790,7 @@ function renderAuth(message = '') {
   $('#bottomNav').style.display = 'none';
   $('.fab').style.display = 'none';
   $('#signOutBtn').style.display = 'none';
+  $('#topbarBrand').style.display = 'none'; // Sembunyikan brand jika belum login
   $('#view').innerHTML =
     '<div class="auth-wrap">'
     + '<h1>🌸 My Reading Archive</h1>'
@@ -1792,6 +1843,7 @@ async function boot() {
     $('#bottomNav').style.display = '';
     $('.fab').style.display = '';
     $('#signOutBtn').style.display = '';
+    $('#topbarBrand').style.display = 'flex'; // Tampilkan brand
     supabase.auth.onAuthStateChange((evt) => {
       if (evt === 'SIGNED_OUT') { Store.books = []; Store.profile = null; renderAuth(); }
     });
@@ -1799,6 +1851,7 @@ async function boot() {
   try {
     await Store.load();
     await Store.loadProfile();
+    updateTopbarBrand(); // Perbarui foto profil di topbar
   } catch (err) {
     console.error(err);
     toast('Gagal memuat koleksi: ' + err.message, 'err');
