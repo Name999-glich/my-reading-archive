@@ -334,6 +334,120 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
   .garden-flower svg { max-width: 56px; }
   .garden-flower .flower-label { font-size: .56rem; max-width: 70px; }
 }
+
+/* ======================= PROFIL ======================= */
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 28px;
+  margin-top: 28px;
+  border-radius: 22px;
+  background: linear-gradient(165deg, rgba(255,248,240,.10), rgba(255,248,240,.03));
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+  flex-wrap: wrap;
+}
+.profile-header::after {
+  content: '';
+  position: absolute; right: -60px; top: -60px;
+  width: 220px; height: 220px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(232,160,191,.28), transparent 70%);
+  pointer-events: none;
+}
+.profile-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex: 0 0 auto;
+  border: 2px solid var(--border);
+  background: linear-gradient(135deg, var(--rose), var(--lavender));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 2.6rem;
+  color: #3d2030;
+  position: relative;
+  box-shadow: 0 10px 26px -10px rgba(232,160,191,.6);
+}
+.profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.profile-info {
+  flex: 1 1 220px;
+  min-width: 0;
+  position: relative;
+  z-index: 1;
+}
+.profile-info h1 {
+  font-size: clamp(1.6rem, 3.4vw, 2.2rem);
+  line-height: 1.1;
+  margin: 0 0 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.profile-info .profile-email {
+  color: var(--muted);
+  font-size: .88rem;
+  margin: 0 0 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.profile-info .profile-tagline {
+  font-family: var(--font-display);
+  font-style: italic;
+  color: var(--blush);
+  font-size: 1rem;
+  margin: 0 0 16px;
+}
+.profile-edit-btn {
+  margin-top: 4px;
+}
+.profile-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 14px;
+  margin: 24px 0;
+}
+.profile-garden-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.profile-avatar-preview {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex: 0 0 auto;
+  border: 2px solid var(--border);
+  background: linear-gradient(135deg, var(--rose), var(--lavender));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 3rem;
+  color: #3d2030;
+}
+.profile-avatar-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+@media (max-width: 860px) {
+  .profile-header { padding: 20px; gap: 18px; }
+  .profile-avatar { width: 96px; height: 96px; font-size: 2rem; }
+  .profile-avatar-preview { width: 110px; height: 110px; font-size: 2.4rem; }
+}
 </style>
 </head>
 <body>
@@ -359,7 +473,8 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
 const CFG = {
   SUPABASE_URL: 'https://fntuwxpxxeezijtoabth.supabase.co',
   SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZudHV3eHB4eGVlemlqdG9hYnRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIwNTI3MzksImV4cCI6MjEwNzYyODczOX0.cuQumMCw4x8GJSo3hISjLVJO6ZCAtakVJ6dSSIkparA',
-  BUCKET: 'covers'
+  BUCKET: 'covers',
+  AVATAR_BUCKET: 'avatars'
 };
 const CLOUD = /^https?:\/\/.+/.test(CFG.SUPABASE_URL) && CFG.SUPABASE_ANON_KEY.length > 30;
 let supabase = null;
@@ -399,10 +514,6 @@ function toast(msg, type = 'ok') {
   setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 320); }, 3400);
 }
 /* ======================= BINTANG SETENGAH ======================= */
-/**
- * Menampilkan bintang dengan dukungan setengah (0.5–5.0).
- * Mengembalikan HTML string berisi <span> bintang.
- */
 function starDisplay(rating) {
   const r = Number(rating) || 0;
   let out = '';
@@ -448,6 +559,10 @@ function placeholderCover(book) {
     + 'fill="#FFF8F0" opacity="0.94">' + esc(initials) + '</text></svg>';
   return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
 }
+function avatarInitial(username, email) {
+  const src = (username || email || '?').trim();
+  return (src[0] || '?').toUpperCase();
+}
 let _db = null;
 function db() {
   if (_db) return Promise.resolve(_db);
@@ -475,11 +590,12 @@ const idbPut = (s, v, k) => idbReq(s, 'readwrite', os => (k === undefined ? os.p
 const idbDel = (s, k) => idbReq(s, 'readwrite', os => os.delete(k));
 
 const Store = {
-  books: [], userId: null, profile: null, urls: new Map(),
+  books: [], userId: null, userEmail: null, profile: null, urls: new Map(),
   async load() {
     if (CLOUD) {
       const { data: { user } } = await supabase.auth.getUser();
       this.userId = user?.id ?? null;
+      this.userEmail = user?.email ?? null;
       if (!this.userId) { this.books = []; return; }
       const { data, error } = await supabase.from('books').select('*')
         .order('created_at', { ascending: false });
@@ -495,6 +611,53 @@ const Store = {
         }
       }
     }
+  },
+  async loadProfile() {
+    if (!CLOUD || !this.userId) { this.profile = null; return; }
+    const { data, error } = await supabase.from('profiles')
+      .select('*').eq('id', this.userId).maybeSingle();
+    if (error) { console.error('Load profile error:', error); this.profile = null; return; }
+    this.profile = data || null;
+  },
+  async saveProfile({ username, file, removeAvatar }) {
+    if (!CLOUD) throw new Error('Profil hanya tersedia di mode cloud.');
+    const uidCur = this.userId;
+    let avatar_path = this.profile?.avatar_path || null;
+    let avatar_url  = this.profile?.avatar_url  || null;
+    const oldPath = avatar_path;
+    if (file) {
+      const path = uidCur + '/' + uid() + '.' + extOf(file);
+      const up = await supabase.storage.from(CFG.AVATAR_BUCKET).upload(path, file, {
+        contentType: file.type || 'image/jpeg', cacheControl: '31536000', upsert: false
+      });
+      if (up.error) throw new Error('Upload foto profil gagal: ' + up.error.message);
+      avatar_path = path;
+      avatar_url = supabase.storage.from(CFG.AVATAR_BUCKET).getPublicUrl(path).data.publicUrl;
+    } else if (removeAvatar) {
+      avatar_path = null; avatar_url = null;
+    }
+    const row = {
+      id: uidCur,
+      username: username || null,
+      avatar_path,
+      avatar_url,
+      updated_at: new Date().toISOString()
+    };
+    const { data, error } = await supabase.from('profiles')
+      .upsert(row, { onConflict: 'id' }).select().single();
+    if (error) throw new Error(error.message);
+    if (oldPath && oldPath !== avatar_path) {
+      await supabase.storage.from(CFG.AVATAR_BUCKET).remove([oldPath]);
+    }
+    this.profile = data;
+    return data;
+  },
+  profileAvatarSrc() {
+    if (this.profile?.avatar_url) return this.profile.avatar_url;
+    return null;
+  },
+  displayName() {
+    return this.profile?.username || (this.userEmail ? this.userEmail.split('@')[0] : 'Pembaca');
   },
   coverSrc(b) {
     if (b.cover_url) return b.cover_url;
@@ -597,6 +760,7 @@ const NAV = [
   { hash:'#/want',       label:'Want to Read',       short:'Ingin',    icon:'✨' },
   { hash:'#/favorites',  label:'Favorites',          short:'Favorit',  icon:'★' },
   { hash:'#/stats',      label:'Reading Statistics', short:'Statistik',icon:'📊' },
+  { hash:'#/profile',    label:'Profil',             short:'Profil',   icon:'👤' },
 ];
 function renderNav() {
   $('#mainNav').innerHTML = NAV.map(n =>
@@ -655,16 +819,13 @@ const HERO_SVG = `
     </linearGradient>
   </defs>
 
-  <!-- Langit -->
   <rect width="1200" height="420" fill="url(#sky)"/>
 
-  <!-- Matahari berdenyut -->
   <g class="sun-glow">
     <circle cx="880" cy="280" r="240" fill="url(#glow)"/>
     <circle cx="880" cy="280" r="52" fill="#FFF8F0" opacity="0.9"/>
   </g>
 
-  <!-- Awan bergerak -->
   <g class="cloud" opacity="0.35">
     <ellipse cx="280" cy="90" rx="90" ry="16" fill="#FFF8F0"/>
     <ellipse cx="340" cy="80" rx="60" ry="12" fill="#FFF8F0"/>
@@ -674,12 +835,9 @@ const HERO_SVG = `
     <ellipse cx="760" cy="112" rx="50" ry="10" fill="#FFF8F0"/>
   </g>
 
-  <!-- Bukit jauh -->
   <path d="M0 300 Q 300 240 600 290 T 1200 280 L1200 420 L0 420Z" fill="url(#hillFar)" opacity="0.75"/>
-  <!-- Bukit dekat -->
   <path d="M0 350 Q 400 300 800 350 T 1200 340 L1200 420 L0 420Z" fill="url(#hillNear)"/>
 
-  <!-- Rumput bergoyang -->
   <g class="grass" fill="#A8C09A" opacity="0.85">
     <path d="M100 420 Q 105 380 110 420Z"/>
     <path d="M140 420 Q 148 375 155 420Z"/>
@@ -696,7 +854,6 @@ const HERO_SVG = `
     <path d="M1100 420 Q 1108 372 1115 420Z"/>
   </g>
 
-  <!-- Bunga bergoyang -->
   <g class="flower-sway">
     <g transform="translate(200, 400)">
       <rect x="-2" y="0" width="4" height="30" fill="#6b8e5a"/>
@@ -737,7 +894,6 @@ const HERO_SVG = `
     </g>
   </g>
 
-  <!-- Kupu-kupu terbang -->
   <g class="butterfly" transform="translate(500, 200)">
     <ellipse cx="-8" cy="0" rx="7" ry="9" fill="#E8A0BF" opacity="0.85"/>
     <ellipse cx="8" cy="0" rx="7" ry="9" fill="#E8A0BF" opacity="0.85"/>
@@ -753,7 +909,6 @@ const HERO_SVG = `
   </g>
 </svg>
 
-<!-- Kelopak bunga berjatuhan -->
 <div class="petal" style="left:8%;  animation-delay:0s">
   <svg width="18" height="18" viewBox="0 0 20 20"><ellipse cx="10" cy="10" rx="8" ry="5" fill="#F7CAC9" opacity="0.9"/></svg>
 </div>
@@ -970,6 +1125,176 @@ function viewStats() {
       : emptyState('Belum ada riwayat', 'Tandai buku sebagai "Selesai Dibaca" untuk melihat riwayat.'))
     + '</section>';
 }
+/* ======================= VIEW: PROFIL ======================= */
+function viewProfile() {
+  const books = Store.books;
+  const finished = books.filter(b => b.status === 'finished');
+  const rated = books.filter(b => b.rating > 0);
+  const avg = rated.length ? (rated.reduce((s, b) => s + Number(b.rating), 0) / rated.length) : 0;
+  const favs = books.filter(b => b.favorite);
+  const email = Store.userEmail || '—';
+  const username = Store.profile?.username || email.split('@')[0];
+  const avatarUrl = Store.profileAvatarSrc();
+  const initial = avatarInitial(username, email);
+
+  // Ringkasan taman (dari buku selesai)
+  const flowerCounts = {};
+  finished.forEach(b => {
+    const t = flowerForBook(b);
+    flowerCounts[t.name] = (flowerCounts[t.name] || 0) + 1;
+  });
+  const totalFlowers = finished.length;
+  const totalFlowerTypes = Object.keys(flowerCounts).length;
+
+  const avatarHTML = avatarUrl
+    ? '<img src="' + esc(avatarUrl) + '" alt="Foto profil">'
+    : esc(initial);
+
+  const card = (icon, num, label) => '<div class="stat-card"><div class="stat-icon">' + icon + '</div>'
+    + '<div class="stat-num">' + num + '</div><div class="stat-label">' + label + '</div></div>';
+
+  return '<div class="profile-header">'
+    + '<div class="profile-avatar" id="profileAvatar">' + avatarHTML + '</div>'
+    + '<div class="profile-info">'
+    + '<p class="eyebrow" style="margin-bottom:6px">Profil Pembaca</p>'
+    + '<h1>' + esc(username) + '</h1>'
+    + '<p class="profile-email">📧 ' + esc(email) + '</p>'
+    + '<p class="profile-tagline">“Setiap buku adalah taman yang tumbuh dalam dirimu.”</p>'
+    + '<button class="btn btn-primary btn-sm profile-edit-btn" data-action="edit-profile">✏️ Edit Profil</button>'
+    + '</div></div>'
+    + '<section class="profile-stats">'
+    + card('📚', books.length, 'Total Buku')
+    + card('✅', finished.length, 'Selesai Dibaca')
+    + card('⭐', avg ? avg.toFixed(1) : '—', 'Rata-rata Rating')
+    + card('★', favs.length, 'Favorit')
+    + '</section>'
+    + '<section class="section"><div class="section-head"><h2>Ringkasan Tamanmu</h2>'
+    + '<a href="#/profile" data-action="goto-garden">Lihat Taman →</a></div>'
+    + '<div class="profile-garden-summary">'
+    + card('🌷', totalFlowers, 'Bunga Tumbuh')
+    + card('🌼', totalFlowerTypes, 'Jenis Bunga')
+    + card('📖', books.filter(b => b.status === 'reading').length, 'Sedang Dibaca')
+    + card('✨', books.filter(b => b.status === 'want').length, 'Ingin Dibaca')
+    + '</div>'
+    + (totalFlowerTypes ? '<div class="garden-legend">'
+        + FLOWER_TYPES.filter(t => flowerCounts[t.name]).map(t =>
+            '<span><i class="dot" style="background:' + t.color + '"></i>' + t.name + ' · ' + flowerCounts[t.name] + '</span>'
+          ).join('')
+        + '</div>' : '')
+    + '</section>'
+    + '<section class="section"><div class="section-head"><h2>Buku Selesai Terakhir</h2>'
+    + '<a href="#/stats">Statistik →</a></div>'
+    + (finished.length
+        ? bookGrid(finished.slice(0, 6))
+        : emptyState('Belum ada buku selesai', 'Tandai buku sebagai "Selesai Dibaca" untuk melihatnya di sini.'))
+    + '</section>';
+}
+function openProfileForm() {
+  if (!CLOUD) { toast('Profil hanya tersedia di mode cloud', 'err'); return; }
+  const email = Store.userEmail || '';
+  const username = Store.profile?.username || email.split('@')[0] || '';
+  const avatarUrl = Store.profileAvatarSrc();
+  const initial = avatarInitial(username, email);
+
+  profileFormState = {
+    file: null,
+    removeAvatar: false,
+    previewUrl: avatarUrl,
+    initial
+  };
+
+  const previewHTML = avatarUrl
+    ? '<img id="avatarPreviewImg" src="' + esc(avatarUrl) + '" alt="Preview">'
+    : '<span id="avatarPreviewInitial">' + esc(initial) + '</span>';
+
+  showModal(
+    '<div class="modal-head"><h2>Edit Profil</h2>'
+    + '<button class="icon-btn" data-action="close-modal">✕</button></div>'
+    + '<form id="profileForm" novalidate>'
+    + '<div class="uploader" style="align-items:center">'
+    + '<div class="profile-avatar-preview" id="avatarPreview">' + previewHTML + '</div>'
+    + '<div class="upload-actions">'
+    + '<div class="row"><button type="button" class="btn btn-ghost btn-sm" id="pickAvatarBtn">Pilih Foto</button>'
+    + '<button type="button" class="btn btn-ghost btn-sm" id="camAvatarBtn">Kamera</button></div>'
+    + '<div class="row"><button type="button" class="btn btn-danger btn-sm" id="rmAvatarBtn">Hapus Foto</button></div>'
+    + '<p class="hint">JPG, JPEG, PNG, atau WebP · maksimal 10 MB.</p>'
+    + '</div>'
+    + '<input type="file" id="avatarFileInput" accept="image/jpeg,image/jpg,image/png,image/webp" hidden>'
+    + '<input type="file" id="avatarCamInput" accept="image/*" capture="user" hidden>'
+    + '</div>'
+    + '<div class="field"><label for="p_username">Username</label>'
+    + '<input id="p_username" type="text" maxlength="40" placeholder="Nama tampilanmu" value="' + esc(username) + '"></div>'
+    + '<div class="field"><label>Email</label>'
+    + '<input type="text" value="' + esc(email) + '" disabled style="opacity:.6;cursor:not-allowed"></div>'
+    + '<p class="hint">Email tidak bisa diubah dari sini.</p>'
+    + '<div class="modal-foot"><button type="button" class="btn btn-ghost" data-action="close-modal">Batal</button>'
+    + '<button type="submit" class="btn btn-primary" id="saveProfileBtn">Simpan Profil</button></div></form>'
+  );
+
+  const fileInput = $('#avatarFileInput');
+  const camInput = $('#avatarCamInput');
+  const preview = $('#avatarPreview');
+
+  function setPreview(src) {
+    profileFormState.previewUrl = src;
+    if (src) {
+      preview.innerHTML = '<img id="avatarPreviewImg" src="' + src + '" alt="Preview">';
+    } else {
+      preview.innerHTML = '<span id="avatarPreviewInitial">' + esc(initial) + '</span>';
+    }
+  }
+  function handleFile(file) {
+    if (!file) return;
+    const okType = ['image/jpeg','image/jpg','image/png','image/webp'].includes(file.type)
+      || /\.(jpe?g|png|webp)$/i.test(file.name);
+    if (!okType) { toast('Format harus JPG, PNG, atau WebP', 'err'); return; }
+    if (file.size > 10 * 1024 * 1024) { toast('Ukuran maksimal 10 MB', 'err'); return; }
+    if (profileFormState.previewUrl && profileFormState.previewUrl.startsWith('blob:')) {
+      URL.revokeObjectURL(profileFormState.previewUrl);
+    }
+    profileFormState.file = file;
+    profileFormState.removeAvatar = false;
+    setPreview(URL.createObjectURL(file));
+  }
+  $('#pickAvatarBtn').addEventListener('click', () => fileInput.click());
+  $('#camAvatarBtn').addEventListener('click', () => camInput.click());
+  fileInput.addEventListener('change', () => { handleFile(fileInput.files[0]); fileInput.value = ''; });
+  camInput.addEventListener('change', () => { handleFile(camInput.files[0]); camInput.value = ''; });
+  $('#rmAvatarBtn').addEventListener('click', () => {
+    if (profileFormState.previewUrl && profileFormState.previewUrl.startsWith('blob:')) {
+      URL.revokeObjectURL(profileFormState.previewUrl);
+    }
+    profileFormState.file = null;
+    profileFormState.removeAvatar = true;
+    setPreview(null);
+  });
+
+  $('#profileForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const newUsername = $('#p_username').value.trim();
+    if (!newUsername) { toast('Username tidak boleh kosong', 'err'); return; }
+    const btn = $('#saveProfileBtn');
+    btn.disabled = true;
+    btn.textContent = 'Menyimpan…';
+    try {
+      await Store.saveProfile({
+        username: newUsername,
+        file: profileFormState.file,
+        removeAvatar: profileFormState.removeAvatar
+      });
+      await Store.loadProfile();
+      closeModal();
+      render(false);
+      toast('Profil diperbarui 🌸');
+    } catch (err) {
+      console.error(err);
+      btn.disabled = false;
+      btn.textContent = 'Simpan Profil';
+      toast('Gagal: ' + (err.message || err), 'err');
+    }
+  });
+}
+let profileFormState = { file: null, removeAvatar: false, previewUrl: null, initial: '?' };
 /* ======================= VIEW: TAMAN BUNGA ======================= */
 const FLOWER_TYPES = [
   { name: 'Mawar',     color: '#E8A0BF', accent: '#F7CAC9' },
@@ -1088,6 +1413,10 @@ function closeModal() {
     URL.revokeObjectURL(formState.previewUrl);
   }
   formState = { file:null, removeCover:false, rating:0, previewUrl:null, id:null, existing:null };
+  if (profileFormState.previewUrl && profileFormState.previewUrl.startsWith('blob:')) {
+    URL.revokeObjectURL(profileFormState.previewUrl);
+  }
+  profileFormState = { file: null, removeAvatar: false, previewUrl: null, initial: '?' };
 }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 let formState = { file:null, removeCover:false, rating:0, previewUrl:null, id:null, existing:null };
@@ -1183,7 +1512,6 @@ function openBookForm(book) {
     setPreview(formState.previewUrl);
   });
   $('#phBtn').addEventListener('click', () => $('#rmBtn').click());
-  /* ---- Klik bintang: kiri = setengah, kanan = penuh ---- */
   $('#starInput').addEventListener('click', e => {
     const btn = e.target.closest('[data-star]');
     if (!btn) return;
@@ -1192,13 +1520,11 @@ function openBookForm(book) {
     const clickX = e.clientX - rect.left;
     const isLeftHalf = clickX < rect.width / 2;
     const newRating = isLeftHalf ? val - 0.5 : val;
-
     if (formState.rating === newRating) {
       formState.rating = 0;
     } else {
       formState.rating = newRating;
     }
-
     $$('#starInput button').forEach(x => {
       const n = Number(x.dataset.star);
       x.classList.remove('on', 'half');
@@ -1233,8 +1559,6 @@ function openBookForm(book) {
     try {
        const savedBook = await Store.save({ id: formState.id, values, file: formState.file, removeCover: formState.removeCover });
       await Store.load();
-      
-      // 🌱 Cek jika status jadi 'finished' dan belum punya seed
       if (values.status === 'finished') {
         await createSeedForBook(savedBook);
       }
@@ -1249,28 +1573,21 @@ function openBookForm(book) {
     }
   });
 }
- /* 🌱 Fungsi untuk membuat Seed Pack saat buku selesai */
 async function createSeedForBook(book) {
-  if (!CLOUD) return; // Abaikan jika mode lokal
-  
-  // Cek apakah buku ini sudah punya seed
+  if (!CLOUD) return;
   const { data: existing } = await supabase
     .from('seeds')
     .select('id')
     .eq('book_id', book.id)
     .eq('user_id', Store.userId)
     .maybeSingle();
-    
-  if (existing) return; // Kalau sudah ada, jangan buat lagi
-
-  // Buat seed baru
+  if (existing) return;
   const { error } = await supabase.from('seeds').insert({
     user_id: Store.userId,
     book_id: book.id,
     book_title: book.title,
     status: 'unopened'
   });
-
   if (error) console.error('Gagal membuat seed:', error);
 }
 async function toggleFav(id) {
@@ -1334,6 +1651,7 @@ function render(scrollTop = true) {
     case 'want':       html = viewCollection({ key:'want', status:'want' }); break;
     case 'favorites':  html = viewCollection({ key:'favorites', favoritesOnly:true }); break;
     case 'stats':      html = viewStats(); break;
+    case 'profile':    html = viewProfile(); break;
     case 'book':       html = viewBookDetail(param); break;
     default:           html = viewHome();
   }
@@ -1372,12 +1690,9 @@ function bindView() {
       try {
         const saved = await Store.save({ id: b.id, values: bookValues(b) });
         await Store.load();
-        
-        // 🌱 Cek jika status jadi 'finished' dan belum punya seed
         if (ds.value === 'finished') {
           await createSeedForBook(saved);
         }
-        
         render(false);
         toast('Status diperbarui');
       } catch (err) {
@@ -1411,6 +1726,12 @@ document.addEventListener('click', async e => {
   } else if (action === 'close-modal') {
     e.preventDefault();
     closeModal();
+  } else if (action === 'edit-profile') {
+    e.preventDefault();
+    openProfileForm();
+  } else if (action === 'goto-garden') {
+    e.preventDefault();
+    window.location.href = 'garden.html';
   }
 });
 function renderAuth(message = '') {
@@ -1465,17 +1786,19 @@ async function boot() {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) { renderAuth(); return; }
     Store.userId = session.user.id;
+    Store.userEmail = session.user.email;
     $('#mainNav').style.display = '';
     $('#addBtn').style.display = '';
     $('#bottomNav').style.display = '';
     $('.fab').style.display = '';
     $('#signOutBtn').style.display = '';
     supabase.auth.onAuthStateChange((evt) => {
-      if (evt === 'SIGNED_OUT') { Store.books = []; renderAuth(); }
+      if (evt === 'SIGNED_OUT') { Store.books = []; Store.profile = null; renderAuth(); }
     });
   }
   try {
     await Store.load();
+    await Store.loadProfile();
   } catch (err) {
     console.error(err);
     toast('Gagal memuat koleksi: ' + err.message, 'err');
@@ -1488,6 +1811,7 @@ $('#signOutBtn').addEventListener('click', async () => {
   if (!CLOUD) return;
   await supabase.auth.signOut();
   Store.books = [];
+  Store.profile = null;
   renderAuth();
 });
 boot();
