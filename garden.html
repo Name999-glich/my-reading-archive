@@ -1047,18 +1047,50 @@ function flowerTopView(type) {
       + '<circle cx="50" cy="50" r="5" fill="' + a + '"/>'
       + '</svg>';
   }
+  /* 👑 LEGEND — Golden Rose */
   if (type.rarity === 'legend') {
+    // Khusus Blue Rose, kita pakai desain yang beda (warna biru)
+    if (type.name === 'Blue Rose') {
+      return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">'
+        + '<ellipse cx="35" cy="62" rx="16" ry="8" fill="#7d9465" transform="rotate(-30 35 62)"/>'
+        + '<ellipse cx="65" cy="62" rx="16" ry="8" fill="#7d9465" transform="rotate(30 65 62)"/>'
+        + '<ellipse cx="50" cy="78" rx="14" ry="7" fill="#8fa878"/>'
+        + '<circle cx="50" cy="38" r="15" fill="' + c + '"/>'
+        + '<circle cx="35" cy="48" r="14" fill="' + c + '"/>'
+        + '<circle cx="65" cy="48" r="14" fill="' + c + '"/>'
+        + '<circle cx="41" cy="61" r="14" fill="#5A8FB8"/>'
+        + '<circle cx="59" cy="61" r="14" fill="#5A8FB8"/>'
+        + '<circle cx="50" cy="50" r="10" fill="#4A7FA8"/>'
+        + '<circle cx="50" cy="50" r="5" fill="' + a + '"/>'
+        + '<circle cx="50" cy="50" r="2.5" fill="' + c + '"/>'
+        + '<text x="50" y="95" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="9" fill="#F4E4A6" font-weight="bold" letter-spacing="2">LEGEND</text>'
+        + '</svg>';
+    }
+    
+    // Desain baru untuk Golden Rose (Mawar Kuning)
     return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">'
-      + '<ellipse cx="35" cy="62" rx="16" ry="8" fill="#7d9465" transform="rotate(-30 35 62)"/>'
-      + '<ellipse cx="65" cy="62" rx="16" ry="8" fill="#7d9465" transform="rotate(30 65 62)"/>'
-      + '<ellipse cx="50" cy="78" rx="14" ry="7" fill="#8fa878"/>'
-      + '<circle cx="50" cy="38" r="15" fill="#E9B44C"/>'
-      + '<circle cx="35" cy="48" r="14" fill="#E9B44C"/>'
-      + '<circle cx="65" cy="48" r="14" fill="#E9B44C"/>'
-      + '<circle cx="41" cy="61" r="14" fill="#F4E4A6"/>'
-      + '<circle cx="59" cy="61" r="14" fill="#F4E4A6"/>'
-      + '<circle cx="50" cy="50" r="10" fill="#D98245"/>'
-      + '<circle cx="50" cy="50" r="5" fill="#FFF8F0"/>'
+      // Daun hijau di bawah
+      + '<path d="M30 85 Q50 70 70 85 Q50 95 30 85Z" fill="#4a5a3f"/>'
+      + '<path d="M20 75 Q40 65 50 75 Q40 85 20 75Z" fill="#5a6a4f"/>'
+      + '<path d="M80 75 Q60 65 50 75 Q60 85 80 75Z" fill="#5a6a4f"/>'
+      // Kelopak luar
+      + '<circle cx="50" cy="50" r="30" fill="#D9A015"/>'
+      // Lapisan kelopak tengah
+      + '<circle cx="50" cy="50" r="22" fill="#F2B820"/>'
+      // Kelopak dalam yang berputar
+      + '<path d="M50 30 Q65 40 60 55 Q45 45 50 30Z" fill="#F4D03F"/>'
+      + '<path d="M50 30 Q35 40 40 55 Q55 45 50 30Z" fill="#FFE066"/>'
+      + '<path d="M50 70 Q65 60 60 45 Q45 55 50 70Z" fill="#F4D03F"/>'
+      + '<path d="M50 70 Q35 60 40 45 Q55 55 50 70Z" fill="#FFE066"/>'
+      + '<path d="M50 50 Q60 40 70 50 Q60 60 50 50Z" fill="#D9A015"/>'
+      + '<path d="M50 50 Q40 40 30 50 Q40 60 50 50Z" fill="#D9A015"/>'
+      // Inti tengah
+      + '<circle cx="50" cy="50" r="5" fill="#B8860B"/>'
+      // Tulisan LEGEND
+      + '<text x="50" y="95" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="9" fill="#FFF8F0" font-weight="bold" letter-spacing="2">LEGEND</text>'
+      // Efek berkilau
+      + '<text x="20" y="25" font-size="12" fill="#FFF8F0" opacity="0.9">✦</text>'
+      + '<text x="80" y="20" font-size="10" fill="#FFF8F0" opacity="0.8">✦</text>'
       + '</svg>';
   }
   if (type.rarity === 'rare') {
