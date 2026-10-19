@@ -1048,6 +1048,7 @@ function flowerTopView(type) {
       + '</svg>';
   }
   /* 👑 LEGEND — Golden Rose */
+  /* 👑 LEGEND — Golden Rose (Mawar Kuning Berlapis) */
   if (type.rarity === 'legend') {
     // Khusus Blue Rose, kita pakai desain yang beda (warna biru)
     if (type.name === 'Blue Rose') {
@@ -1067,28 +1068,34 @@ function flowerTopView(type) {
         + '</svg>';
     }
     
-    // Desain baru untuk Golden Rose (Mawar Kuning)
+    // Desain Golden Rose
     return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">'
-      // Daun hijau di bawah
-      + '<path d="M30 85 Q50 70 70 85 Q50 95 30 85Z" fill="#4a5a3f"/>'
-      + '<path d="M20 75 Q40 65 50 75 Q40 85 20 75Z" fill="#5a6a4f"/>'
-      + '<path d="M80 75 Q60 65 50 75 Q60 85 80 75Z" fill="#5a6a4f"/>'
-      // Kelopak luar
-      + '<circle cx="50" cy="50" r="30" fill="#D9A015"/>'
-      // Lapisan kelopak tengah
-      + '<circle cx="50" cy="50" r="22" fill="#F2B820"/>'
-      // Kelopak dalam yang berputar
-      + '<path d="M50 30 Q65 40 60 55 Q45 45 50 30Z" fill="#F4D03F"/>'
-      + '<path d="M50 30 Q35 40 40 55 Q55 45 50 30Z" fill="#FFE066"/>'
-      + '<path d="M50 70 Q65 60 60 45 Q45 55 50 70Z" fill="#F4D03F"/>'
-      + '<path d="M50 70 Q35 60 40 45 Q55 55 50 70Z" fill="#FFE066"/>'
-      + '<path d="M50 50 Q60 40 70 50 Q60 60 50 50Z" fill="#D9A015"/>'
-      + '<path d="M50 50 Q40 40 30 50 Q40 60 50 50Z" fill="#D9A015"/>'
-      // Inti tengah
-      + '<circle cx="50" cy="50" r="5" fill="#B8860B"/>'
+      // Tangkai dan daun
+      + '<path d="M50 85 Q40 70 50 50" stroke="#4a5a3f" stroke-width="3" fill="none"/>'
+      + '<path d="M45 70 Q30 65 25 55 Q35 60 45 70Z" fill="#5a6a4f"/>'
+      + '<path d="M55 75 Q70 65 75 55 Q65 60 55 75Z" fill="#5a6a4f"/>'
+      
+      // Lapisan Kelopak Luar (Warna Oranye Emas Gelap)
+      + '<path d="M50 55 C 25 55 20 30 35 20 C 45 15 55 15 65 20 C 80 30 75 55 50 55 Z" fill="#C78C12"/>'
+      
+      // Lapisan Kelopak Tengah (Warna Emas)
+      + '<path d="M50 50 C 30 50 28 32 40 25 C 48 20 52 20 60 25 C 72 32 70 50 50 50 Z" fill="#E6A817"/>'
+      
+      // Lapisan Kelopak Dalam (Warna Kuning Cerah)
+      + '<path d="M50 45 C 35 45 35 35 45 30 C 50 28 55 30 55 35 C 55 40 50 45 50 45 Z" fill="#F2C12E"/>'
+      
+      // Inti Mawar (Gulungan Kelopak)
+      + '<path d="M48 38 C 45 35 50 30 52 33 C 55 36 52 40 48 38 Z" fill="#FFD659"/>'
+      + '<path d="M50 35 C 48 33 50 31 51 32 C 53 34 52 36 50 35 Z" fill="#FFEAA3"/>'
+      
+      // Efek Highlight di kelopak
+      + '<path d="M35 35 Q40 25 50 25" stroke="#FFEAA3" stroke-width="2" fill="none" opacity="0.6" stroke-linecap="round"/>'
+      + '<path d="M50 45 Q40 40 40 35" stroke="#FFEAA3" stroke-width="1.5" fill="none" opacity="0.8" stroke-linecap="round"/>'
+      
       // Tulisan LEGEND
       + '<text x="50" y="95" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="9" fill="#FFF8F0" font-weight="bold" letter-spacing="2">LEGEND</text>'
-      // Efek berkilau
+      
+      // Efek Berkilau
       + '<text x="20" y="25" font-size="12" fill="#FFF8F0" opacity="0.9">✦</text>'
       + '<text x="80" y="20" font-size="10" fill="#FFF8F0" opacity="0.8">✦</text>'
       + '</svg>';
