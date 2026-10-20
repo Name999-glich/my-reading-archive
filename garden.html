@@ -856,57 +856,47 @@ h1,h2,h3{font-family:var(--font-display);font-weight:600;margin:0}
  /* 🦋 Animasi Kupu-kupu & Lebah di Taman */
 .flying-insect{
   position:absolute;
-  pointer-events:none; /* Agar tidak menghalangi klik bunga */
-  z-index:1; /* Di bawah bunga (bunga pakai z-index:2) */
+  pointer-events:none;
+  z-index:10; /* Di atas bunga (bunga z-index:2) */
   font-size:24px;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
 }
 
-/* Kupu-kupu 1 */
-.butterfly-1{
-  top: 20%; left: 10%;
-  animation: flyButterfly1 15s infinite alternate;
-}
-/* Kupu-kupu 2 */
-.butterfly-2{
-  top: 60%; left: 70%;
-  animation: flyButterfly2 18s infinite alternate;
-  font-size: 20px;
-}
-/* Lebah 1 */
-.bee-1{
-  top: 40%; left: 40%;
-  animation: flyBee 12s infinite alternate;
-  font-size: 18px;
-}
-/* Lebah 2 */
-.bee-2{
-  top: 70%; left: 20%;
-  animation: flyBee 20s infinite alternate-reverse;
-  font-size: 16px;
-}
+/* Kupu-kupu */
+.butterfly-1{ top: 15%; left: 10%; animation: flyButterfly1 15s infinite alternate; }
+.butterfly-2{ top: 25%; left: 60%; animation: flyButterfly2 18s infinite alternate; font-size: 20px; }
+.butterfly-3{ top: 10%; left: 80%; animation: flyButterfly1 20s infinite alternate-reverse; font-size: 18px; }
+.butterfly-4{ top: 30%; left: 30%; animation: flyButterfly2 22s infinite alternate; font-size: 22px; }
 
+/* Lebah */
+.bee-1{ top: 20%; left: 40%; animation: flyBee 12s infinite alternate; font-size: 18px; }
+.bee-2{ top: 35%; left: 75%; animation: flyBee 16s infinite alternate-reverse; font-size: 16px; }
+.bee-3{ top: 12%; left: 25%; animation: flyBee 14s infinite alternate; font-size: 20px; }
+.bee-4{ top: 28%; left: 90%; animation: flyBee 18s infinite alternate-reverse; font-size: 15px; }
+
+/* Animasi Terbang */
 @keyframes flyButterfly1 {
   0%   { transform: translate(0, 0) rotate(10deg); }
-  25%  { transform: translate(150px, -100px) rotate(-10deg); }
-  50%  { transform: translate(300px, 50px) rotate(15deg); }
-  75%  { transform: translate(100px, 200px) rotate(-5deg); }
+  25%  { transform: translate(120px, -40px) rotate(-10deg); }
+  50%  { transform: translate(250px, 30px) rotate(15deg); }
+  75%  { transform: translate(80px, 80px) rotate(-5deg); }
   100% { transform: translate(0, 0) rotate(10deg); }
 }
 
 @keyframes flyButterfly2 {
   0%   { transform: translate(0, 0) rotate(-15deg); }
-  33%  { transform: translate(-200px, -150px) rotate(20deg); }
-  66%  { transform: translate(-100px, 100px) rotate(-10deg); }
+  33%  { transform: translate(-150px, -50px) rotate(20deg); }
+  66%  { transform: translate(-80px, 60px) rotate(-10deg); }
   100% { transform: translate(0, 0) rotate(-15deg); }
 }
 
 @keyframes flyBee {
   0%   { transform: translate(0, 0); }
-  25%  { transform: translate(-80px, -80px); }
-  50%  { transform: translate(120px, -30px); }
-  75%  { transform: translate(50px, 100px); }
+  25%  { transform: translate(-60px, -30px); }
+  50%  { transform: translate(100px, -20px); }
+  75%  { transform: translate(40px, 50px); }
   100% { transform: translate(0, 0); }
 }
  /* 🌙 Tema Malam */
@@ -1239,10 +1229,14 @@ function renderGarden(books, seeds = []) {
 
   root.innerHTML = '<div class="garden-view"><div class="grass-field">'
     + '<div class="garden-grid-top">' + slotsHTML + '</div>'
-    + '<div class="flying-insect butterfly-1">🦋</div>'
+       + '<div class="flying-insect butterfly-1">🦋</div>'
     + '<div class="flying-insect butterfly-2">🦋</div>'
+    + '<div class="flying-insect butterfly-3">🦋</div>'
+    + '<div class="flying-insect butterfly-4">🦋</div>'
     + '<div class="flying-insect bee-1">🐝</div>'
     + '<div class="flying-insect bee-2">🐝</div>'
+    + '<div class="flying-insect bee-3">🐝</div>'
+    + '<div class="flying-insect bee-4">🐝</div>'
        + '</div></div><div class="garden-footer"><span>' + total + ' bunga tumbuh</span></div>'
     + '<div class="drop-rate-info">'
     + '<div class="rate-trigger-wrap">'
@@ -1529,10 +1523,10 @@ function initThemeToggle() {
     btn.textContent = night ? '🌙' : '☀️';
     
     // Ubah kupu-kupu/lebah menjadi kunang-kunang saat malam
-    const insects = document.querySelectorAll('.flying-insect');
+       const insects = document.querySelectorAll('.flying-insect');
     insects.forEach(insect => {
       if (night) {
-        if (insect.classList.contains('butterfly-1') || insect.classList.contains('butterfly-2')) {
+        if (insect.classList.contains('butterfly-1') || insect.classList.contains('butterfly-2') || insect.classList.contains('butterfly-3') || insect.classList.contains('butterfly-4')) {
           insect.textContent = '✨'; // Kunang-kunang
         } else {
           insect.textContent = '🌟'; // Kunang-kunang kecil
