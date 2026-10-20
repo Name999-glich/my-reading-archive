@@ -1565,8 +1565,8 @@ function initThemeToggle() {
     const allSeeds = await loadSeeds(session.user.id);
     renderGarden(books || [], allSeeds);
     
-      initThemeToggle();
-catch (err) {
+         initThemeToggle();
+  } catch (err) {
     console.error(err);
     root.innerHTML = '<div class="state-box"><h1>⚠️ Gagal Memuat</h1>'
       + '<p>' + esc(err.message || 'Terjadi kesalahan') + '</p>'
