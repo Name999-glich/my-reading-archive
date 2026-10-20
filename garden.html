@@ -909,6 +909,35 @@ h1,h2,h3{font-family:var(--font-display);font-weight:600;margin:0}
   75%  { transform: translate(50px, 100px); }
   100% { transform: translate(0, 0); }
 }
+ /* 🌙 Tema Malam */
+body.night-mode {
+  background: #1a1420;
+}
+body.night-mode::before {
+  background:
+    radial-gradient(1100px 620px at 78% -12%, rgba(100,80,150,.2), transparent 62%),
+    radial-gradient(820px 520px at 6% -8%, rgba(50,40,80,.2), transparent 60%),
+    radial-gradient(900px 620px at 94% 16%, rgba(30,30,50,.3), transparent 62%),
+    radial-gradient(1200px 800px at 50% 118%, rgba(20,10,30,.5), transparent 65%),
+    linear-gradient(180deg,#0f0a14 0%,#1a1420 45%,#0f0a14 100%);
+}
+body.night-mode .garden-view {
+  filter: brightness(0.6) hue-rotate(20deg);
+  border-color: rgba(100,80,150,.3);
+}
+body.night-mode .grass-field {
+  background:
+    repeating-linear-gradient(45deg, transparent 0px, transparent 6px, rgba(255,255,255,.01) 6px, rgba(255,255,255,.01) 7px),
+    repeating-linear-gradient(-45deg, transparent 0px, transparent 8px, rgba(0,0,0,.1) 8px, rgba(0,0,0,.1) 9px),
+    radial-gradient(circle at 50% 50%, #1b2e20 0%, #142118 50%, #0f1a12 100%);
+}
+body.night-mode .garden-slot svg {
+  filter: brightness(0.8) drop-shadow(0 0 10px rgba(100,80,150,.5));
+}
+body.night-mode .brand-mark {
+  background: radial-gradient(circle at 35% 30%, #FFF8F0, #625477 45%, #3D2B3D 75%);
+  box-shadow: 0 0 18px rgba(100,80,150,.6);
+}
   /* Responsive */
 @media (max-width:600px){
   .topbar-inner{height:54px;padding:0 14px}
@@ -941,6 +970,9 @@ h1,h2,h3{font-family:var(--font-display);font-weight:600;margin:0}
 </header>
 
 <main class="wrap">
+   <div style="display:flex; justify-content:flex-end; margin-bottom:-20px; position:relative; z-index:10;">
+    <button id="themeToggle" class="btn btn-ghost" style="padding:8px 12px; font-size:1.2rem;" title="Ubah Waktu">☀️</button>
+  </div>
   <div class="garden-header">
     <h1><span class="icon">🌷</span> Taman Bunga</h1>
     <p>Setiap buku yang selesai kamu baca menumbuhkan satu bunga di padang ini.</p>
@@ -1478,7 +1510,44 @@ window.openSeedGacha = openSeedGacha;
 window.resetToSeed = resetToSeed;
 window.closeGachaAndReload = closeGachaAndReload;
 
-async function boot() {
+/* 🌙 Logika Toggle Siang/Malam */
+function initThemeToggle() {
+  const btn = document.getElementById('themeToggle');
+  if (!btn) return;
+  
+  // Cek apakah user sebelumnya sudah memilih mode malam
+  const isNight = localStorage.getItem('gardenNightMode') === 'true';
+  if (isNight) {
+    document.body.classList.add('night-mode');
+    btn.textContent = '🌙';
+  }
+
+  btn.addEventListener('click', () => {
+    document.body.classList.toggle('night-mode');
+    const night = document.body.classList.contains('night-mode');
+    localStorage.setItem('gardenNightMode', night);
+    btn.textContent = night ? '🌙' : '☀️';
+    
+    // Ubah kupu-kupu/lebah menjadi kunang-kunang saat malam
+    const insects = document.querySelectorAll('.flying-insect');
+    insects.forEach(insect => {
+      if (night) {
+        if (insect.classList.contains('butterfly-1') || insect.classList.contains('butterfly-2')) {
+          insect.textContent = '✨'; // Kunang-kunang
+        } else {
+          insect.textContent = '🌟'; // Kunang-kunang kecil
+        }
+      } else {
+        if (insect.classList.contains('butterfly-1') || insect.classList.contains('butterfly-2')) {
+          insect.textContent = '🦋'; // Kembali jadi kupu-kupu
+        } else {
+          insect.textContent = '🐝'; // Kembali jadi lebah
+        }
+      }
+    });
+  });
+}
+  async function boot() {
   const root = document.getElementById('garden-root');
   try {
     const { data: { session } } = await supabase.auth.getSession();
@@ -1496,7 +1565,8 @@ async function boot() {
     const allSeeds = await loadSeeds(session.user.id);
     renderGarden(books || [], allSeeds);
     
-  } catch (err) {
+      initThemeToggle();
+catch (err) {
     console.error(err);
     root.innerHTML = '<div class="state-box"><h1>⚠️ Gagal Memuat</h1>'
       + '<p>' + esc(err.message || 'Terjadi kesalahan') + '</p>'
