@@ -999,20 +999,32 @@ const FLOWER_TYPES = [
   { name: 'Daisy',         color: '#FFF8F0', accent: '#F4E4A6', rarity: 'common', rate: 24.67, desc: 'Bunga sederhana yang selalu ceria.' },
   { name: 'Mawar',         color: '#E8A0BF', accent: '#F7CAC9', rarity: 'common', rate: 24.67, desc: 'Simbol cinta klasik yang tak pernah pudar.' },
   { name: 'Matahari',      color: '#F4E4A6', accent: '#F4A896', rarity: 'common', rate: 24.66, desc: 'Selalu menghadap ke arah cahaya.' },
-  { name: 'Lavender',      color: '#C8A2C8', accent: '#F7CAC9', rarity: 'rare',   rate: 20, desc: 'Wangi menenangkan, jarang ditemui.' },
+  
+  // RARE (Total 20%)
+  { name: 'Lavender',      color: '#C8A2C8', accent: '#F7CAC9', rarity: 'rare',   rate: 10, desc: 'Wangi menenangkan, jarang ditemui.' },
+  { name: 'Kamboja',       color: '#FF69B4', accent: '#F4D03F', rarity: 'rare',   rate: 10, desc: 'Bunga kamboja dengan 3 varian warna.',
+    variants: [
+      { name: 'Kamboja Putih',  color: '#FFFFFF', accent: '#F4D03F' },
+      { name: 'Kamboja Pink',   color: '#FF69B4', accent: '#FFB6C1' },
+      { name: 'Kamboja Yellow', color: '#FFD700', accent: '#FFF8F0' }
+    ]
+  },
+
+  // LEGEND (Total 4%)
   { name: 'Golden Rose',   color: '#F4E4A6', accent: '#F4A896', rarity: 'legend', rate: 2, desc: 'Mawar emas legendaris, simbol kejayaan.' },
   { name: 'Blue Rose',     color: '#7FB3D5', accent: '#FFF8F0', rarity: 'legend', rate: 2, desc: 'Mawar biru mistis — mustahil di alam nyata.' },
+  
+  // SECRET (Total 2%)
   { name: 'Bunga Bangkai', color: '#3D2B3D', accent: '#8B7B8B', rarity: 'secret', rate: 2, desc: 'Bunga mekar dari dunia lain. Aura abu & misteri.' }
 ];
 
 const RARITY_RATES = { common: 74, rare: 20, legend: 4, secret: 2 };
 const RARITY_POOL = {
   common: ['Daisy', 'Mawar', 'Matahari'],
-  rare:   ['Lavender'],
+  rare:   ['Lavender', 'Kamboja'],
   legend: ['Golden Rose', 'Blue Rose'],
   secret: ['Bunga Bangkai']
 };
-
 function flowerForBook(book) {
   const baseSeed = Array.from(book.title || 'X').reduce((a, c) => a + c.charCodeAt(0), 0);
   const rarityRoll = (baseSeed * 7) % 100;
@@ -1024,9 +1036,25 @@ function flowerForBook(book) {
 
   const pool = RARITY_POOL[pickedRarity];
   const flowerRoll = (baseSeed * 13) % pool.length;
-  return FLOWER_TYPES.find(f => f.name === pool[flowerRoll]) || FLOWER_TYPES[0];
-}
+  const baseFlower = FLOWER_TYPES.find(f => f.name === pool[flowerRoll]) || FLOWER_TYPES[0];
 
+  // Jika yang keluar adalah Kamboja, acak variannya
+  if (baseFlower.name === 'Kamboja' && baseFlower.variants) {
+    // Gunakan seed lain (×17) untuk menentukan varian
+    const variantRoll = (baseSeed * 17) % baseFlower.variants.length;
+    const selectedVariant = baseFlower.variants[variantRoll];
+    
+    // Kembalikan objek baru dengan nama & warna varian
+    return {
+      ...baseFlower,
+      name: selectedVariant.name,
+      color: selectedVariant.color,
+      accent: selectedVariant.accent
+    };
+  }
+
+  return baseFlower;
+}
 function flowerTopView(type) {
   const c = type.color, a = type.accent;
     /* 🌺 SECRET — Bunga Bangkai */
@@ -1120,6 +1148,46 @@ function flowerTopView(type) {
       // Efek Berkilau
       + '<text x="20" y="25" font-size="12" fill="#FFF8F0" opacity="0.9">✦</text>'
       + '<text x="80" y="20" font-size="10" fill="#FFF8F0" opacity="0.8">✦</text>'
+      + '</svg>';
+  }
+   /* 🌸 RARE — Bunga Kamboja */
+  if (type.name.includes('Kamboja')) {
+    const isWhite = type.name === 'Kamboja Putih';
+    const isPink = type.name === 'Kamboja Pink';
+    const isYellow = type.name === 'Kamboja Yellow';
+
+    const bgColor = isWhite ? '#FFFFFF' : isPink ? '#FF69B4' : '#FFD700';
+    const centerColor = isWhite ? '#F4D03F' : isPink ? '#FFB6C1' : '#FFF8F0';
+
+    return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="overflow:visible">'
+      // Daun hijau
+      + '<path d="M20 80 Q40 90 50 80 Q60 90 80 80 Q70 95 50 95 Q30 95 20 80Z" fill="#4a5a3f"/>'
+      
+      // Kelopak 1 (Atas)
+      + '<path d="M50 50 C 30 30 40 5 50 10 C 60 5 70 30 50 50 Z" fill="' + bgColor + '" stroke="' + centerColor + '" stroke-width="1.5"/>'
+      + '<path d="M50 50 L 50 10" stroke="' + centerColor + '" stroke-width="1" opacity="0.4"/>'
+      
+      // Kelopak 2 (Kanan)
+      + '<path d="M50 50 C 70 30 95 40 90 50 C 95 60 70 70 50 50 Z" fill="' + bgColor + '" stroke="' + centerColor + '" stroke-width="1.5"/>'
+      + '<path d="M50 50 L 90 50" stroke="' + centerColor + '" stroke-width="1" opacity="0.4"/>'
+
+      // Kelopak 3 (Kiri)
+      + '<path d="M50 50 C 30 70 5 60 10 50 C 5 40 30 30 50 50 Z" fill="' + bgColor + '" stroke="' + centerColor + '" stroke-width="1.5"/>'
+      + '<path d="M50 50 L 10 50" stroke="' + centerColor + '" stroke-width="1" opacity="0.4"/>'
+
+      // Kelopak 4 (Bawah)
+      + '<path d="M50 50 C 70 70 60 95 50 90 C 40 95 30 70 50 50 Z" fill="' + bgColor + '" stroke="' + centerColor + '" stroke-width="1.5"/>'
+      + '<path d="M50 50 L 50 90" stroke="' + centerColor + '" stroke-width="1" opacity="0.4"/>'
+
+      // Kelopak 5 (Kanan Bawah)
+      + '<path d="M50 50 C 80 60 90 80 75 85 C 60 95 40 70 50 50 Z" fill="' + bgColor + '" stroke="' + centerColor + '" stroke-width="1.5"/>'
+      
+      // Inti Bunga (Warna kuning/putih)
+      + '<circle cx="50" cy="50" r="6" fill="' + centerColor + '"/>'
+      + '<circle cx="50" cy="50" r="3" fill="#FFA500" opacity="0.8"/>'
+      
+      // Teks RARE
+      + '<text x="50" y="98" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="9" fill="#C8A2C8" font-weight="bold" letter-spacing="2">RARE</text>'
       + '</svg>';
   }
   if (type.rarity === 'rare') {
