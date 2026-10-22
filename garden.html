@@ -1154,6 +1154,7 @@ function flowerTopView(type) {
    🏡 RENDER TAMAN & SEED
    ============================================================ */
 function renderGarden(books, seeds = []) {
+    window.__gardenSeeds = seeds;
   window.__gardenBooks = books;
 
   // Pisahkan seed
@@ -1393,22 +1394,69 @@ function openCollectionPopup() {
   const existing = document.getElementById('collectionPopup');
   if (existing) return;
 
-  const planted = (window.__gardenBooks || []); // placeholder
-  // (Logika collection popup disederhanakan agar tidak error)
+  // Ambil data dari bunga yang sudah tertanam di taman
+  const planted = window.__gardenSeeds ? window.__gardenSeeds.filter(s => s.status === 'planted') : [];
+  const total = planted.length;
+
+  // Hitung per rarity
+  const rarityCount = { common: 0, rare: 0, legend: 0, secret: 0 };
+  planted.forEach(seed => {
+    const t = FLOWER_TYPES.find(f => f.name === seed.flower_name);
+    if (t) rarityCount[t.rarity] = (rarityCount[t.rarity] || 0) + 1;
+  });
+
+  const pct = n => total ? Math.round((n / total) * 100) : 0;
+
+  const rarityLabels = {
+    common: { icon: '🌼', label: 'Common',  color: '#A8C09A' },
+    rare:   { icon: '💜', label: 'Rare',    color: '#C8A2C8' },
+    legend: { icon: '👑', label: 'Legend',  color: '#F4E4A6' },
+    secret: { icon: '🌺', label: 'Secret',  color: '#B8B8B8' }
+  };
+
+  // Buat baris untuk tiap rarity
+  const rarityRows = ['common', 'rare', 'legend', 'secret'].map(r => {
+    const info = rarityLabels[r];
+    const count = rarityCount[r] || 0;
+    const p = pct(count);
+    return '<div class="collection-rarity-item ' + r + '">'
+      + '<div class="cri-icon">' + info.icon + '</div>'
+      + '<div class="cri-info">'
+      + '<div class="cri-name">' + info.label + '</div>'
+      + '<div class="cri-bar"><i style="width:' + p + '%"></i></div>'
+      + '</div>'
+      + '<div class="cri-count">' + count + '</div>'
+      + '<div class="cri-pct">' + p + '%</div>'
+      + '</div>';
+  }).join('');
+
   const popupHTML =
     '<div class="collection-popup-backdrop" id="collectionPopup">'
     + '<div class="collection-popup">'
-    + '<div class="collection-head"><h3>🌸 Koleksi Bunga</h3>'
-    + '<button class="collection-close" id="collectionClose">✕</button></div>'
-    + '<div class="collection-note">Fitur koleksi sedang disiapkan.</div>'
+    + '<div class="collection-head">'
+    + '<h3>🌸 Koleksi Bunga</h3>'
+    + '<button class="collection-close" id="collectionClose">✕</button>'
+    + '</div>'
+    + '<div class="collection-total">'
+    + '<div class="ct-label">Total Bunga Dimiliki</div>'
+    + '<div class="ct-value">' + total + '</div>'
+    + '<div class="ct-sub">bunga telah tumbuh di tamanmu</div>'
+    + '</div>'
+    + '<div class="collection-rarity-list">' + rarityRows + '</div>'
+    + '<div class="collection-note">'
+    + 'Kumpulkan semua rarity — termasuk Secret yang sangat langka (2%)!'
+    + '</div>'
     + '</div>'
     + '</div>';
 
   document.body.insertAdjacentHTML('beforeend', popupHTML);
   const popup = document.getElementById('collectionPopup');
   requestAnimationFrame(() => popup.classList.add('open'));
+
   document.getElementById('collectionClose').addEventListener('click', closeCollectionPopup);
-  popup.addEventListener('click', e => { if (e.target.id === 'collectionPopup') closeCollectionPopup(); });
+  popup.addEventListener('click', e => {
+    if (e.target.id === 'collectionPopup') closeCollectionPopup();
+  });
 }
 
 function closeCollectionPopup() {
