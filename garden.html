@@ -1398,23 +1398,47 @@ function openFlowerDetail(flower, seedId = null, hasReset = false) {
   const existing = document.getElementById('flowerDetail');
   if (existing) existing.remove();
 
+  // Logika untuk Bunga yang punya varian
+  let variants = null;
+  let currentIdx = 0;
+  
+  // Cek apakah ini bunga Kamboja
+  if (flower.name.includes('Kamboja')) {
+    // Ambil data induk Kamboja dari FLOWER_TYPES
+    const parent = FLOWER_TYPES.find(f => f.name === 'Kamboja');
+    if (parent && parent.variants) {
+      variants = parent.variants;
+      // Cari urutan varian saat ini (jika dari gacha)
+      currentIdx = variants.findIndex(v => v.name === flower.name);
+      if (currentIdx === -1) currentIdx = 0; // Fallback jika tidak ketemu
+    }
+  }
+
   const icon = flower.rarity === 'secret' ? '🌺'
             : flower.rarity === 'legend' ? (flower.name === 'Blue Rose' ? '🌹' : '👑')
             : flower.rarity === 'rare'   ? '💜'
             : (flower.name === 'Daisy' ? '🌼' : flower.name === 'Mawar' ? '🌸' : '🌻');
 
-  const svgHTML = (typeof flowerTopView === 'function')
-    ? flowerTopView(flower)
-    : '<div style="font-size:4rem">' + icon + '</div>';
+  // SVG default
+  let svgHTML = (typeof flowerTopView === 'function') ? flowerTopView(flower) : '<div style="font-size:4rem">' + icon + '</div>';
+
+  // Jika ada varian, bungkus dengan tombol panah
+  if (variants) {
+    svgHTML = '<div style="display:flex; align-items:center; justify-content:center; gap:10px; position:relative; width:100%;">'
+      + '<button id="prevVariant" style="background:none; border:none; color:var(--muted); font-size:1.5rem; cursor:pointer; padding:10px;">◀</button>'
+      + '<div id="variantImageContainer" style="width:130px; height:130px; transition:opacity 0.2s; display:flex; align-items:center; justify-content:center;">' + svgHTML + '</div>'
+      + '<button id="nextVariant" style="background:none; border:none; color:var(--muted); font-size:1.5rem; cursor:pointer; padding:10px;">▶</button>'
+      + '</div>';
+  }
 
   const popupHTML =
     '<div class="flower-detail-backdrop" id="flowerDetail">'
     + '<div class="flower-detail">'
     + '<button class="flower-detail-close" id="flowerDetailClose">✕</button>'
     + '<div class="flower-detail-visual ' + flower.rarity + '">' + svgHTML + '</div>'
-    + '<h3 class="flower-detail-name">' + flower.name + '</h3>'
+    + '<h3 class="flower-detail-name" id="detailName">' + flower.name + '</h3>'
     + '<span class="flower-detail-rarity ' + flower.rarity + '">' + flower.rarity + '</span>'
-    + '<p class="flower-detail-desc">' + (flower.desc || 'Bunga misterius dari tamanmu.') + '</p>'
+    + '<p class="flower-detail-desc" id="detailDesc">' + (flower.desc || 'Bunga misterius dari tamanmu.') + '</p>'
     + '<div class="flower-detail-rate">Peluang: <strong>' + flower.rate + '%</strong></div>'
     + (seedId && !hasReset ? '<button class="btn-gacha-close" style="margin-top:16px;background:rgba(232,160,191,.1);border-color:rgba(232,160,191,.3);color:#ffd9e6;" onclick="resetToSeed(\'' + seedId + '\')">🔄 Kembalikan ke Seed (1x)</button>' : '')
     + (seedId && hasReset ? '<div style="margin-top:16px;font-size:0.75rem;color:var(--muted);font-style:italic;">Kesempatan reset sudah digunakan.</div>' : '')
@@ -1429,8 +1453,44 @@ function openFlowerDetail(flower, seedId = null, hasReset = false) {
   popup.addEventListener('click', e => {
     if (e.target.id === 'flowerDetail') closeFlowerDetail();
   });
-}
 
+  // Logika Slide Varian
+  if (variants) {
+    const imgContainer = document.getElementById('variantImageContainer');
+    const nameEl = document.getElementById('detailName');
+    
+    const updateVariant = (newIdx) => {
+      // Efek fade out
+      imgContainer.style.opacity = '0';
+      nameEl.style.opacity = '0';
+      
+      setTimeout(() => {
+        const v = variants[newIdx];
+        // Gabungkan data varian dengan data induk (agar warna & rate tetap ada)
+        const newFlower = { ...flower, name: v.name, color: v.color, accent: v.accent };
+        
+        // Render ulang gambar dan nama
+        imgContainer.innerHTML = flowerTopView(newFlower);
+        nameEl.textContent = v.name;
+        
+        // Efek fade in
+        imgContainer.style.opacity = '1';
+        nameEl.style.opacity = '1';
+        currentIdx = newIdx;
+      }, 200);
+    };
+
+    document.getElementById('prevVariant').addEventListener('click', () => {
+      const next = (currentIdx - 1 + variants.length) % variants.length;
+      updateVariant(next);
+    });
+
+    document.getElementById('nextVariant').addEventListener('click', () => {
+      const next = (currentIdx + 1) % variants.length;
+      updateVariant(next);
+    });
+  }
+}
 async function resetToSeed(seedId) {
   if (!confirm('Yakin ingin mengembalikan bunga ini menjadi Seed? Kesempatan ini hanya bisa dilakukan 1x.')) return;
 
