@@ -1370,15 +1370,14 @@ function renderGarden(books, seeds = []) {
     return;
   }
 
-  const flowers = plantedSeeds.map((seed, idx) => {
+   const flowers = plantedSeeds.map((seed, idx) => {
     const originalBook = books.find(b => b.id === seed.book_id) || { id: seed.book_id, title: seed.book_title };
     const t = FLOWER_TYPES.find(f => f.name === seed.flower_name) || FLOWER_TYPES[0];
-    const seedStr = Array.from(seed.book_title || 'X').reduce((a, c) => a + c.charCodeAt(0), idx);
-    const col = (seedStr * 7 + idx * 3) % 6;
-    const row = Math.floor((seedStr * 13 + idx * 5) % 5);
+    // Penempatan berurutan (slot 0, 1, 2, dst)
+    const col = idx % 6; 
+    const row = Math.floor(idx / 6);
     return { book: originalBook, flower: t, col, row, seedId: seed.id, has_reset: seed.has_reset };
   });
-
   const COLS = 6, ROWS = 5;
   const slots = Array.from({ length: COLS * ROWS }, () => null);
   flowers.forEach(f => {
