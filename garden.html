@@ -1436,6 +1436,9 @@ function renderGarden(books, seeds = []) {
    🎁 FUNGSI GACHA & MODAL
    ============================================================ */
 async function openSeedGacha(seedId, bookTitle) {
+  const existing = document.getElementById('gachaPopup');
+  if (existing) existing.remove();
+
   const popupHTML =
     '<div class="gacha-popup-backdrop" id="gachaPopup">'
     + '<div class="gacha-popup">'
@@ -1460,7 +1463,10 @@ async function openSeedGacha(seedId, bookTitle) {
   box.classList.add('shake');
 
   try {
+    // 1. Tentukan hasil gacha di memori
     const gachaResult = flowerForBook({ title: bookTitle });
+
+    // 2. Update database
     const { error } = await supabase.from('seeds').update({
       status: 'planted',
       rarity: gachaResult.rarity,
@@ -1470,13 +1476,16 @@ async function openSeedGacha(seedId, bookTitle) {
 
     if (error) throw error;
 
+    // 3. Tampilkan hasil
     setTimeout(() => {
       box.classList.remove('shake');
       box.style.display = 'none';
+      
       res.innerHTML = flowerTopView(gachaResult);
       title.textContent = gachaResult.name;
       rarity.textContent = gachaResult.rarity;
       rarity.className = 'gacha-rarity ' + gachaResult.rarity;
+      
       res.classList.add('show');
       title.classList.add('show');
       rarity.classList.add('show');
@@ -1484,12 +1493,21 @@ async function openSeedGacha(seedId, bookTitle) {
     }, 1500);
 
   } catch (err) {
-    console.error(err);
-    alert('Gagal membuka seed: ' + err.message);
-    closeGachaAndReload();
+    console.error('Error gacha:', err);
+    // Jika error, tetap tampilkan hasil gacha secara lokal (fallback)
+    const gachaResult = flowerForBook({ title: bookTitle });
+    box.classList.remove('shake');
+    box.style.display = 'none';
+    res.innerHTML = flowerTopView(gachaResult);
+    title.textContent = gachaResult.name;
+    rarity.textContent = gachaResult.rarity;
+    rarity.className = 'gacha-rarity ' + gachaResult.rarity;
+    res.classList.add('show');
+    title.classList.add('show');
+    rarity.classList.add('show');
+    closeBtn.style.display = 'block';
   }
 }
-
 function closeGachaAndReload() {
   const popup = document.getElementById('gachaPopup');
   if (popup) popup.remove();
