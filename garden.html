@@ -1246,7 +1246,7 @@ function flowerTopView(type) {
    🏡 RENDER TAMAN & SEED
    ============================================================ */
 function renderGarden(books, seeds = []) {
-    window.__gardenSeeds = seeds;
+  window.__gardenSeeds = seeds;
   window.__gardenBooks = books;
 
   // Pisahkan seed
@@ -1541,8 +1541,8 @@ function openCollectionPopup() {
   const existing = document.getElementById('collectionPopup');
   if (existing) return;
 
-  // Ambil data dari bunga yang sudah tertanam di taman
-  const planted = window.__gardenSeeds ? window.__gardenSeeds.filter(s => s.status === 'planted') : [];
+  // Ambil data seed yang sudah ditanam dari variabel global
+  const planted = (window.__gardenSeeds || []).filter(s => s.status === 'planted');
   const total = planted.length;
 
   // Hitung per rarity
@@ -1561,7 +1561,6 @@ function openCollectionPopup() {
     secret: { icon: '🌺', label: 'Secret',  color: '#B8B8B8' }
   };
 
-  // Buat baris untuk tiap rarity
   const rarityRows = ['common', 'rare', 'legend', 'secret'].map(r => {
     const info = rarityLabels[r];
     const count = rarityCount[r] || 0;
@@ -1577,25 +1576,22 @@ function openCollectionPopup() {
       + '</div>';
   }).join('');
 
-   const popupHTML =
-    '<div class="flower-detail-backdrop" id="flowerDetail">'
-    + '<div class="flower-detail">'
-    + '<button class="flower-detail-close" id="flowerDetailClose">✕</button>'
-    
-    // 👇 Tombol Panah Kiri (hanya muncul jika ada varian)
-    + (variants ? '<button id="prevVariant" class="nav-arrow" style="position:absolute; left:-20px; top:50%; transform:translateY(-50%); font-size:2rem; color:var(--muted); background:none; border:none; cursor:pointer; z-index:10;">◀</button>' : '')
-    
-    + '<div class="flower-detail-visual ' + flower.rarity + '">' + svgHTML + '</div>'
-    
-    // 👇 Tombol Panah Kanan
-    + (variants ? '<button id="nextVariant" class="nav-arrow" style="position:absolute; right:-20px; top:50%; transform:translateY(-50%); font-size:2rem; color:var(--muted); background:none; border:none; cursor:pointer; z-index:10;">▶</button>' : '')
-
-    + '<h3 class="flower-detail-name" id="detailName">' + flower.name + '</h3>'
-    + '<span class="flower-detail-rarity ' + flower.rarity + '">' + flower.rarity + '</span>'
-    + '<p class="flower-detail-desc" id="detailDesc">' + (flower.desc || 'Bunga misterius dari tamanmu.') + '</p>'
-    + '<div class="flower-detail-rate">Peluang: <strong>' + flower.rate + '%</strong></div>'
-    + (seedId && !hasReset ? '<button class="btn-gacha-close" style="margin-top:16px;background:rgba(232,160,191,.1);border-color:rgba(232,160,191,.3);color:#ffd9e6;" onclick="resetToSeed(\'' + seedId + '\')">🔄 Kembalikan ke Seed (1x)</button>' : '')
-    + (seedId && hasReset ? '<div style="margin-top:16px;font-size:0.75rem;color:var(--muted);font-style:italic;">Kesempatan reset sudah digunakan.</div>' : '')
+  const popupHTML =
+    '<div class="collection-popup-backdrop" id="collectionPopup">'
+    + '<div class="collection-popup">'
+    + '<div class="collection-head">'
+    + '<h3>🌸 Koleksi Bunga</h3>'
+    + '<button class="collection-close" id="collectionClose">✕</button>'
+    + '</div>'
+    + '<div class="collection-total">'
+    + '<div class="ct-label">Total Bunga Dimiliki</div>'
+    + '<div class="ct-value">' + total + '</div>'
+    + '<div class="ct-sub">bunga telah tumbuh di tamanmu</div>'
+    + '</div>'
+    + '<div class="collection-rarity-list">' + rarityRows + '</div>'
+    + '<div class="collection-note">'
+    + 'Kumpulkan semua rarity — termasuk Secret yang sangat langka (2%)!'
+    + '</div>'
     + '</div>'
     + '</div>';
 
