@@ -1069,8 +1069,32 @@ const esc = s => String(s ?? '').replace(/[&<>"']/g, c =>
    🎰 DATA BUNGA & GACHA
    ============================================================ */
 const FLOWER_TYPES = [
-const RARITY_RATES = { common: 60, rare: 20, legend: 10, mythic: 7, secret: 3 };
-const RARITY_POOL = {
+const FLOWER_TYPES = [
+  // COMMON (Total 60%)
+  { name: 'Daisy',         color: '#FFF8F0', accent: '#F4E4A6', rarity: 'common', rate: 20, desc: 'Bunga sederhana yang selalu ceria.' },
+  { name: 'Mawar',         color: '#E8A0BF', accent: '#F7CAC9', rarity: 'common', rate: 20, desc: 'Simbol cinta klasik yang tak pernah pudar.' },
+  { name: 'Matahari',      color: '#F4E4A6', accent: '#F4A896', rarity: 'common', rate: 20, desc: 'Selalu menghadap ke arah cahaya.' },
+  
+  // RARE (Total 20%)
+  { name: 'Lavender',      color: '#C8A2C8', accent: '#F7CAC9', rarity: 'rare',   rate: 10, desc: 'Wangi menenangkan, jarang ditemui.' },
+  { name: 'Kamboja',       color: '#FF69B4', accent: '#F4D03F', rarity: 'rare',   rate: 10, desc: 'Bunga kamboja dengan 3 varian warna.',
+    variants: [
+      { name: 'Kamboja Putih',  color: '#FFFFFF', accent: '#F4D03F' },
+      { name: 'Kamboja Pink',   color: '#FF69B4', accent: '#FFB6C1' },
+      { name: 'Kamboja Yellow', color: '#FFD700', accent: '#FFF8F0' }
+    ]
+  },
+
+  // LEGEND (Total 10%)
+  { name: 'Golden Rose',   color: '#F4E4A6', accent: '#F4A896', rarity: 'legend', rate: 5, desc: 'Mawar emas legendaris, simbol kejayaan.' },
+  { name: 'Blue Rose',     color: '#7FB3D5', accent: '#FFF8F0', rarity: 'legend', rate: 5, desc: 'Mawar biru mistis — mustahil di alam nyata.' },
+  
+  // MYTHIC (Total 7%)
+  { name: 'Teratai',       color: '#F8BBD0', accent: '#FFD54F', rarity: 'mythic', rate: 7, desc: 'Bunga suci yang tumbuh di permukaan air.' },
+
+  // SECRET (Total 3%)
+  { name: 'Bunga Bangkai', color: '#3D2B3D', accent: '#8B7B8B', rarity: 'secret', rate: 3, desc: 'Bunga mekar dari dunia lain. Aura abu & misteri.' }
+];
   common: ['Daisy', 'Mawar', 'Matahari'],
   rare:   ['Lavender', 'Kamboja'],
   legend: ['Golden Rose', 'Blue Rose'],
@@ -1084,7 +1108,7 @@ function flowerForBook(book) {
   else if (rarityRoll < 80)  pickedRarity = 'rare';
   else if (rarityRoll < 90)  pickedRarity = 'legend';
   else if (rarityRoll < 97)  pickedRarity = 'mythic';  // 👈 Tambah Mythic
-  else                       pickedRarity = 'secret';                  pickedRarity = 'secret';
+  else                       pickedRarity = 'secret';                 
 
   const pool = RARITY_POOL[pickedRarity];
   const flowerRoll = (baseSeed * 13) % pool.length;
@@ -1670,14 +1694,16 @@ function openRatePopup() {
   const existing = document.getElementById('ratePopup');
   if (existing) return;
 
-  const rarityLabels = {
+   const rarityLabels = {
     common: { icon: '🌼', label: 'Common' },
     rare:   { icon: '💜', label: 'Rare' },
     legend: { icon: '👑', label: 'Legend' },
+    mythic: { icon: '🪷', label: 'Mythic' }, // 👈 Tambah ini
     secret: { icon: '🌺', label: 'Secret' }
   };
 
-  const rarityGroups = ['common', 'rare', 'legend', 'secret'].map(r => {
+  const rarityGroups = ['common', 'rare', 'legend', 'mythic', 'secret'].map(r => { // 👈 Tambah 'mythic'
+    // ...
     const info = rarityLabels[r];
     const pool = RARITY_POOL[r];
     const perFlower = (100 / pool.length).toFixed(2);
