@@ -1104,13 +1104,16 @@ const RARITY_POOL = {
   secret: ['Bunga Bangkai']
 };
 function flowerForBook(book) {
-    const rarityRoll = (baseSeed * 7) % 100;
+  // 👇 Variabel baseSeed yang sempat hilang sudah dikembalikan di sini
+  const baseSeed = Array.from(book.title || 'X').reduce((a, c) => a + c.charCodeAt(0), 0);
+  
+  const rarityRoll = (baseSeed * 7) % 100;
   let pickedRarity;
   if (rarityRoll < 60)       pickedRarity = 'common';
   else if (rarityRoll < 80)  pickedRarity = 'rare';
   else if (rarityRoll < 90)  pickedRarity = 'legend';
-  else if (rarityRoll < 97)  pickedRarity = 'mythic';  // 👈 Tambah Mythic
-  else                       pickedRarity = 'secret';                 
+  else if (rarityRoll < 97)  pickedRarity = 'mythic';
+  else                       pickedRarity = 'secret';
 
   const pool = RARITY_POOL[pickedRarity];
   const flowerRoll = (baseSeed * 13) % pool.length;
@@ -1118,11 +1121,9 @@ function flowerForBook(book) {
 
   // Jika yang keluar adalah Kamboja, acak variannya
   if (baseFlower.name === 'Kamboja' && baseFlower.variants) {
-    // Gunakan seed lain (×17) untuk menentukan varian
     const variantRoll = (baseSeed * 17) % baseFlower.variants.length;
     const selectedVariant = baseFlower.variants[variantRoll];
     
-    // Kembalikan objek baru dengan nama & warna varian
     return {
       ...baseFlower,
       name: selectedVariant.name,
