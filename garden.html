@@ -1079,17 +1079,28 @@ function flowerForBook(book) {
 }
 function flowerTopView(type) {
   const c = type.color, a = type.accent;
-    /* 🌺 SECRET — Bunga Bangkai */
+
+  /* 🎨 Definisikan Gradasi Warna (Texture) */
+  const gradientId = 'grad_' + type.name.replace(/\s+/g, '');
+  const gradients = '<defs>'
+    + '<radialGradient id="' + gradientId + '" cx="50%" cy="50%" r="50%">'
+    + '<stop offset="0%" stop-color="' + a + '" />'
+    + '<stop offset="70%" stop-color="' + c + '" />'
+    + '<stop offset="100%" stop-color="' + c + '" stop-opacity="0.8"/>'
+    + '</radialGradient>'
+    + '<filter id="shadow_' + gradientId + '"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity="0.3"/></filter>'
+    + '</defs>';
+
+  /* 🌺 SECRET — Bunga Bangkai */
   if (type.name === 'Bunga Bangkai') {
     return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">'
-      // Daun hijau di bawah
+      + gradients
       + '<path d="M10 90 Q30 75 50 90 Q70 75 90 90" fill="#4a5a3f"/>'
-      // Kelopak luar melengkung lebar
-      + '<path d="M50 80 Q10 70 15 45 Q25 65 50 75Z" fill="#B83A2E"/>'
-      + '<path d="M50 80 Q90 70 85 45 Q75 65 50 75Z" fill="#B83A2E"/>'
+      + '<path d="M50 80 Q10 70 15 45 Q25 65 50 75Z" fill="#B83A2E" filter="url(#shadow_' + gradientId + ')"/>'
+      + '<path d="M50 80 Q90 70 85 45 Q75 65 50 75Z" fill="#B83A2E" filter="url(#shadow_' + gradientId + ')"/>'
       + '<path d="M50 80 Q20 55 35 25 Q45 45 50 70Z" fill="#C44A35"/>'
       + '<path d="M50 80 Q80 55 65 25 Q55 45 50 70Z" fill="#C44A35"/>'
-      // Bercak putih (pola khas Rafflesia)
+      // Bercak (Tekstur)
       + '<circle cx="25" cy="55" r="2" fill="#FFF8F0" opacity="0.6"/>'
       + '<circle cx="35" cy="45" r="1.5" fill="#FFF8F0" opacity="0.7"/>'
       + '<circle cx="20" cy="65" r="2.5" fill="#FFF8F0" opacity="0.5"/>'
@@ -1098,81 +1109,13 @@ function flowerTopView(type) {
       + '<circle cx="80" cy="65" r="2.5" fill="#FFF8F0" opacity="0.5"/>'
       + '<circle cx="45" cy="35" r="1.8" fill="#FFF8F0" opacity="0.6"/>'
       + '<circle cx="55" cy="35" r="1.8" fill="#FFF8F0" opacity="0.6"/>'
-      // Lubang tengah (dasar gelap)
       + '<ellipse cx="50" cy="55" rx="18" ry="16" fill="#2a1e2a"/>'
-      // Bibir lubang berwarna merah gelap
       + '<ellipse cx="50" cy="55" rx="18" ry="16" fill="none" stroke="#8B2A1E" stroke-width="3"/>'
       + '<ellipse cx="50" cy="55" rx="14" ry="12" fill="none" stroke="#B83A2E" stroke-width="2"/>'
       + '</svg>';
   }
-  if (type.name === 'Blue Rose') {
-    return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">'
-      + '<ellipse cx="35" cy="62" rx="16" ry="8" fill="#7d9465" transform="rotate(-30 35 62)"/>'
-      + '<ellipse cx="65" cy="62" rx="16" ry="8" fill="#7d9465" transform="rotate(30 65 62)"/>'
-      + '<ellipse cx="50" cy="78" rx="14" ry="7" fill="#8fa878"/>'
-      + '<circle cx="50" cy="38" r="15" fill="' + c + '"/>'
-      + '<circle cx="35" cy="48" r="14" fill="' + c + '"/>'
-      + '<circle cx="65" cy="48" r="14" fill="' + c + '"/>'
-      + '<circle cx="41" cy="61" r="14" fill="#5A8FB8"/>'
-      + '<circle cx="59" cy="61" r="14" fill="#5A8FB8"/>'
-      + '<circle cx="50" cy="50" r="10" fill="#4A7FA8"/>'
-      + '<circle cx="50" cy="50" r="5" fill="' + a + '"/>'
-      + '</svg>';
-  }
-  /* 👑 LEGEND — Golden Rose */
-  /* 👑 LEGEND — Golden Rose (Mawar Kuning Berlapis) */
-  if (type.rarity === 'legend') {
-    // Khusus Blue Rose, kita pakai desain yang beda (warna biru)
-    if (type.name === 'Blue Rose') {
-      return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">'
-        + '<ellipse cx="35" cy="62" rx="16" ry="8" fill="#7d9465" transform="rotate(-30 35 62)"/>'
-        + '<ellipse cx="65" cy="62" rx="16" ry="8" fill="#7d9465" transform="rotate(30 65 62)"/>'
-        + '<ellipse cx="50" cy="78" rx="14" ry="7" fill="#8fa878"/>'
-        + '<circle cx="50" cy="38" r="15" fill="' + c + '"/>'
-        + '<circle cx="35" cy="48" r="14" fill="' + c + '"/>'
-        + '<circle cx="65" cy="48" r="14" fill="' + c + '"/>'
-        + '<circle cx="41" cy="61" r="14" fill="#5A8FB8"/>'
-        + '<circle cx="59" cy="61" r="14" fill="#5A8FB8"/>'
-        + '<circle cx="50" cy="50" r="10" fill="#4A7FA8"/>'
-        + '<circle cx="50" cy="50" r="5" fill="' + a + '"/>'
-        + '<circle cx="50" cy="50" r="2.5" fill="' + c + '"/>'
-        + '<text x="50" y="95" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="9" fill="#F4E4A6" font-weight="bold" letter-spacing="2">LEGEND</text>'
-        + '</svg>';
-    }
-    
-    // Desain Golden Rose
-    return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">'
-      // Tangkai dan daun
-      + '<path d="M50 85 Q40 70 50 50" stroke="#4a5a3f" stroke-width="3" fill="none"/>'
-      + '<path d="M45 70 Q30 65 25 55 Q35 60 45 70Z" fill="#5a6a4f"/>'
-      + '<path d="M55 75 Q70 65 75 55 Q65 60 55 75Z" fill="#5a6a4f"/>'
-      
-      // Lapisan Kelopak Luar (Warna Oranye Emas Gelap)
-      + '<path d="M50 55 C 25 55 20 30 35 20 C 45 15 55 15 65 20 C 80 30 75 55 50 55 Z" fill="#C78C12"/>'
-      
-      // Lapisan Kelopak Tengah (Warna Emas)
-      + '<path d="M50 50 C 30 50 28 32 40 25 C 48 20 52 20 60 25 C 72 32 70 50 50 50 Z" fill="#E6A817"/>'
-      
-      // Lapisan Kelopak Dalam (Warna Kuning Cerah)
-      + '<path d="M50 45 C 35 45 35 35 45 30 C 50 28 55 30 55 35 C 55 40 50 45 50 45 Z" fill="#F2C12E"/>'
-      
-      // Inti Mawar (Gulungan Kelopak)
-      + '<path d="M48 38 C 45 35 50 30 52 33 C 55 36 52 40 48 38 Z" fill="#FFD659"/>'
-      + '<path d="M50 35 C 48 33 50 31 51 32 C 53 34 52 36 50 35 Z" fill="#FFEAA3"/>'
-      
-      // Efek Highlight di kelopak
-      + '<path d="M35 35 Q40 25 50 25" stroke="#FFEAA3" stroke-width="2" fill="none" opacity="0.6" stroke-linecap="round"/>'
-      + '<path d="M50 45 Q40 40 40 35" stroke="#FFEAA3" stroke-width="1.5" fill="none" opacity="0.8" stroke-linecap="round"/>'
-      
-      // Tulisan LEGEND
-      + '<text x="50" y="95" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="9" fill="#FFF8F0" font-weight="bold" letter-spacing="2">LEGEND</text>'
-      
-      // Efek Berkilau
-      + '<text x="20" y="25" font-size="12" fill="#FFF8F0" opacity="0.9">✦</text>'
-      + '<text x="80" y="20" font-size="10" fill="#FFF8F0" opacity="0.8">✦</text>'
-      + '</svg>';
-  }
-   /* 🌸 RARE — Bunga Kamboja */
+
+  /* 🌸 RARE — Bunga Kamboja (Lengkap 3 Varian) */
   if (type.name.includes('Kamboja')) {
     const isWhite = type.name === 'Kamboja Putih';
     const isPink = type.name === 'Kamboja Pink';
@@ -1182,29 +1125,30 @@ function flowerTopView(type) {
     const centerColor = isWhite ? '#F4D03F' : isPink ? '#FFB6C1' : '#FFF8F0';
 
     return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="overflow:visible">'
-      // Daun hijau
+      + gradients
+      // Daun
       + '<path d="M20 80 Q40 90 50 80 Q60 90 80 80 Q70 95 50 95 Q30 95 20 80Z" fill="#4a5a3f"/>'
       
-      // Kelopak 1 (Atas)
-      + '<path d="M50 50 C 30 30 40 5 50 10 C 60 5 70 30 50 50 Z" fill="' + bgColor + '" stroke="' + centerColor + '" stroke-width="1.5"/>'
+      // Kelopak 1 (Atas) - beri efek shadow dan gradasi
+      + '<path d="M50 50 C 30 30 40 5 50 10 C 60 5 70 30 50 50 Z" fill="' + bgColor + '" stroke="' + centerColor + '" stroke-width="1.5" filter="url(#shadow_' + gradientId + ')"/>'
       + '<path d="M50 50 L 50 10" stroke="' + centerColor + '" stroke-width="1" opacity="0.4"/>'
       
       // Kelopak 2 (Kanan)
-      + '<path d="M50 50 C 70 30 95 40 90 50 C 95 60 70 70 50 50 Z" fill="' + bgColor + '" stroke="' + centerColor + '" stroke-width="1.5"/>'
+      + '<path d="M50 50 C 70 30 95 40 90 50 C 95 60 70 70 50 50 Z" fill="' + bgColor + '" stroke="' + centerColor + '" stroke-width="1.5" filter="url(#shadow_' + gradientId + ')"/>'
       + '<path d="M50 50 L 90 50" stroke="' + centerColor + '" stroke-width="1" opacity="0.4"/>'
 
       // Kelopak 3 (Kiri)
-      + '<path d="M50 50 C 30 70 5 60 10 50 C 5 40 30 30 50 50 Z" fill="' + bgColor + '" stroke="' + centerColor + '" stroke-width="1.5"/>'
+      + '<path d="M50 50 C 30 70 5 60 10 50 C 5 40 30 30 50 50 Z" fill="' + bgColor + '" stroke="' + centerColor + '" stroke-width="1.5" filter="url(#shadow_' + gradientId + ')"/>'
       + '<path d="M50 50 L 10 50" stroke="' + centerColor + '" stroke-width="1" opacity="0.4"/>'
 
       // Kelopak 4 (Bawah)
-      + '<path d="M50 50 C 70 70 60 95 50 90 C 40 95 30 70 50 50 Z" fill="' + bgColor + '" stroke="' + centerColor + '" stroke-width="1.5"/>'
+      + '<path d="M50 50 C 70 70 60 95 50 90 C 40 95 30 70 50 50 Z" fill="' + bgColor + '" stroke="' + centerColor + '" stroke-width="1.5" filter="url(#shadow_' + gradientId + ')"/>'
       + '<path d="M50 50 L 50 90" stroke="' + centerColor + '" stroke-width="1" opacity="0.4"/>'
 
       // Kelopak 5 (Kanan Bawah)
-      + '<path d="M50 50 C 80 60 90 80 75 85 C 60 95 40 70 50 50 Z" fill="' + bgColor + '" stroke="' + centerColor + '" stroke-width="1.5"/>'
+      + '<path d="M50 50 C 80 60 90 80 75 85 C 60 95 40 70 50 50 Z" fill="' + bgColor + '" stroke="' + centerColor + '" stroke-width="1.5" filter="url(#shadow_' + gradientId + ')"/>'
       
-      // Inti Bunga (Warna kuning/putih)
+      // Inti Bunga
       + '<circle cx="50" cy="50" r="6" fill="' + centerColor + '"/>'
       + '<circle cx="50" cy="50" r="3" fill="#FFA500" opacity="0.8"/>'
       
@@ -1212,29 +1156,87 @@ function flowerTopView(type) {
       + '<text x="50" y="98" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="9" fill="#C8A2C8" font-weight="bold" letter-spacing="2">RARE</text>'
       + '</svg>';
   }
+
+  /* 🌹 LEGEND — Blue Rose & Golden Rose */
+  if (type.rarity === 'legend') {
+    if (type.name === 'Blue Rose') {
+      return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">'
+        + gradients
+        + '<ellipse cx="35" cy="62" rx="16" ry="8" fill="#7d9465" transform="rotate(-30 35 62)"/>'
+        + '<ellipse cx="65" cy="62" rx="16" ry="8" fill="#7d9465" transform="rotate(30 65 62)"/>'
+        + '<ellipse cx="50" cy="78" rx="14" ry="7" fill="#8fa878"/>'
+        // Kelopak berlapis
+        + '<circle cx="50" cy="38" r="15" fill="' + c + '" filter="url(#shadow_' + gradientId + ')"/>'
+        + '<circle cx="35" cy="48" r="14" fill="' + c + '" filter="url(#shadow_' + gradientId + ')"/>'
+        + '<circle cx="65" cy="48" r="14" fill="' + c + '" filter="url(#shadow_' + gradientId + ')"/>'
+        + '<circle cx="41" cy="61" r="14" fill="#5A8FB8"/>'
+        + '<circle cx="59" cy="61" r="14" fill="#5A8FB8"/>'
+        + '<circle cx="50" cy="50" r="10" fill="#4A7FA8"/>'
+        + '<circle cx="50" cy="50" r="5" fill="' + a + '"/>'
+        + '<circle cx="50" cy="50" r="2.5" fill="' + c + '"/>'
+        + '<text x="50" y="95" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="9" fill="#F4E4A6" font-weight="bold" letter-spacing="2">LEGEND</text>'
+        + '</svg>';
+    }
+    
+    // Golden Rose (Mawar Kuning)
+    return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">'
+      + gradients
+      + '<path d="M50 85 Q40 70 50 50" stroke="#4a5a3f" stroke-width="3" fill="none"/>'
+      + '<path d="M45 70 Q30 65 25 55 Q35 60 45 70Z" fill="#5a6a4f"/>'
+      + '<path d="M55 75 Q70 65 75 55 Q65 60 55 75Z" fill="#5a6a4f"/>'
+      
+      // Lapisan Kelopak Luar
+      + '<path d="M50 55 C 25 55 20 30 35 20 C 45 15 55 15 65 20 C 80 30 75 55 50 55 Z" fill="#C78C12" filter="url(#shadow_' + gradientId + ')"/>'
+      // Lapisan Kelopak Tengah
+      + '<path d="M50 50 C 30 50 28 32 40 25 C 48 20 52 20 60 25 C 72 32 70 50 50 50 Z" fill="#E6A817" filter="url(#shadow_' + gradientId + ')"/>'
+      // Lapisan Kelopak Dalam
+      + '<path d="M50 45 C 35 45 35 35 45 30 C 50 28 55 30 55 35 C 55 40 50 45 50 45 Z" fill="#F2C12E"/>'
+      // Inti Mawar
+      + '<path d="M48 38 C 45 35 50 30 52 33 C 55 36 52 40 48 38 Z" fill="#FFD659"/>'
+      + '<path d="M50 35 C 48 33 50 31 51 32 C 53 34 52 36 50 35 Z" fill="#FFEAA3"/>'
+      
+      // Efek Highlight
+      + '<path d="M35 35 Q40 25 50 25" stroke="#FFEAA3" stroke-width="2" fill="none" opacity="0.6" stroke-linecap="round"/>'
+      + '<path d="M50 45 Q40 40 40 35" stroke="#FFEAA3" stroke-width="1.5" fill="none" opacity="0.8" stroke-linecap="round"/>'
+      
+      + '<text x="50" y="95" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="9" fill="#FFF8F0" font-weight="bold" letter-spacing="2">LEGEND</text>'
+      + '<text x="20" y="25" font-size="12" fill="#FFF8F0" opacity="0.9">✦</text>'
+      + '<text x="80" y="20" font-size="10" fill="#FFF8F0" opacity="0.8">✦</text>'
+      + '</svg>';
+  }
+
+  /* 💜 RARE — Lavender */
   if (type.rarity === 'rare') {
     return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">'
+      + gradients
       + '<ellipse cx="35" cy="62" rx="16" ry="8" fill="#7d9465" transform="rotate(-30 35 62)"/>'
       + '<ellipse cx="65" cy="62" rx="16" ry="8" fill="#7d9465" transform="rotate(30 65 62)"/>'
-      + '<circle cx="50" cy="32" r="12" fill="' + c + '"/>'
-      + '<circle cx="32" cy="42" r="12" fill="' + c + '"/>'
-      + '<circle cx="68" cy="42" r="12" fill="' + c + '"/>'
-      + '<circle cx="32" cy="58" r="12" fill="' + c + '"/>'
-      + '<circle cx="68" cy="58" r="12" fill="' + c + '"/>'
-      + '<circle cx="50" cy="68" r="12" fill="' + c + '"/>'
+      // Kelopak
+      + '<circle cx="50" cy="32" r="12" fill="' + c + '" filter="url(#shadow_' + gradientId + ')"/>'
+      + '<circle cx="32" cy="42" r="12" fill="' + c + '" filter="url(#shadow_' + gradientId + ')"/>'
+      + '<circle cx="68" cy="42" r="12" fill="' + c + '" filter="url(#shadow_' + gradientId + ')"/>'
+      + '<circle cx="32" cy="58" r="12" fill="' + c + '" filter="url(#shadow_' + gradientId + ')"/>'
+      + '<circle cx="68" cy="58" r="12" fill="' + c + '" filter="url(#shadow_' + gradientId + ')"/>'
+      + '<circle cx="50" cy="68" r="12" fill="' + c + '" filter="url(#shadow_' + gradientId + ')"/>'
+      // Inti
       + '<circle cx="50" cy="50" r="9" fill="' + a + '"/>'
       + '<circle cx="50" cy="50" r="4" fill="#FFF8F0"/>'
       + '</svg>';
   }
+
+  /* 🌼 COMMON (Daisy, Mawar, Matahari) */
   return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">'
+    + gradients
     + '<ellipse cx="35" cy="60" rx="16" ry="8" fill="#7d9465" transform="rotate(-30 35 60)"/>'
     + '<ellipse cx="65" cy="60" rx="16" ry="8" fill="#7d9465" transform="rotate(30 65 60)"/>'
     + '<ellipse cx="50" cy="75" rx="14" ry="7" fill="#8fa878"/>'
-    + '<circle cx="50" cy="38" r="14" fill="' + c + '"/>'
-    + '<circle cx="36" cy="48" r="13" fill="' + c + '"/>'
-    + '<circle cx="64" cy="48" r="13" fill="' + c + '"/>'
-    + '<circle cx="42" cy="60" r="13" fill="' + c + '"/>'
-    + '<circle cx="58" cy="60" r="13" fill="' + c + '"/>'
+    // Kelopak (dengan gradasi/shadow)
+    + '<circle cx="50" cy="38" r="14" fill="url(#' + gradientId + ')" filter="url(#shadow_' + gradientId + ')"/>'
+    + '<circle cx="36" cy="48" r="13" fill="url(#' + gradientId + ')" filter="url(#shadow_' + gradientId + ')"/>'
+    + '<circle cx="64" cy="48" r="13" fill="url(#' + gradientId + ')" filter="url(#shadow_' + gradientId + ')"/>'
+    + '<circle cx="42" cy="60" r="13" fill="url(#' + gradientId + ')" filter="url(#shadow_' + gradientId + ')"/>'
+    + '<circle cx="58" cy="60" r="13" fill="url(#' + gradientId + ')" filter="url(#shadow_' + gradientId + ')"/>'
+    // Inti
     + '<circle cx="50" cy="50" r="9" fill="' + a + '"/>'
     + '<circle cx="50" cy="50" r="5" fill="#FFF8F0"/>'
     + '</svg>';
