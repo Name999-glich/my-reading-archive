@@ -950,6 +950,57 @@ body.night-mode .brand-mark {
     font-size: 1.5rem !important;
   }
 }
+ /* 🌊 Efek Mythic & Air Teratai */
+.garden-slot.mythic {
+  animation: mythicFloat 4s ease-in-out infinite, growFlower 0.9s ease-out both;
+}
+.garden-slot.mythic svg {
+  filter: drop-shadow(0 0 12px rgba(248,187,208,0.8)) drop-shadow(0 0 25px rgba(255,213,79,0.6));
+}
+
+/* Riak Air di bawah Teratai */
+.garden-slot.mythic::before {
+  content: '';
+  position: absolute;
+  bottom: 5%;
+  left: 10%;
+  width: 80%;
+  height: 25%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(100, 200, 255, 0.4) 0%, transparent 70%);
+  animation: waterRipple 3s ease-out infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@keyframes mythicFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+@keyframes waterRipple {
+  0% { transform: scale(0.8); opacity: 0.8; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+
+.garden-slot.mythic .garden-flower-name {
+  color: #F8BBD0;
+  text-shadow: 0 0 8px rgba(248,187,208,0.9), 0 0 15px rgba(255,213,79,0.5);
+  animation: nameMythicGlow 3s ease-in-out infinite;
+}
+@keyframes nameMythicGlow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Penyesuaian Warna Panel Rarity */
+.rarity-card.mythic::after { background: radial-gradient(circle, #F8BBD0, transparent 70%); }
+.rarity-card.mythic .rc-count { color: #F8BBD0; }
+.collection-rarity-item.mythic .cri-icon {
+  background: radial-gradient(circle, rgba(248,187,208,.4), rgba(248,187,208,.15));
+  border: 1px solid rgba(248,187,208,.6);
+  box-shadow: 0 0 14px -2px rgba(248,187,208,.6);
+}
+.collection-rarity-item.mythic .cri-bar i { background: linear-gradient(90deg, #F8BBD0, #FFD54F); }
   /* Responsive */
 @media (max-width:600px){
   .topbar-inner{height:54px;padding:0 14px}
@@ -1018,43 +1069,22 @@ const esc = s => String(s ?? '').replace(/[&<>"']/g, c =>
    🎰 DATA BUNGA & GACHA
    ============================================================ */
 const FLOWER_TYPES = [
-  { name: 'Daisy',         color: '#FFF8F0', accent: '#F4E4A6', rarity: 'common', rate: 24.67, desc: 'Bunga sederhana yang selalu ceria.' },
-  { name: 'Mawar',         color: '#E8A0BF', accent: '#F7CAC9', rarity: 'common', rate: 24.67, desc: 'Simbol cinta klasik yang tak pernah pudar.' },
-  { name: 'Matahari',      color: '#F4E4A6', accent: '#F4A896', rarity: 'common', rate: 24.66, desc: 'Selalu menghadap ke arah cahaya.' },
-  
-  // RARE (Total 20%)
-  { name: 'Lavender',      color: '#C8A2C8', accent: '#F7CAC9', rarity: 'rare',   rate: 10, desc: 'Wangi menenangkan, jarang ditemui.' },
-  { name: 'Kamboja',       color: '#FF69B4', accent: '#F4D03F', rarity: 'rare',   rate: 10, desc: 'Bunga kamboja dengan 3 varian warna.',
-    variants: [
-      { name: 'Kamboja Putih',  color: '#FFFFFF', accent: '#F4D03F' },
-      { name: 'Kamboja Pink',   color: '#FF69B4', accent: '#FFB6C1' },
-      { name: 'Kamboja Yellow', color: '#FFD700', accent: '#FFF8F0' }
-    ]
-  },
-
-  // LEGEND (Total 4%)
-  { name: 'Golden Rose',   color: '#F4E4A6', accent: '#F4A896', rarity: 'legend', rate: 2, desc: 'Mawar emas legendaris, simbol kejayaan.' },
-  { name: 'Blue Rose',     color: '#7FB3D5', accent: '#FFF8F0', rarity: 'legend', rate: 2, desc: 'Mawar biru mistis — mustahil di alam nyata.' },
-  
-  // SECRET (Total 2%)
-  { name: 'Bunga Bangkai', color: '#3D2B3D', accent: '#8B7B8B', rarity: 'secret', rate: 2, desc: 'Bunga mekar dari dunia lain. Aura abu & misteri.' }
-];
-
-const RARITY_RATES = { common: 74, rare: 20, legend: 4, secret: 2 };
+const RARITY_RATES = { common: 60, rare: 20, legend: 10, mythic: 7, secret: 3 };
 const RARITY_POOL = {
   common: ['Daisy', 'Mawar', 'Matahari'],
   rare:   ['Lavender', 'Kamboja'],
   legend: ['Golden Rose', 'Blue Rose'],
+  mythic: ['Teratai'],
   secret: ['Bunga Bangkai']
 };
 function flowerForBook(book) {
-  const baseSeed = Array.from(book.title || 'X').reduce((a, c) => a + c.charCodeAt(0), 0);
-  const rarityRoll = (baseSeed * 7) % 100;
+    const rarityRoll = (baseSeed * 7) % 100;
   let pickedRarity;
-  if (rarityRoll < 74)       pickedRarity = 'common';
-  else if (rarityRoll < 94)  pickedRarity = 'rare';
-  else if (rarityRoll < 98)  pickedRarity = 'legend';
-  else                       pickedRarity = 'secret';
+  if (rarityRoll < 60)       pickedRarity = 'common';
+  else if (rarityRoll < 80)  pickedRarity = 'rare';
+  else if (rarityRoll < 90)  pickedRarity = 'legend';
+  else if (rarityRoll < 97)  pickedRarity = 'mythic';  // 👈 Tambah Mythic
+  else                       pickedRarity = 'secret';                  pickedRarity = 'secret';
 
   const pool = RARITY_POOL[pickedRarity];
   const flowerRoll = (baseSeed * 13) % pool.length;
@@ -1157,6 +1187,29 @@ function flowerTopView(type) {
       + '</svg>';
   }
 
+   /* 🪷 MYTHIC — Bunga Teratai */
+  if (type.name === 'Teratai') {
+    return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="overflow:visible">'
+      + gradients
+      // Daun teratai (Lily pad)
+      + '<ellipse cx="50" cy="75" rx="35" ry="15" fill="#2E7D32" opacity="0.8"/>'
+      + '<ellipse cx="50" cy="75" rx="35" ry="15" fill="none" stroke="#4CAF50" stroke-width="1.5"/>'
+      // Kelopak Luar
+      + '<path d="M50 65 C 20 50 25 20 40 25 C 50 30 50 50 50 65 Z" fill="#F8BBD0" filter="url(#shadow_' + gradientId + ')"/>'
+      + '<path d="M50 65 C 80 50 75 20 60 25 C 50 30 50 50 50 65 Z" fill="#F8BBD0" filter="url(#shadow_' + gradientId + ')"/>'
+      + '<path d="M50 65 C 15 60 15 35 35 35 C 45 40 50 55 50 65 Z" fill="#FFF8F0" filter="url(#shadow_' + gradientId + ')"/>'
+      + '<path d="M50 65 C 85 60 85 35 65 35 C 55 40 50 55 50 65 Z" fill="#FFF8F0" filter="url(#shadow_' + gradientId + ')"/>'
+      // Kelopak Dalam
+      + '<path d="M50 65 C 35 45 40 20 50 30 C 60 20 65 45 50 65 Z" fill="#F8BBD0"/>'
+      + '<path d="M50 65 C 40 55 30 45 40 40 C 48 45 50 55 50 65 Z" fill="#FFD54F" opacity="0.8"/>'
+      + '<path d="M50 65 C 60 55 70 45 60 40 C 52 45 50 55 50 65 Z" fill="#FFD54F" opacity="0.8"/>'
+      // Inti Bunga
+      + '<circle cx="50" cy="55" r="6" fill="#FFB300"/>'
+      + '<circle cx="50" cy="55" r="3" fill="#FFF8F0"/>'
+      // Teks MYTHIC
+      + '<text x="50" y="98" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="9" fill="#F8BBD0" font-weight="bold" letter-spacing="2">MYTHIC</text>'
+      + '</svg>';
+  }
   /* 🌹 LEGEND — Blue Rose & Golden Rose */
   if (type.rarity === 'legend') {
     if (type.name === 'Blue Rose') {
@@ -1546,7 +1599,7 @@ function openCollectionPopup() {
   const total = planted.length;
 
   // Hitung per rarity
-  const rarityCount = { common: 0, rare: 0, legend: 0, secret: 0 };
+   const rarityCount = { common: 0, rare: 0, legend: 0, mythic: 0, secret: 0 };
   planted.forEach(seed => {
     const t = FLOWER_TYPES.find(f => f.name === seed.flower_name);
     if (t) rarityCount[t.rarity] = (rarityCount[t.rarity] || 0) + 1;
@@ -1558,10 +1611,11 @@ function openCollectionPopup() {
     common: { icon: '🌼', label: 'Common',  color: '#A8C09A' },
     rare:   { icon: '💜', label: 'Rare',    color: '#C8A2C8' },
     legend: { icon: '👑', label: 'Legend',  color: '#F4E4A6' },
+        mythic: { icon: '🪷', label: 'Mythic',  color: '#F8BBD0' },
     secret: { icon: '🌺', label: 'Secret',  color: '#B8B8B8' }
   };
 
-  const rarityRows = ['common', 'rare', 'legend', 'secret'].map(r => {
+    const rarityRows = ['common', 'rare', 'legend', 'mythic', 'secret'].map(r => {
     const info = rarityLabels[r];
     const count = rarityCount[r] || 0;
     const p = pct(count);
