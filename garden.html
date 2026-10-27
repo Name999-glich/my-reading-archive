@@ -1005,6 +1005,31 @@ body.night-mode .brand-mark {
   box-shadow: 0 0 14px -2px rgba(248,187,208,.6);
 }
 .collection-rarity-item.mythic .cri-bar i { background: linear-gradient(90deg, #F8BBD0, #FFD54F); }
+ /* 🌿 Rumput Bergoyang */
+.grass-layer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40%;
+  pointer-events: none; /* Agar tidak menghalangi klik */
+  z-index: 1; /* Di bawah bunga (bunga z-index: 2) */
+  background-image: 
+    radial-gradient(circle at 15% 100%, transparent 20px, #4a5a3f 21px, #4a5a3f 22px, transparent 23px),
+    radial-gradient(circle at 30% 100%, transparent 25px, #3d4d2f 26px, #3d4d2f 27px, transparent 28px),
+    radial-gradient(circle at 45% 100%, transparent 15px, #556a47 16px, #556a47 17px, transparent 18px),
+    radial-gradient(circle at 60% 100%, transparent 30px, #3d4d2f 31px, #3d4d2f 32px, transparent 33px),
+    radial-gradient(circle at 75% 100%, transparent 20px, #4a5a3f 21px, #4a5a3f 22px, transparent 23px),
+    radial-gradient(circle at 90% 100%, transparent 25px, #556a47 26px, #556a47 27px, transparent 28px);
+  background-size: 100% 100%;
+  animation: swayGrass 4s ease-in-out infinite alternate;
+  transform-origin: bottom center;
+}
+
+@keyframes swayGrass {
+  0% { transform: skewX(-5deg) scaleY(1); }
+  100% { transform: skewX(5deg) scaleY(1.05); }
+}
   /* Responsive */
 @media (max-width:600px){
   .topbar-inner{height:54px;padding:0 14px}
@@ -1417,6 +1442,7 @@ function renderGarden(books, seeds = []) {
   });
 
   root.innerHTML = '<div class="garden-view"><div class="grass-field">'
+        + '<div class="grass-layer"></div>' /* 👈 Tambahkan baris ini */
     + '<div class="garden-grid-top">' + slotsHTML + '</div>'
        + '<div class="flying-insect butterfly-1">🦋</div>'
     + '<div class="flying-insect butterfly-2">🦋</div>'
