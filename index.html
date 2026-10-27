@@ -90,14 +90,16 @@ body::after {
   position: fixed;
   inset: 0;
   z-index: -1;
-  background: radial-gradient(circle at center, transparent 0%, rgba(30, 18, 30, 0.7) 100%);
+  /* Overlay gelap transparan agar teks tetap kontras */
+  background: rgba(45, 25, 45, 0.65); 
+  backdrop-filter: blur(2px); /* Sedikit blur agar lebih elegan */
   pointer-events: none;
 }
 /* =========================================================== */
 
 img{display:block;max-width:100%}
 a{color:inherit}
-h1,h2,h3{font-family:var(--font-display);font-weight:600;margin:0}
+h1,h2,h3{font-family:var(--font-display);font-weight:600;margin:0; text-shadow: 0 2px 10px rgba(0,0,0,0.4);}
 .wrap{max-width:1180px;margin:0 auto;padding:0 20px; position: relative; z-index: 1;}
 .topbar{position:sticky;top:0;z-index:40;border-bottom:1px solid var(--border);
   background:linear-gradient(180deg,rgba(61,43,61,.92),rgba(61,43,61,.62));
@@ -152,7 +154,7 @@ h1,h2,h3{font-family:var(--font-display);font-weight:600;margin:0}
 .section{margin:32px 0}
 .section-head{display:flex;align-items:baseline;justify-content:space-between;gap:14px;margin-bottom:14px}
 .section-head h2{font-size:1.4rem}
-.section-head a{color:var(--rose);text-decoration:none;font-size:.82rem}
+.section-head a{color:var(--rose);text-decoration:none;font-size:.82rem; text-shadow: 0 1px 5px rgba(0,0,0,0.5);}
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
 .stat-card{background:linear-gradient(160deg,rgba(255,248,240,.09),rgba(255,248,240,.025));
   border:1px solid var(--border);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);
