@@ -951,6 +951,17 @@ body.night-mode .brand-mark {
   }
 }
  /* 🌊 Efek Mythic & Air Teratai */
+  /* ✨ Aura Khusus Snapdragon */
+.garden-slot.mythic[title*="Snapdragon"] {
+  animation: snapdragonPulse 3s ease-in-out infinite alternate;
+}
+.garden-slot.mythic[title*="Snapdragon"] svg {
+  filter: drop-shadow(0 0 15px rgba(255, 105, 180, 0.7)) drop-shadow(0 0 25px rgba(255, 215, 0, 0.5));
+}
+@keyframes snapdragonPulse {
+  0% { transform: scale(1) translateY(0); }
+  100% { transform: scale(1.05) translateY(-3px); }
+}
 .garden-slot.mythic {
   /* Efek melayang naik-turun */
   animation: mythicFloat 4s ease-in-out infinite, growFlower 0.9s ease-out both;
@@ -1123,8 +1134,9 @@ const FLOWER_TYPES = [
   { name: 'Golden Rose',   color: '#F4E4A6', accent: '#F4A896', rarity: 'legend', rate: 5, desc: 'Mawar emas legendaris, simbol kejayaan.' },
   { name: 'Blue Rose',     color: '#7FB3D5', accent: '#FFF8F0', rarity: 'legend', rate: 5, desc: 'Mawar biru mistis — mustahil di alam nyata.' },
   
-  // MYTHIC (Total 7%)
-  { name: 'Teratai',       color: '#F8BBD0', accent: '#FFD54F', rarity: 'mythic', rate: 7, desc: 'Bunga suci yang tumbuh di permukaan air.' },
+   // MYTHIC (Total 7%)
+  { name: 'Teratai',       color: '#F8BBD0', accent: '#FFD54F', rarity: 'mythic', rate: 3.5, desc: 'Bunga suci yang tumbuh di permukaan air.' },
+  { name: 'Snapdragon',    color: '#FF69B4', accent: '#FFD700', rarity: 'mythic', rate: 3.5, desc: 'Tiga tangkai bunga Snapdragon yang megah.' },
 
   // SECRET (Total 3%)
   { name: 'Bunga Bangkai', color: '#3D2B3D', accent: '#8B7B8B', rarity: 'secret', rate: 3, desc: 'Bunga mekar dari dunia lain. Aura abu & misteri.' }
@@ -1135,7 +1147,7 @@ const RARITY_POOL = {
   common: ['Daisy', 'Mawar', 'Matahari'],
   rare:   ['Lavender', 'Kamboja'],
   legend: ['Golden Rose', 'Blue Rose'],
-  mythic: ['Teratai'],
+  mythic: ['Teratai', 'Snapdragon'],
   secret: ['Bunga Bangkai']
 };
 function flowerForBook(book) {
@@ -1283,6 +1295,43 @@ function flowerTopView(type) {
       
       // 5. Teks MYTHIC
       + '<text x="50" y="95" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="9" fill="#F8BBD0" font-weight="bold" letter-spacing="2">MYTHIC</text>'
+      + '</svg>';
+  }
+   /* 🌸 MYTHIC — Snapdragon Flowers (3 Tangkai) */
+  if (type.name === 'Snapdragon') {
+    // Fungsi pembantu untuk menggambar 1 tangkai
+    const drawStem = (x, mainColor, accentColor, offsetY, scale) => {
+      return '<g transform="translate(' + x + ', ' + offsetY + ') scale(' + scale + ')">'
+        // Batang
+        + '<path d="M0 100 Q0 50 0 10" stroke="#4a5a3f" stroke-width="4" fill="none" stroke-linecap="round"/>'
+        // Daun
+        + '<path d="M0 70 Q-15 65 -20 55 Q-10 60 0 65Z" fill="#5a6a4f"/>'
+        + '<path d="M0 85 Q15 80 20 70 Q10 75 0 80Z" fill="#5a6a4f"/>'
+        // Kuncup atas
+        + '<ellipse cx="0" cy="15" rx="4" ry="6" fill="' + mainColor + '"/>'
+        + '<ellipse cx="0" cy="25" rx="5" ry="7" fill="' + mainColor + '"/>'
+        // Bunga (berlapis ke bawah)
+        + '<path d="M-10 35 Q0 25 10 35 Q0 45 -10 35Z" fill="' + mainColor + '"/>'
+        + '<path d="M-12 45 Q0 35 12 45 Q0 55 -12 45Z" fill="' + accentColor + '"/>'
+        + '<path d="M-14 55 Q0 45 14 55 Q0 65 -14 55Z" fill="' + mainColor + '"/>'
+        + '<path d="M-10 65 Q0 55 10 65 Q0 75 -10 65Z" fill="' + accentColor + '"/>'
+        // Highlight/kilau
+        + '<circle cx="-2" cy="45" r="1.5" fill="#FFF8F0" opacity="0.6"/>'
+        + '<circle cx="3" cy="55" r="1.5" fill="#FFF8F0" opacity="0.6"/>'
+        + '</g>';
+    };
+
+    return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="overflow:visible">'
+      + gradients
+      // Tangkai Kiri (Pink)
+      + drawStem(25, '#FF69B4', '#FFB6C1', 20, 0.8)
+      // Tangkai Kanan (Merah/Coral)
+      + drawStem(75, '#FF4500', '#FFD700', 20, 0.8)
+      // Tangkai Tengah (Ungu/Magenta - Lebih besar)
+      + drawStem(50, '#C71585', '#FF69B4', 0, 1)
+      
+      // Teks MYTHIC
+      + '<text x="50" y="98" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="9" fill="#F8BBD0" font-weight="bold" letter-spacing="2">MYTHIC</text>'
       + '</svg>';
   }
   /* 🌹 LEGEND — Blue Rose & Golden Rose */
