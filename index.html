@@ -19,24 +19,91 @@
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;min-height:100vh;color:var(--cream);background:#3D2B3D;
+body{
+  margin:0; min-height:100vh; color:var(--cream);
   font-family:'Inter',system-ui,-apple-system,sans-serif;
-  -webkit-font-smoothing:antialiased;overflow-x:hidden}
-body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
-  background:radial-gradient(1100px 620px at 78% -12%, rgba(244,228,166,.20), transparent 62%),
-    radial-gradient(820px 520px at 6% -8%, rgba(247,202,201,.18), transparent 60%),
-    radial-gradient(900px 620px at 94% 16%, rgba(232,160,191,.20), transparent 62%),
-    radial-gradient(1200px 800px at 50% 118%, rgba(200,162,200,.35), transparent 65%),
-    linear-gradient(180deg,#2f2030 0%,#3d2b3d 45%,#2f2030 100%)}
+  -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  /* LANGSIT SENJA BARU */
+  background: linear-gradient(180deg, #2a1e3f 0%, #4a2c5c 25%, #7d4b7d 50%, #b76e7d 75%, #f0a88e 100%);
+  background-attachment: fixed;
+  position: relative;
+}
+
+/* ================= ANIMASI LATAR BELAKANG (AWAN & BURUNG) ================= */
+.sky-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Awan */
+.cloud-bg {
+  position: absolute;
+  background: rgba(255, 248, 240, 0.15);
+  border-radius: 50%;
+  filter: blur(20px);
+  box-shadow: 0 0 40px rgba(255, 248, 240, 0.1);
+}
+.cloud1 { width: 300px; height: 100px; top: 10%; left: -300px; animation: driftCloud 60s linear infinite; }
+.cloud2 { width: 450px; height: 140px; top: 25%; left: -450px; animation: driftCloud 90s linear infinite 10s; opacity: 0.7;}
+.cloud3 { width: 250px; height: 80px; top: 50%; left: -250px; animation: driftCloud 75s linear infinite 20s; opacity: 0.8;}
+.cloud4 { width: 400px; height: 120px; top: 70%; left: -400px; animation: driftCloud 110s linear infinite 5s; opacity: 0.5;}
+
+@keyframes driftCloud {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(calc(100vw + 500px)); }
+}
+
+/* Burung */
+.bird {
+  position: absolute;
+  width: 60px;
+  height: 30px;
+  fill: rgba(45, 25, 45, 0.6);
+  animation: flyBird 25s linear infinite;
+}
+.bird1 { top: 15%; animation-duration: 20s; animation-delay: 2s; }
+.bird2 { top: 18%; animation-duration: 24s; animation-delay: 4s; transform: scale(0.7); }
+.bird3 { top: 40%; animation-duration: 30s; animation-delay: 0s; transform: scale(1.2); }
+.bird4 { top: 60%; animation-duration: 22s; animation-delay: 8s; transform: scale(0.9); }
+.bird5 { top: 80%; animation-duration: 35s; animation-delay: 12s; transform: scale(0.5); opacity: 0.7;}
+
+@keyframes flyBird {
+  0% { left: -100px; }
+  100% { left: calc(100vw + 100px); }
+}
+
+.wing {
+  transform-origin: center;
+  animation: flap 0.8s ease-in-out infinite alternate;
+}
+@keyframes flap {
+  0% { transform: scaleY(1); }
+  100% { transform: scaleY(0.3); }
+}
+
+/* ================= OVERLAY UNTUK KETERBACAAN ================= */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(circle at center, transparent 0%, rgba(30, 18, 30, 0.7) 100%);
+  pointer-events: none;
+}
+/* =========================================================== */
+
 img{display:block;max-width:100%}
 a{color:inherit}
 h1,h2,h3{font-family:var(--font-display);font-weight:600;margin:0}
-.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px; position: relative; z-index: 1;}
 .topbar{position:sticky;top:0;z-index:40;border-bottom:1px solid var(--border);
   background:linear-gradient(180deg,rgba(61,43,61,.92),rgba(61,43,61,.62));
   backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
 .topbar-inner{display:flex;align-items:center;gap:18px;height:66px;max-width:1180px;margin:0 auto;padding:0 20px}
-/* --- BRAND BARU: FOTO PROFIL + USERNAME --- */
+/* --- BRAND: FOTO PROFIL + USERNAME --- */
 .brand{display:flex;align-items:center;gap:12px;text-decoration:none;
   font-family:var(--font-display);font-size:1.16rem;font-weight:600;white-space:nowrap;
   transition:opacity .2s; border-radius:12px; padding:4px 8px 4px 4px; margin-left:-8px;}
@@ -89,7 +156,7 @@ h1,h2,h3{font-family:var(--font-display);font-weight:600;margin:0}
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
 .stat-card{background:linear-gradient(160deg,rgba(255,248,240,.09),rgba(255,248,240,.025));
   border:1px solid var(--border);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);
-  position:relative;overflow:hidden}
+  position:relative;overflow:hidden; backdrop-filter: blur(4px);}
 .stat-card::after{content:'';position:absolute;right:-30px;top:-30px;width:90px;height:90px;border-radius:50%;
   background:radial-gradient(circle,rgba(247,202,201,.28),transparent 70%)}
 .stat-icon{font-size:1.1rem;opacity:.9}
@@ -361,6 +428,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
   position: relative;
   overflow: hidden;
   flex-wrap: wrap;
+  backdrop-filter: blur(4px);
 }
 .profile-header::after {
   content: '';
@@ -475,6 +543,32 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
 </style>
 </head>
 <body>
+
+<!-- ELEMEN LATAR BELAKANG ANIMASI -->
+<div class="sky-bg">
+  <!-- Awan -->
+  <div class="cloud-bg cloud1"></div>
+  <div class="cloud-bg cloud2"></div>
+  <div class="cloud-bg cloud3"></div>
+  <div class="cloud-bg cloud4"></div>
+
+  <!-- Burung -->
+  <svg class="bird bird1" viewBox="0 0 100 50">
+    <path class="wing" d="M 10 25 Q 30 5 50 25 Q 70 5 90 25 Q 70 45 50 25 Q 30 45 10 25 Z" />
+  </svg>
+  <svg class="bird bird2" viewBox="0 0 100 50">
+    <path class="wing" d="M 10 25 Q 30 5 50 25 Q 70 5 90 25 Q 70 45 50 25 Q 30 45 10 25 Z" />
+  </svg>
+  <svg class="bird bird3" viewBox="0 0 100 50">
+    <path class="wing" d="M 10 25 Q 30 5 50 25 Q 70 5 90 25 Q 70 45 50 25 Q 30 45 10 25 Z" />
+  </svg>
+  <svg class="bird bird4" viewBox="0 0 100 50">
+    <path class="wing" d="M 10 25 Q 30 5 50 25 Q 70 5 90 25 Q 70 45 50 25 Q 30 45 10 25 Z" />
+  </svg>
+  <svg class="bird bird5" viewBox="0 0 100 50">
+    <path class="wing" d="M 10 25 Q 30 5 50 25 Q 70 5 90 25 Q 70 45 50 25 Q 30 45 10 25 Z" />
+  </svg>
+</div>
 
 <header class="topbar">
   <div class="topbar-inner">
