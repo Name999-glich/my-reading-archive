@@ -1820,15 +1820,17 @@ function openRatePopup() {
     secret: { icon: '🌺', label: 'Secret' }
   };
 
-  const rarityGroups = ['common', 'rare', 'legend', 'mythic', 'secret'].map(r => { // 👈 Tambah 'mythic'
-    // ...
+  const rarityGroups = ['common', 'rare', 'legend', 'mythic', 'secret'].map(r => {
     const info = rarityLabels[r];
     const pool = RARITY_POOL[r];
     const perFlower = (100 / pool.length).toFixed(2);
 
     const flowersHTML = pool.map(name => {
-      const icon = r === 'secret' ? '🌺' : r === 'legend' ? (name === 'Blue Rose' ? '🌹' : '👑') : r === 'rare' ? '💜' : (name === 'Daisy' ? '🌼' : name === 'Mawar' ? '🌸' : '🌻');
-      return '<div class="rate-item ' + r + '" data-flower-name="' + name + '">'
+      const icon = r === 'secret' ? '🌺' 
+                 : r === 'mythic' ? (name === 'Teratai' ? '🪷' : '🌺') 
+                 : r === 'legend' ? (name === 'Blue Rose' ? '🌹' : '👑') 
+                 : r === 'rare' ? '💜' 
+                 : (name === 'Daisy' ? '🌼' : name === 'Mawar' ? '🌸' : '🌻');      return '<div class="rate-item ' + r + '" data-flower-name="' + name + '">'
         + '<div class="ri-name"><span class="ri-icon ' + r + '">' + icon + '</span> ' + name + '</div>'
         + '<div class="ri-pct">' + perFlower + '%</div>'
         + '</div>';
